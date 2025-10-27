@@ -1,0 +1,52 @@
+section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        nav {
+            >div {
+                >p {
+                    opacity: 1;
+
+                }
+            }
+
+        }
+
+    }
+}
+
+nav {
+    >div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+
+        cursor: pointer;
+
+        >img {
+            width: 30px;
+        }
+
+        >p {
+            transition: opacity 1s ease-in-out, font-size 1s ease-in-out;
+            opacity: 0;
+
+
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+
+
+}

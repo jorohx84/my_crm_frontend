@@ -1,0 +1,64 @@
+section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+}
+
+.memberListWrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+
+}
+
+
+
+.assigneeCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.priority {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+
+.prioBtn {
+    width: 100%;
+    max-width: unset;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: wheat;
+    border-radius: 4px;
+}
+
+.prioActive {
+    box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.3) !important;
+}
+
+.red {
+    background-color: rgb(206, 3, 3);
+}
+
+.green {
+    background-color: rgb(1, 120, 1);
+}
+
+.yellow {
+    background-color: rgb(253, 165, 1);
+}

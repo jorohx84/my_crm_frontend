@@ -1,0 +1,43 @@
+<section>
+    <div class="regBtn"
+     (click)="globalservice.navigateToPath('registration')" >
+        <p>Jetzt Registrieren</p>
+    </div>
+   
+    <div class="loginRegCont">
+        <h2>Anmelden</h2>
+        <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+            <div class="inputCont">
+                <div class="inputfield">
+                    <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
+                        [(ngModel)]="loginData.username" required>
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="email.invalid && email.touched">Bitte E-Mail-Adresse einegeben</p>
+                </div>
+            </div>
+            <div class="inputCont">
+                <div class="inputfield">
+                    <input #password="ngModel" type="password" id="password" name="password" placeholder="Passwort"
+                        [(ngModel)]="loginData.password" required>
+                    <img *ngIf="!isVisibility" (click)="changeVisibility('password')" src="./icons/eye.svg" alt="">
+                    <img *ngIf="isVisibility" (click)="changeVisibility('password')" src="./icons/eye-crossed.svg"
+                        alt="">
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="password.invalid && password.touched">Bitte Passwort eingeben</p>
+                </div>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="!isValid && isSend">E-Mail oder Passwort ungültig</p>
+            </div>
+            <div class="btnCont">
+                <button type="submit" [disabled]="loginForm.invalid">Anmelden</button>
+            </div>
+
+
+        </form>
+    </div>
+
+
+</section>

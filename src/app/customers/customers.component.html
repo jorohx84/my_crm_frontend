@@ -1,0 +1,170 @@
+<section>
+    <div class="menubar">
+        <h2>Kunden</h2>
+        <div class="searchField">
+            <div class="filterContainer">
+                <div class="searchFilter" (click)="openFilter()">
+                    <img [ngClass]="{'rotate': searchFilterOpen}" src="./icons/dropdown.svg" alt="">
+                    <p>{{currentSearchFilter?.displayName}}</p>
+                </div>
+                <div *ngIf="searchFilterOpen" class="searchOptions" (mouseleave)="searchFilterOpen=false">
+                    <div *ngFor="let filter of customerFields; let index = index">
+                        <p (click)="changeSearchFitler(index); openFilter()">{{filter.displayName}}</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="inputfield">
+                <input type="text" (input)="searchCustomer()" [(ngModel)]="searchValue" placeholder="Suche">
+                <img src="./icons/search.svg" alt="">
+            </div>
+        </div>
+        <div class="addBtn" (click)="isOpen=true">
+
+            <img src="./icons/add.svg" alt="">
+            <p>Neu</p>
+        </div>
+    </div>
+    <div class="customerListCont">
+        <div class="listHeadline">
+            <p *ngFor="let headline of customerFields">{{headline.displayName}}</p>
+        </div>
+        <div class="divider"></div>
+        <div class="customerList">
+
+            <div *ngIf="isloading">
+                <p>Kundendaten werden geladen...</p>
+            </div>
+            <div *ngIf="!isFound && isSearch">
+                <p>Keine Kunden gefunden</p>
+            </div>
+            <div *ngFor="let customer of customers, let index=index">
+
+                <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
+                    (click)="globalservice.navigateToPathID('main/singlecustomer',customer.id )">
+                    <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formWrapper" [ngClass]="{'slidein': isOpen}">
+        <h3>Kunden anlegen</h3>
+        <form #customerCreateForm="ngForm" (ngSubmit)="onSubmit(customerCreateForm)">
+            <!-- companyName -->
+            <div class="inputCont">
+                <div class="inputfield"
+                    [ngClass]="{'errorBorder': companyName.invalid && companyName.touched && isOpen}">
+                    <input #companyName="ngModel" type="text" id="companyName" name="companyName"
+                        placeholder="Firmenname" [(ngModel)]="customer.companyName" required>
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="companyName.invalid && companyName.touched && isOpen">Pflichtfeld</p>
+                </div> -->
+            </div>
+
+            <!-- street -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': street.invalid && street.touched}">
+                    <input #street="ngModel" type="text" id="street" name="street" placeholder="Straße"
+                        [(ngModel)]="customer.street" required>
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="street.invalid && street.touched">Pflichtfeld</p>
+                </div> -->
+            </div>
+
+            <!-- areacode -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': areacode.invalid && areacode.touched}">
+                    <input #areacode="ngModel" type="text" id="areacode" name="areacode" placeholder="Postleitzahl"
+                        [(ngModel)]="customer.areacode" required>
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="areacode.invalid && areacode.touched">Pflichtfeld</p>
+                </div> -->
+            </div>
+
+            <!-- city -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': city.invalid && city.touched}">
+                    <input #city="ngModel" type="text" id="city" name="city" placeholder="Stadt"
+                        [(ngModel)]="customer.city" required>
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="city.invalid && city.touched">Pflichtfeld</p>
+                </div> -->
+            </div>
+
+            <!-- country -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': country.invalid && country.touched}">
+                    <input #country="ngModel" type="text" id="country" name="country" placeholder="Land"
+                        [(ngModel)]="customer.country" required>
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="country.invalid && country.touched">Pflichtfeld</p>
+                </div> -->
+            </div>
+
+            <!-- email -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': email.invalid && email.touched}">
+                    <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
+                        [(ngModel)]="customer.email" required
+                        pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="email.invalid && email.touched">Bitte gültige E-Mail eingeben</p>
+                </div> -->
+            </div>
+
+            <!-- phone -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': phone.invalid && phone.touched}">
+                    <input #phone="ngModel" type="tel" id="phone" name="phone" placeholder="Telefonnummer"
+                        [(ngModel)]="customer.phone" required pattern="^[0-9\-\+\s\(\)]*$">
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="phone.invalid && phone.touched">Bitte gültige Telefonnummer eingeben</p>
+                </div> -->
+            </div>
+
+            <!-- website -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': website.invalid && website.touched}">
+                    <input #website="ngModel" type="url" id="website" name="website" placeholder="Webseite"
+                        [(ngModel)]="customer.website" required
+                        pattern="^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$">
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="website.invalid && website.touched">Bitte gültige URL eingeben</p>
+                </div> -->
+            </div>
+
+            <!-- branch -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': branch.invalid && branch.touched}">
+                    <input #branch="ngModel" type="text" id="branch" name="branch" placeholder="Branche"
+                        [(ngModel)]="customer.branch" required>
+                </div>
+                <!-- <div class="errorTxt">
+                    <p *ngIf="branch.invalid && branch.touched">Pflichtfeld</p>
+                </div> -->
+            </div>
+            <div *ngIf="!isValid && isSend" class="errorTxt">
+                <p>Bitte alle Felder ausfüllen.</p>
+                <p *ngIf="email.errors?.['pattern']"> E-Mail-Adresse ungültig</p>
+                <p *ngIf="website.errors?.['pattern']"> Website-URL ungültig</p>
+                <p *ngIf="phone.errors?.['pattern']">Telefonnummer ungültig</p>
+            </div>
+            <div class="btnCont">
+                <button type="button" (click)="reserFormData(customerCreateForm)">Abbrechen</button>
+                <button type="submit">Nutzer anlegen</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</section>

@@ -1,1 +1,261 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Inter';
+    src: url(./../public/fonts/Inter/Inter-VariableFont_opsz\,wght.ttf);
+    font-weight: 100 900;
+    font-style: normal;
+}
+
+:root {
+    // --button: #02749e;
+    --font-light: rgb(143, 141, 141);
+    --button: #0282b1;
+    --inputborder: #0783b0;
+    --border: #10779d;
+    --box: #10779d;
+    --box-light: #10779d24;
+    --error: rgb(187, 2, 2);
+    --listrow: #10779d20;
+    --listrow-light: #10779d0c;
+    --listrow-hover: #10779d81;
+    --input: #10779d28;
+}
+
+section,
+div,
+p,
+input,
+textarea {
+    box-sizing: border-box !important;
+    margin: 0;
+
+}
+
+.slideOut {
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(120%);
+}
+
+.slideIn {
+    transform: translateX(0);
+}
+
+textarea {
+
+    all: unset;
+    width: 100%;
+    height: 100px;
+    overflow: auto;
+    resize: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 14px;
+    font-family: 'Inter';
+
+    &::placeholder {
+        font-size: 12px;
+    }
+}
+
+textarea:focus,
+textarea:active {
+    outline: none;
+    box-shadow: none;
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1 {
+    margin: 0;
+}
+
+h2 {
+    font-size: 32px;
+    font-weight: 500;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+h4 {
+    margin: 0;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 300;
+    overflow: hidden;
+}
+
+input {
+    all: unset;
+    width: 100%;
+    font-size: 14px;
+
+    &::placeholder {
+        font-size: 12px;
+    }
+
+    &:focus {
+        &::placeholder {
+            opacity: 0;
+        }
+    }
+
+    /* Deaktiviert Chrome/Edge Autofill-Hintergrund */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill,
+    select:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+        box-shadow: 0 0 0px 1000px white inset !important;
+        -webkit-text-fill-color: #000 !important;
+        background-color: white !important;
+    }
+
+
+}
+
+.divider {
+    width: 100%;
+    min-height: 2px;
+    background-color: var(--box);
+}
+
+.verticaldivider {
+    min-width: 1px;
+    height: 100%;
+    background-color: var(--box);
+}
+
+.loginRegCont {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid 0.9px var(--border);
+    border-radius: 8px;
+    padding: 32px;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    gap: 8px;
+}
+
+.inputCont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.inputfield {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 0.5px var(--inputborder);
+    border-radius: 4px;
+    padding: 0 16px;
+    transition: border-width 0.3s ease-in-out, border-color 0.3s ease-in-out;
+
+
+
+    >input {
+        width: 100% !important;
+    }
+
+    >img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.errorTxt {
+    width: 100%;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    padding-left: 4px;
+    padding-top: 4px;
+
+    >p {
+        font-size: 14px;
+        color: var(--error);
+    }
+}
+
+.errorBorder {
+    border-color: var(--error) !important;
+    border-width: 1px !important;
+}
+
+button {
+    all: unset;
+    width: 100%;
+    max-width: 160px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--button);
+    color: white;
+    border-radius: 4px;
+    transition: transform 0.3s ease-in-out;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+.btnCont {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 32px;
+}
+
+
+.border {
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+}

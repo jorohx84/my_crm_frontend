@@ -1,0 +1,22 @@
+<section>
+    <h2>Mitarbeiter</h2>
+    <div class="inputCont">
+        <div class="inputfield">
+            <input #search="ngModel" name="search" (input)="searchUser()" [(ngModel)]="searchValue" type="text" placeholder="Name oder E-Mail-Adresse">
+            <img src="./icons/search.svg" alt="">
+        </div>
+    </div>
+
+    <div class="memberList">
+        <p *ngIf="members.length===0 && !isSearch">Liste wird geladen...</p>
+        <p *ngIf="isSearch && !isFound">Keine Mitarbeiter gefunden</p>
+        <div *ngFor="let member of members, let index=index">
+        
+            <div class="memberListRow" (click)="sendUserdata(index)">
+                <img src="./icons/profile.svg" alt="">
+                    <p>{{member.fullname}}</p>
+            </div>
+
+        </div>
+    </div>
+</section>

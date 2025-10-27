@@ -1,0 +1,265 @@
+section {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    // position: relative;
+    padding-left: 32px;
+}
+
+
+
+.customerFile {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 128px;
+    margin-top: 12px;
+
+}
+
+.customerProfile {
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    display: flex;
+    gap: 32px;
+
+    input {
+        width: 300px;
+        border: solid 0.5px white;
+
+        &:focus {
+            // background-color: var(--input) !important;
+            border: solid 0.5px var(--border);
+            border-radius: 4px;
+
+        }
+
+        &:hover {
+            // background-color: var(--input) !important;
+            border: solid 0.5px var(--border);
+            border-radius: 4px;
+        }
+    }
+}
+
+.customeInfos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+position: relative;
+    gap: 32px;
+}
+
+.companyHeader {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.companyName {
+    width: 100%;
+    display: flex;
+    gap: 24px;
+    margin-top: 4px;
+}
+
+.customertitle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.profileIcon {
+    min-width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--box);
+    border-radius: 100px;
+
+    >img {
+        width: 40px;
+    }
+}
+
+
+
+.menubar {
+
+    // position: absolute;
+    width: 500px;
+    height: 100%;
+    // right: 0;
+    display: flex;
+
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    // background-color: var(--box-light);
+    padding: 12px;
+    border-radius: 4px;
+
+
+}
+
+.navBtns {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+
+    >div {
+        cursor: pointer;
+    }
+}
+
+.actionBtns {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+}
+
+.menuBtn {
+    display: flex;
+    cursor: pointer;
+
+    >img {
+        width: 24px;
+    }
+}
+
+.contactCont {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contactData {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    >img {
+        width: 20px;
+    }
+}
+
+.adressCont {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cityCont {
+    width: 300px;
+    display: flex;
+
+
+    >:nth-child(1) {
+        width: 46px;
+    }
+}
+
+.textFieldCont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.customerBoard {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.informationCont {
+    position: absolute;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.taskFormWrapper {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 32px;
+    background-color: white;
+    border-left: solid 0.5px var(--border);
+ 
+}
+
+// .userslistCont{
+//     width: 100%;
+//     height: 100%;
+// }
+
+.assigneeCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.priority {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.prioBtn {
+    width: 100%;
+    max-width: unset;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.prioActive {
+    box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.3) !important;
+}
+
+.red {
+    background-color: rgb(206, 3, 3);
+}
+
+.green {
+    background-color: rgb(1, 120, 1);
+}
+
+.yellow {
+    background-color: rgb(253, 165, 1);
+}
+
+.deleteWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    background-color: white;
+
+}

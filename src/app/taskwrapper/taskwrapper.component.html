@@ -1,0 +1,70 @@
+<section>
+
+    <div class="memberListWrapper slideOut" [ngClass]="{'slideIn': globalservice.memberListOpen}">
+        <app-memberlist></app-memberlist>
+    </div>
+    <h3>Aufgabe erstellen</h3>
+    <form #taskCreationFrom="ngForm" (ngSubmit)="createTask(taskCreationFrom)">
+        <div class="inputCont">
+            <div class="inputfield">
+                <input #title="ngModel" type="text" [(ngModel)]="task.title" name="title" placeholder="Titel" required>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="title.invalid && title.touched">*Pflichtfeld</p>
+            </div>
+        </div>
+        <div class="inputCont">
+            <textarea #description="ngModel" name="description" [(ngModel)]="task.description"
+                placeholder="Beschreibung" id="" required></textarea>
+            <div class="errorTxt">
+                <p *ngIf="title.invalid && (title.touched || taskCreationFrom.submitted)">*Pflichtfeld</p>
+            </div>
+        </div>
+
+        <div class="inputCont">
+            <h4>zu erledigen bis:</h4>
+            <div class="inputfield">
+                <input #date="ngModel" type="date" [(ngModel)]="task.due_date" name="date" placeholder="Titel" required>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+            </div>
+        </div>
+        <div class="inputCont">
+
+            <div class="assigneeCont">
+                <button type="button" (click)="globalservice.memberListOpen=true">Aufgabe zuweisen</button>
+                <p *ngIf="member">{{member.fullname}}</p>
+            </div>
+
+
+            <div class="errorTxt">
+                <p *ngIf="noMember">Bitte Aufgabe einem Mitarbeiter zuweisen</p>
+            </div>
+        </div>
+        <div class="inputCont">
+            <h4>Priorität</h4>
+
+            <div class="priority">
+                <button type="button" [ngClass]="{'prioActive': task.priority==='low'}" (click)="setPriority('low')"
+                    class="prioBtn green">
+                    <p>Niedrig</p>
+                </button>
+                <button type="button" [ngClass]="{'prioActive': task.priority==='mid'}" (click)="setPriority('mid')"
+                    class="prioBtn yellow">
+                    <p>Mittel</p>
+                </button>
+                <button type="button" [ngClass]="{'prioActive': task.priority==='high'}" (click)="setPriority('high')"
+                    class="prioBtn red">
+                    <p>Hoch</p>
+                </button>
+            </div>
+        </div>
+        <div class="btnCont">
+            <button type="button" (click)="resetTask(taskCreationFrom)">Abbrechen</button>
+            <button type="submit">Speichern</button>
+        </div>
+  
+    </form>
+
+</section>
