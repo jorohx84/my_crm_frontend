@@ -1,0 +1,47 @@
+<section>
+
+    <div class="taskHeader">
+        <h2>{{task?.title}} </h2>
+        <!-- <h3>für {{task.customer.companyname}}</h3> -->
+        <div class="closeBtn">
+            <img src="./icons/close.svg" alt="" (click)="backToCustomer()">
+
+        </div>
+    </div>
+    <div class="taskContent">
+
+
+        <div class="taskInfoCont">
+            <div class="stateLine">
+                <h4>Status</h4>
+
+                <div class="progressLineCont">
+                    <div class="progressDot activeDot" (click)="updateTask('undone')">
+                        <p>unbearbeitet</p>
+                    </div>
+                    <div class="progressDot"
+                        [ngClass]="{'activeDot': task?.state ==='in_progress' || task?.state ==='under_review' || task?.state ==='done'}"
+                        (click)="updateTask('in_progress')">
+                        <p>in Bearbeitung</p>
+                    </div>
+                    <div class="progressDot"
+                        [ngClass]="{'activeDot': task?.state ==='under_review' || task?.state ==='done'}"
+                        (click)="updateTask('under_review')">
+                        <p>in Prüfung</p>
+                    </div>
+                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='done'}"
+                        (click)="updateTask('done')">
+                        <p>Erledigt</p>
+                    </div>
+                    <div class="progressLineInner" [style.width.%]=linewidth></div>
+                    <div class="progressLine"></div>
+                </div>
+            </div>
+            <div class="taskInfos"></div>
+        </div>
+
+        <div class="subtasksCont">
+            <h3>Verlauf</h3>
+        </div>
+    </div>
+</section>

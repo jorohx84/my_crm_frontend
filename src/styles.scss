@@ -19,7 +19,8 @@
     --listrow-hover: #10779d81;
     --input: #10779d28;
 }
-
+//#B02323
+//#D98014
 section,
 div,
 p,
@@ -88,11 +89,13 @@ h1 {
 h2 {
     font-size: 32px;
     font-weight: 500;
+    margin: 0;
 }
 
 h3 {
     font-size: 24px;
     font-weight: 400;
+    margin: 0;
 }
 
 h4 {
@@ -145,12 +148,12 @@ input {
 
 .divider {
     width: 100%;
-    min-height: 2px;
+    min-height: 0.5px;
     background-color: var(--box);
 }
 
 .verticaldivider {
-    min-width: 1px;
+    min-width: 0.5px;
     height: 100%;
     background-color: var(--box);
 }

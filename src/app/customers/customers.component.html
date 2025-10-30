@@ -40,8 +40,14 @@
             </div>
             <div *ngFor="let customer of customers, let index=index">
 
-                <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
+                <!-- <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
                     (click)="globalservice.navigateToPathID('main/singlecustomer',customer.id )">
+                    
+                    <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
+                </div> -->
+                <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
+                    (click)="globalservice.navigateToPath(['main','singlecustomer',customer.id ])">
+
                     <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                 </div>
             </div>

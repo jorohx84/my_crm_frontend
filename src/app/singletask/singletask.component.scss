@@ -1,0 +1,109 @@
+section {
+    width: 100%;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+  
+  
+    position: relative;
+}
+
+.taskHeader{
+    width: 100%;
+   
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    gap: 24px;
+    border-bottom: solid 0.5px var(--border);
+    position: relative;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    cursor: pointer;
+
+    >img {
+        width: 30px;
+    }
+}
+
+.taskContent{
+    width: 100%;
+    height: 100%;
+    display: flex;
+   
+}
+.taskInfoCont{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+   
+}
+.stateLine{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.progressLineCont {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.progressLine {
+    width: 100%;
+    min-height: 0.5px;
+    position: absolute;
+    left: 0;
+    background-color: var(--box);
+}
+
+.progressLineInner {
+ 
+    min-height: 3px;
+    position: absolute;
+    left: 0;
+    background-color: var(--box);
+}
+
+.progressDot {
+    width: 110px;
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100px;
+    border: solid var(--box);
+    background-color: white;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.activeDot {
+    color: white !important;
+    background-color: var(--box) !important;
+}
+
+.lineDescription {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    >p {}
+}
+
+.subtasksCont{
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    max-width: 400px;
+    border-left: solid 0.5px var(--border);
+}

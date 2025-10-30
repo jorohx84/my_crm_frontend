@@ -12,9 +12,13 @@ export class GlobalService {
     memberListOpen: boolean = false;
     taskWrapperOpen: boolean = false;
 
-    navigateToPath(path: string,) {
-        this.router.navigate([path]);
-    }
+    // navigateToPath(path: string,) {
+    //     this.router.navigate([path]);
+    // }
+
+    navigateToPath(segments: any[]) {
+  this.router.navigate(segments);
+}
 
     navigateToPathID(path: string, id: any) {
         this.router.navigate([path, id]);

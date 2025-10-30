@@ -1,0 +1,49 @@
+section{
+    width: 100%;
+  
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    height: calc(100vh - 229px);
+}
+
+.divider{
+    min-height: 2px;
+}
+
+.taskList{
+    width: 100%;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: scroll;
+}
+.taskRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    cursor: pointer;
+
+    &:hover {
+        border-color: white;
+        background-color: var(--listrow-hover);
+    }
+}
+
+.taskRowleft {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.taskRowRight {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: space-between;
+    align-items: flex-end;
+}

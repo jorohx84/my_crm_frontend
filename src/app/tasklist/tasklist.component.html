@@ -1,0 +1,28 @@
+<section>
+    <h2>Aufgaben</h2>
+    <div class="divider"></div>
+    <div class="taskList">
+
+
+        <div (click)="openTask(index)" class="taskRow border" *ngFor="let task of tasks, let index=index">
+            <div class="taskRowleft">
+                <h3> {{task.title}}</h3>
+                <span>erstellt am: {{task.created_at | date: 'dd.MM.yyyy'}}</span>
+
+                <span *ngIf="task.state ==='undone'">Satus: unbearbeitet</span>
+                <span *ngIf="task.state ==='in_progress'">Satus: in Bearbeitung</span>
+                <span *ngIf="task.state ==='under_review'">Satus: in Prüfung</span>
+                <span *ngIf="task.state ==='done'">Satus: Erledigt</span>
+            </div>
+            <div class="taskRowRight">
+                <span>Fällig am: {{task.due_date | date: 'dd.MM.yyyy'}}</span>
+                <span *ngIf="task.priority==='low'">Priorität: Niedrig</span>
+                <span *ngIf="task.priority==='mid'">Priorität: Mittel</span>
+                <span *ngIf="task.priority==='high'">Priorität: Hoch</span>
+                <span>zu erledigen von: {{task.assignee.fullname}}</span>
+            </div>
+
+
+        </div>
+    </div>
+</section>

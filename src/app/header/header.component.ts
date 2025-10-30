@@ -18,6 +18,7 @@ export class HeaderComponent {
   apiservice = inject(APIService);
   observservice = inject(ObservableService);
   userservice = inject(UserService);
+  globalservice=inject(GlobalService);
   router = inject(Router);
   user: any;
   component: string = '';

@@ -15,25 +15,32 @@
         </div>
 
         <div class="navBtns">
-            <div>
+              <div (click)="changeFolder('orders')">
+                <h4>Dashboard</h4>
+            </div>
+            <div (click)="changeFolder('activities')">
                 <h4>Aktivitäten</h4>
             </div>
-            <div>
+            <div (click)="changeFolder('contacts')">
                 <h4>Kontakte</h4>
             </div>
-            <div>
+            <!-- <div (click)="changeFolder('tasks')">
+                <h4>Aufgaben</h4>
+            </div> -->
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'])">
+
                 <h4>Aufgaben</h4>
             </div>
-            <div>
+            <div (click)="changeFolder('orders')">
                 <h4>Aufträge</h4>
             </div>
         </div>
         <div class="actionBtns">
             <div *ngIf="!isEdit" class="menuBtn" (click)="globalservice.taskWrapperOpen=true">
-                <img src=" ./icons/trash.svg" alt="">
+                <img src=" ./icons/tasks.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
-                <img src=" ./icons/trash.svg" alt="">
+                <img src=" ./icons/contact.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
                 <img src=" ./icons/trash.svg" alt="">
@@ -48,8 +55,10 @@
     </div>
     <div class="divider"></div>
     <div class="customerFile">
+
+        <!-- CUSTOMER -->
         <div class="customerProfile">
-    
+
             <div class="customeInfos">
 
                 <div class="adressCont">
@@ -96,19 +105,23 @@
             </div>
         </div>
         <!-- <div class="verticaldivider"></div> -->
+
+        <!-- BOARD -->
         <div class="customerBoard">
-            <div class="">
-                <div *ngFor="let task of tasks">
-                    <p>{{task.title}}</p>
-                </div>
-            </div>
+      
+           <router-outlet></router-outlet>
         </div>
+
+
+
+        <!-- SIDEBAR -->
+        <!-- <div class="customerSidebar"></div> -->
     </div>
 
     <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
 
         <app-taskwrapper></app-taskwrapper>
-       
+
     </div>
 
 

@@ -61,7 +61,7 @@ section {
     //     left: 0;
     border-right: solid 0.5px var(--border);
     transition: width 1s ease-in-out;
-background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
 
     // &:hover {
 
@@ -70,8 +70,8 @@ background-color: rgb(255, 255, 255);
 }
 
 .placeholder {
-//   width: 120px;
-//     height: 100%;
+    //   width: 120px;
+    //     height: 100%;
 }
 
 .mainWindow {
@@ -86,7 +86,7 @@ background-color: rgb(255, 255, 255);
 .header {
     width: 100%;
     min-height: 80px;
-    border-bottom: solid 0.5px var(--border);
+    border-bottom: solid 2px var(--border);
 
 }
 
@@ -94,6 +94,6 @@ background-color: rgb(255, 255, 255);
 
     height: calc(100vh - 80px);
     width: 100%;
-    padding: 24px;
+    // padding: 24px;
     overflow: hidden;
 }

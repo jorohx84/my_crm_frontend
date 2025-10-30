@@ -5,6 +5,7 @@ section {
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
+
 }
 
 .profileCont {
@@ -24,4 +25,25 @@ section {
     // &:hover {
     //     transform: scale(1.05);
     // }
+}
+
+.navLogoCont{
+    display: flex;
+    align-items: center;
+    gap: 56px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    >div {
+        >p {
+           
+            font-weight: 400;
+        }
+
+    }
+
 }

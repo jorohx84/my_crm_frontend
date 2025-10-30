@@ -10,10 +10,12 @@ import { response } from 'express';
 import { ObservableService } from '../services/observable.service';
 import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
-
+import { DataService } from '../services/data.service';
+import { TasklistComponent } from '../tasklist/tasklist.component';
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-singlecustomer',
-  imports: [CommonModule, FormsModule, TaskwrapperComponent],
+  imports: [CommonModule, FormsModule, TaskwrapperComponent, RouterOutlet],
   templateUrl: './singlecustomer.component.html',
   styleUrl: './singlecustomer.component.scss'
 })
@@ -22,6 +24,7 @@ export class SinglecustomerComponent {
   apiservice = inject(APIService);
   userservice = inject(UserService);
   observerservice = inject(ObservableService);
+  dataservice = inject(DataService);
   route = inject(ActivatedRoute);
   customerID: number | string | null = null;
   customer = this.userservice.emptyCustomer; //das leere objekt falls daten zu spät geladen werde und ngModel darauf zugreifen möchte
@@ -33,34 +36,35 @@ export class SinglecustomerComponent {
   user: any;
   member: any;
   noMember: boolean = false;
-  tasks: any[] = [];
 
+  folder: string = '';
 
   ngOnInit() {
+    this.folder=this.dataservice.getDataFromLocalStorage('folder');
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.customerID = id
       if (id) {
         this.loadCustomer(id)
-        this.loadTasks()
+        // this.loadTasks(id)
       }
 
     });
-   
-    this.observerservice.taskSubject$.subscribe((data) => {
-      this.loadTasks();
-    })
+
+    // this.observerservice.taskSubject$.subscribe((data) => {
+    //   this.loadTasks(this.customerID);
+    // })
 
   }
 
-  loadTasks() {
-    this.apiservice.getData(`tasks/${this.customerID}`).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.tasks = response;
-      }
-    })
-  }
+  // loadTasks(id: string | number | null = null) {
+  //   this.apiservice.getData(`tasks/${id}`).subscribe({
+  //     next: (response) => {
+  //       console.log(response);
+  //       this.tasks = response;
+  //     }
+  //   })
+  // }
 
 
   toggleEditMode() {
@@ -110,7 +114,8 @@ export class SinglecustomerComponent {
 
     setTimeout(() => {
       if (this.isDelete === true) {
-        this.globalservice.navigateToPath('main/customers');
+        // this.globalservice.navigateToPath('main/customers');
+        this.globalservice.navigateToPath(['main', 'customers']);
         this.isOpen = false;
         this.isDelete = false
 
@@ -121,25 +126,13 @@ export class SinglecustomerComponent {
   }
 
 
+  changeFolder(folderKey: string) {
+    this.folder = folderKey
+    console.log(this.folder);
+    this.dataservice.saveDataToLocalStorage('folder', folderKey);
 
-  // findAssignee(input: any) {
-  //   console.log(input.value);
-  //   const email = input.value;
-  //   this.apiservice.getData(`email-check/${email}`).subscribe({
-  //     next: (response) => {
-  //       console.log(response);
-  //       this.task.assignee = response[0];
-  //       this.notfound = response.length === 0 ? true : false;
+  }
 
-  //     },
-  //     error: (err) => {
-  //       this.notfound = true;
-  //     }
-  //   })
-
-
-
-  // }
 
 
 }

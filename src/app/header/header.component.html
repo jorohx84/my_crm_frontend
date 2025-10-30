@@ -1,7 +1,22 @@
 
 
 <section>
-<div>meinCRM</div>
+    <div class="navLogoCont">
+    
+        <h1>CRM</h1>
+    <nav>
+        <div class="navlink" (click)="globalservice.navigateToPath(['main','customers'])">
+         
+            <p>Kunden</p>
+        </div>
+         <div class="navlink" (click)="globalservice.navigateToPath(['main','customers'])">
+            
+            <p>Aufgaben</p>
+        </div>
+    </nav>
+
+    </div>
+
 <div class="profileCont" (click)="logoutUser()">
 <img src="./icons/logout.svg" alt="">
 
