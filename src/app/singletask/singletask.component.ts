@@ -25,7 +25,7 @@ export class SingletaskComponent {
   userservice = inject(UserService);
   dataservice = inject(DataService);
   taskId: string | null = null;
-  sidebarKey: string = 'logs';
+  sidebarKey: string = 'subtasks';
   task: any = {
     title: '',
     description: '',
@@ -54,14 +54,14 @@ export class SingletaskComponent {
   duedateChangeOpen: boolean = false;
   newDueDate: string = '';
   subtasks: any[] = [];
-  subtaskTitle: string = '';
+  subtask: any;
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
         this.taskId = id
         this.loadtask(id);
-        this.loadSubtasks();
+        this.loadSubtasks(id);
       }
     });
 
@@ -72,14 +72,13 @@ export class SingletaskComponent {
       }
     })
 
-    this.observerservice.taskTriggerSubject$.subscribe((taskData) => {
-      this.loadSubtasks();
-
-      if (taskData) {
-        this.subtaskTitle = taskData.title;
-        console.log(this.subtaskTitle);
+    this.observerservice.taskTriggerSubject$.subscribe((subtaskData) => {
+      if (subtaskData) {
+        this.subtask = subtaskData;
+        this.loadSubtasks(subtaskData.id);
+        this.updateTask('subtask');
       }
-      this.updateTask('subtask');
+
     })
 
   }
@@ -100,8 +99,8 @@ export class SingletaskComponent {
   }
 
 
-  loadSubtasks() {
-    this.apiservice.getData('subtasks/').subscribe({
+  loadSubtasks(id:string) {
+    this.apiservice.getData(`subtasks/${id}`).subscribe({
       next: (response) => {
         console.log(response);
         this.subtasks = response;
@@ -211,7 +210,7 @@ export class SingletaskComponent {
       const newState = this.dataservice.interpretation[objKey][this.task[objKey]]
       return newState
     } else if (objKey === 'subtask') {
-      const newState = this.subtaskTitle;
+      const newState = this.subtask.title;
       return newState
     }
   }
