@@ -184,7 +184,7 @@ section {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 24px;
+    // padding: 24px;
     overflow: hidden;
 }
 
@@ -197,18 +197,7 @@ section {
     gap: 4px;
 }
 
-.taskFormWrapper {
-    width: 100%;
-    max-width: 600px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 32px;
-    background-color: white;
-    border-left: solid 0.5px var(--border);
-z-index: 2;
-}
+
 
 // .userslistCont{
 //     width: 100%;

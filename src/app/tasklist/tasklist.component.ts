@@ -41,7 +41,7 @@ export class TasklistComponent {
     }
   });
 
-    this.observerservice.taskSubject$.subscribe((data) => {
+    this.observerservice.taskTriggerSubject$.subscribe((data) => {
       if (this.customerID) {
               this.loadTasks(this.customerID);
       }

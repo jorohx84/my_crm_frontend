@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="actionBtns">
-            <div *ngIf="!isEdit" class="menuBtn" (click)="globalservice.taskWrapperOpen=true">
+            <div *ngIf="!isEdit" class="menuBtn" (click)="globalservice.taskWrapperOpen=true; globalservice.isSubtaskWrapper=false;">
                 <img src=" ./icons/tasks.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">

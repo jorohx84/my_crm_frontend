@@ -12,6 +12,8 @@ export class ObservableService {
     public memberSubject$ = this.memberSubject.asObservable();
     private taskSubject = new BehaviorSubject<any>(null);
     public taskSubject$ = this.taskSubject.asObservable();
+    private taskTriggerSubject = new BehaviorSubject<any>(null);
+    public taskTriggerSubject$ = this.taskTriggerSubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -20,8 +22,12 @@ export class ObservableService {
         this.memberSubject.next(member);
     }
 
-    triggerloadTask(){
-        this.taskSubject.next(null);
+    sendTask(task:any){
+        this.taskSubject.next(task);
+    }
+
+    triggerloadTask(task:any) {
+        this.taskTriggerSubject.next(task);
     }
 
 }

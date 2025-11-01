@@ -61,21 +61,24 @@ export class UserService {
         this.apiservice.getData(`profile/${ID}/`, false).subscribe({
             next: (response) => {
                 console.log(response);
-                const user = this.creatUserObject(response);
+                // const user = this.creatUserObject(response);
+                const user = response;
+                console.log(user);
+                
                 this.observservice.observeUser(user);
             }
         })
     }
 
-    creatUserObject(data: any) {
-        return {
-            id: data.id,
-            firstname: data.first_name,
-            lastname: data.last_name,
-            email: data.email,
-            tel: data.tel,
-            displayName: data.first_name + ' ' + data.last_name
-        }
-    }
+    // creatUserObject(data: any) {
+    //     return {
+    //         id: data.id,
+    //         firstname: data.first_name,
+    //         lastname: data.last_name,
+    //         email: data.email,
+    //         tel: data.tel,
+    //         displayName: data.first_name + ' ' + data.last_name
+    //     }
+    // }
 
 }

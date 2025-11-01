@@ -17,8 +17,9 @@
 
     </div>
 
-<div class="profileCont" (click)="logoutUser()">
-<img src="./icons/logout.svg" alt="">
+<div class="profileCont" >
+    <p>{{user?.displayName}}</p>
+<img (click)="logoutUser()" src="./icons/logout.svg" alt="">
 
 </div>
 

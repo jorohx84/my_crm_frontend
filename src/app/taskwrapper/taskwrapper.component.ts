@@ -8,6 +8,8 @@ import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
 import { APIService } from '../services/api.service';
 import { response } from 'express';
+import { User } from '../models/user.model';
+import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-taskwrapper',
   imports: [CommonModule, FormsModule, MemberlistComponent],
@@ -18,10 +20,12 @@ export class TaskwrapperComponent {
   apiservice = inject(APIService);
   globalservice = inject(GlobalService);
   observerservice = inject(ObservableService);
+  userservice = inject(UserService);
   route = inject(ActivatedRoute);
   member: any;
   noMember: boolean = false;
   customerID: number | string | null = null;
+  user: any;
   task: any = {
     title: '',
     description: '',
@@ -35,10 +39,17 @@ export class TaskwrapperComponent {
     due_date: '',
     reviewer: '',
     completed_at: '',
+    log: [],
   };
-
+  mainTaskId: string='';
 
   ngOnInit() {
+    this.userservice.getUser().subscribe((user) => {
+      if (user) {
+        this.user = user;
+        console.log(user);
+      }
+    })
     this.observerservice.memberSubject$.subscribe((member) => {
       if (member) {
         console.log(member);
@@ -53,34 +64,68 @@ export class TaskwrapperComponent {
       const id = params.get('id');
       this.customerID = id
       console.log(this.customerID);
-
-
     });
+
+    this.observerservice.taskSubject$.subscribe((taskObj) => {
+      if (taskObj) {
+        this.mainTaskId = taskObj.id;
+        console.log(taskObj.id);
+
+      }
+    })
   }
 
   createTask(form: NgForm) {
+    console.log(this.globalservice.isSubtaskWrapper);
+
     this.noMember = this.checkMemberAdded();
     if (!form.valid || this.noMember) {
       form.control.markAllAsTouched(); // markiert alle Felder als "touched"
       return;
     }
     this.task.customer = this.customerID;
-    const requestData = this.createTaskObject();
-    this.apiservice.postData('tasks/', requestData).subscribe({
+    this.createLogElement()
+    this.saveTask();
+    this.globalservice.taskWrapperOpen = false;
+    this.globalservice.isSubtaskWrapper = false;
+    this.resetTask(form)
+  }
+
+  saveTask() {
+    console.log(this.globalservice.isSubtaskWrapper);
+  
+    let request$;
+    if (this.globalservice.isSubtaskWrapper) {
+      const requestData = this.createSubtaskObject();
+      request$ = this.apiservice.postData('subtasks/', requestData)
+    } else {
+      const requestData = this.createTaskObject();
+      request$ = this.apiservice.postData('tasks/', requestData)
+    }
+
+    request$.subscribe({
       next: (response) => {
         console.log(response);
-        this.observerservice.triggerloadTask()
+        this.observerservice.triggerloadTask(response);
       },
       error: (err) => console.log(err)
-
     })
-    this.globalservice.taskWrapperOpen = false;
-
-
-    this.resetTask(form)
-
 
   }
+
+
+  createLogElement() {
+    this.task.log.push({
+      logged_at: new Date().toISOString(),
+      updated_by: {
+        id: this.user.id,
+        fullname: this.user.fullname,
+      },
+      log: 'Aufgabe wurde erstellt',
+      newState: '',
+    });
+  }
+
   createTaskObject() {
     return {
       title: this.task.title,
@@ -90,6 +135,23 @@ export class TaskwrapperComponent {
       state: 'undone',
       priority: this.task.priority,
       due_date: this.task.due_date,
+      log: this.task.log,
+
+    }
+  }
+
+  createSubtaskObject() {
+    return {
+      task: this.mainTaskId,
+      title: this.task.title,
+      description: this.task.description,
+      customer: this.task.customer,
+      assignee: this.task.assignee,
+      state: 'undone',
+      priority: this.task.priority,
+      due_date: this.task.due_date,
+      log: this.task.log,
+
     }
   }
 
@@ -102,6 +164,7 @@ export class TaskwrapperComponent {
     this.task.priority = 'low';
     this.member = {};
     this.noMember = false;
+    this.globalservice.isSubtaskWrapper = false;
     form.resetForm();
     this.globalservice.taskWrapperOpen = false;
   }

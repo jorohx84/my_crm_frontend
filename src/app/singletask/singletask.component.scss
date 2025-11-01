@@ -1,28 +1,31 @@
 section {
     width: 100%;
-    height: calc(100vh - 80px);
+    height: 100%;
     display: flex;
     flex-direction: column;
-  
-  
     position: relative;
 }
 
-.taskHeader{
+.taskHeader {
     width: 100%;
-   
+    height: 90px;
     display: flex;
-    flex-direction: column;
+   justify-content: space-between;
     padding: 24px;
     gap: 24px;
     border-bottom: solid 0.5px var(--border);
     position: relative;
 }
 
+.taskTitle {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+}
+
 .closeBtn {
-    position: absolute;
-    top: 24px;
-    right: 24px;
+
     cursor: pointer;
 
     >img {
@@ -30,20 +33,31 @@ section {
     }
 }
 
-.taskContent{
+.taskContent {
     width: 100%;
     height: 100%;
     display: flex;
-   
+    overflow: hidden;
+
 }
-.taskInfoCont{
+
+.taskInfoCont {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     padding: 24px;
-   
+    gap: 24px;
+
 }
-.stateLine{
+
+.taskInfoSubCont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+.stateLine {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -67,7 +81,7 @@ section {
 }
 
 .progressLineInner {
- 
+
     min-height: 3px;
     position: absolute;
     left: 0;
@@ -100,10 +114,171 @@ section {
     >p {}
 }
 
-.subtasksCont{
+.taskInfos {
     width: 100%;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.duedate{
+    position: relative;
+}
+
+.changeDueDate{
+    position: absolute;
+    width:280px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+    z-index: 1;
+}
+
+.prioCont {
+    display: flex;
+    gap: 16px;
+}
+
+.prioDot {
+    min-width: 100px;
+    min-height: 100%;
+    border-radius: 100px;
+    background-color: red;
+    position: relative;
+    cursor: pointer;
+}
+
+.changePrio{
+    width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    right: -102px;
+    padding: 12px 0;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+    >p{
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        &:hover{
+            background-color: var(--listrow-hover);
+        }
+    }
+}
+
+.descriptionCont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.description {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.commentCont {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+
+    >p {
+        width: 100%;
+    }
+
+    >img {
+        width: 20px;
+        cursor: pointer;
+    }
+}
+
+
+
+.subtasksCont {
+    width: 100%;
+    max-width: 500px;
+
+    height: calc(100vh - 268.5px);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
     padding: 24px;
-    max-width: 400px;
+
     border-left: solid 0.5px var(--border);
+    overflow: hidden;
+}
+
+.sidabarNav{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    >div{
+        width: 100%;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--box-light);
+        border-radius: 4px;
+    }
+}
+
+.btnHlgt{
+    color: white !important;
+    background-color: var(--box) !important;
+}
+
+.sidebarList {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: scroll;
+}
+
+.commentsRow {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: var(--box-light);
+    position: relative;
+
+    >textarea {
+        border: none;
+        padding: 0;
+        height: 50px;
+    }
+
+    >img {
+        width: 18px;
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+    }
+}
+
+.commentInfo {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }

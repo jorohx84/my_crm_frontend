@@ -1,24 +1,26 @@
-section{
+section {
     width: 100%;
-  
+    height: 100%;
     display: flex;
     flex-direction: column;
+    padding: 24px;
     gap: 24px;
     height: calc(100vh - 229px);
 }
 
-.divider{
+.divider {
     min-height: 2px;
 }
 
-.taskList{
+.taskList {
     width: 100%;
-    
+
     display: flex;
     flex-direction: column;
     gap: 8px;
     overflow-y: scroll;
 }
+
 .taskRow {
     width: 100%;
     display: flex;

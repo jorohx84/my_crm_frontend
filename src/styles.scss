@@ -19,6 +19,7 @@
     --listrow-hover: #10779d81;
     --input: #10779d28;
 }
+
 //#B02323
 //#D98014
 section,
@@ -29,6 +30,19 @@ textarea {
     box-sizing: border-box !important;
     margin: 0;
 
+}
+
+.taskFormWrapper {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 32px;
+    background-color: white;
+    border-left: solid 0.5px var(--border);
+    z-index: 2;
 }
 
 .slideOut {
