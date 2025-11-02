@@ -271,8 +271,41 @@ button {
     padding: 32px;
 }
 
+.closeBtn{
+
+}
+
+.addBtn {
+width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 16px;
+    border-radius: 4px;
+    border: solid 0.5px var(--border);
+    cursor: pointer;
+position: relative;
+    >img {
+        width: 12px;
+    }
+
+}
+
 
 .border {
     border: solid 0.5px var(--border);
     border-radius: 4px;
+}
+
+.red {
+    background-color: rgb(206, 3, 3) !important;
+}
+
+.green {
+    background-color: rgb(1, 120, 1) !important;
+}
+
+.yellow {
+    background-color: rgb(253, 165, 1) !important;
 }

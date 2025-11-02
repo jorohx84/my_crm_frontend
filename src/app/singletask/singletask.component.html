@@ -7,11 +7,16 @@
         </div>
 
         <!-- <h3>für {{task.customer.companyname}}</h3> -->
+        <div class="taskMenu">
+            <div class="addBtn" (click)="commentSlide=true"><img src="./icons/add.svg" alt="">Kommentar</div>
+            <div class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To Do</div>
+            <div class="closeBtn">
+                <img src="./icons/close.svg" alt="" (click)="backToCustomer()">
 
-        <div class="closeBtn">
-            <img src="./icons/close.svg" alt="" (click)="backToCustomer()">
+            </div>
 
         </div>
+
     </div>
     <div class="taskContent">
 
@@ -20,7 +25,7 @@
 
 
             <div class="stateLine">
-                <h4>Status</h4>
+                <!-- <h4>Status</h4> -->
 
                 <div class="progressLineCont">
                     <div class="progressDot activeDot" (click)="updateTaskState('undone', 'state')">
@@ -49,20 +54,25 @@
                 <div class="taskInfos">
                     <h4>Informationen</h4>
                     <p>Erstellt am: {{task?.created_at | date: 'dd.MM.yyyy'}}</p>
-                    <div (click)="duedateChangeOpen=true" class="duedate">
+                    <div class="duedate">
                         <p>Fällig am: {{task?.due_date | date: 'dd.MM.yyyy'}}</p>
+                        <img (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt="">
                         <div *ngIf="duedateChangeOpen" class="changeDueDate">
+                            <h4>Fälligkeitsdatum ändern</h4>
                             <div class="inputfield">
                                 <input (change)="updateDueDate('due_date', $event)" [(ngModel)]="newDueDate"
                                     type="date">
                             </div>
-
+                            <img (click)="duedateChangeOpen=false" src="./icons/close.svg" alt="">
                         </div>
                     </div>
 
                     <div class="prioCont">
                         <p>Priorität:</p>
-                        <div (click)="priochangeOpen=!priochangeOpen" class="prioDot">
+                        <div (click)="priochangeOpen=!priochangeOpen" class="prio">
+                            <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+                            <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+                            <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
                             <div *ngIf="priochangeOpen" class="changePrio" (mouseleave)="priochangeOpen=false">
                                 <p (click)="changePrio('low', $event)">Niedrig</p>
                                 <p (click)="changePrio('mid', $event)">Mittel</p>
@@ -73,7 +83,7 @@
                     <h4>Zuständigkeiten:</h4>
                     <p>Bearbeiter: {{task.assignee?.fullname}}</p>
                     <p>Prüfer: {{task.reviewer?.fullname}}</p>
-                    <button (click)="addSubtask()">Subtask erstellen</button>
+
                 </div>
 
                 <div class="descriptionCont">
@@ -82,13 +92,40 @@
                         <textarea (change)="updateTask('description')" [disabled]="task?.reviewer?.id !== user?.id "
                             name="" id="" [(ngModel)]="task.description"></textarea>
                     </div>
+                    <div class="subtasksMonitor">
+                        <h3>To Do`s</h3>
+                        <div class="divider"></div>
+                        <div>
+                            <p>Gesamt:</p>
+                            <p>{{subtasks.length}}</p>
+                        </div>
 
-                    <div class="commentCont">
+                        <div>
+                            <p>unbearbeitet:</p>
+                            <p>{{countCompletesSubtasks('undone')}}</p>
+                        </div>
+                        <div>
+                            <p>in Bearbeitung:</p>
+                            <p>{{countCompletesSubtasks('in_progress')}}</p>
+                        </div>
+                        <div>
+                            <p>in Prüfung:</p>
+                            <p>{{countCompletesSubtasks('under_review')}}</p>
+                        </div>
+                        <div>
+                            <p>Erledigt</p>
+                            <p>{{countCompletesSubtasks('done')}}</p>
+                        </div>
+
+
+                    </div>
+
+                    <!-- <div class="commentCont">
                         <p>Kommentar</p>
                         <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
                             placeholder="Schreibe ein Kommentar" id=""></textarea>
                         <img (click)="createComment()" src="./icons/send.svg" alt="">
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -101,7 +138,7 @@
         <div class="subtasksCont">
             <div class="sidabarNav">
                 <div [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}" (click)="changeSidebarContent('subtasks')">
-                    <h4>Subtasks</h4>
+                    <h4>To Do`s</h4>
                 </div>
                 <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
                     <h4>Kommentare</h4>
@@ -137,19 +174,60 @@
             <div *ngIf="sidebarKey==='logs'" class="sidebarList">
 
                 <div *ngFor="let log of task.log">
-                    <p>{{log.log}}</p>
-                    <p>{{log.newState}}</p>
+                    <div class="logCard">
+                        <p>{{log.logged_at | date: 'dd.MM.yyyy : hh:mm'}} Uhr</p>
+                        <div class="divider"></div>
+                        <h4>{{log.log}}</h4>
+                        <p>{{log.newState}}</p>
+                        <p>{{log.updated_by.fullname}}</p>
+                    </div>
+
 
 
                 </div>
 
+
+
             </div>
 
-              <div *ngIf="sidebarKey==='subtasks'" class="sidebarList">
+            <div *ngIf="sidebarKey==='subtasks'" class="sidebarList">
 
                 <div *ngFor="let subtask of subtasks">
-                    <p>{{subtask.title}}</p>
-                    <p>{{subtask.description}}</p>
+                    <div class="subtaskCard">
+                        <div class="titleCont">
+                            <div class="title">
+
+                                <h4>{{subtask.title}}</h4>
+                            </div>
+
+                            {{subtask.created_at | date: 'dd.MM.yyyy'}}
+                        </div>
+
+                        <div class="divider"></div>
+                        <div class="subtaskInfo">
+                            <!-- <p>{{subtask.description}}</p> -->
+                            <p> Bearbeiter: {{subtask.assignee.fullname}}</p>
+                            <p> Prüfer: {{subtask.reviewer.fullname}}</p>
+                        </div>
+                        <div class="subtaskState">
+                            <div> Fällig am:{{subtask.due_date | date: 'dd.MM.yyyy' }}</div>
+                            <div class="stateCont">
+
+                                <img *ngIf="subtask.priority==='low'" src="./icons/low.svg" alt="">
+                                <img *ngIf="subtask.priority==='mid'" src="./icons/mid.svg" alt="">
+                                <img *ngIf="subtask.priority==='high'" src="./icons/high.svg" alt="">
+
+                                <img *ngIf="subtask.state==='undone'" src="./icons/undone.svg" alt="">
+                                <img *ngIf="subtask.state==='in_progress'" src="./icons/progress.svg" alt="">
+                                <img *ngIf="subtask.state==='under_review'" src="./icons/review.svg" alt="">
+                                <img *ngIf="subtask.state==='done'" src="./icons/done.svg" alt="">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
 
 
                 </div>
@@ -163,4 +241,14 @@
         <app-taskwrapper></app-taskwrapper>
 
     </div> -->
+
+    <div class="commentInputWrapper" [ngClass]="{'commentSlide': commentSlide}">
+        <img (click)="commentSlide=false" src="./icons/close.svg" alt="">
+        <div class="commentCont">
+            <p>Kommentar</p>
+            <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
+                placeholder="Schreibe ein Kommentar" id=""></textarea>
+            <img (click)="createComment()" src="./icons/send.svg" alt="">
+        </div>
+    </div>
 </section>

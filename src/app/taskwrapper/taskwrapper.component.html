@@ -3,7 +3,9 @@
     <div class="memberListWrapper slideOut" [ngClass]="{'slideIn': globalservice.memberListOpen}">
         <app-memberlist></app-memberlist>
     </div>
-    <h3>Aufgabe erstellen</h3>
+    <h3 *ngIf="!globalservice.isSubtaskWrapper">Aufgabe erstellen</h3>
+    <h3 *ngIf="globalservice.isSubtaskWrapper">To Do erstellen</h3>
+    
     <form #taskCreationFrom="ngForm" (ngSubmit)="createTask(taskCreationFrom)">
         <div class="inputCont">
             <div class="inputfield">

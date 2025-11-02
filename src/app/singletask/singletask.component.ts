@@ -7,7 +7,7 @@ import { UserService } from '../services/user.service';
 import { FormsModule } from '@angular/forms';
 import { response } from 'express';
 import { DataService } from '../services/data.service';
-import { identity } from 'rxjs';
+import { identity, retry } from 'rxjs';
 import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 import { ObservableService } from '../services/observable.service';
 
@@ -55,6 +55,7 @@ export class SingletaskComponent {
   newDueDate: string = '';
   subtasks: any[] = [];
   subtask: any;
+  commentSlide: boolean = false;
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -75,8 +76,12 @@ export class SingletaskComponent {
     this.observerservice.taskTriggerSubject$.subscribe((subtaskData) => {
       if (subtaskData) {
         this.subtask = subtaskData;
-        this.loadSubtasks(subtaskData.id);
+        console.log(subtaskData);
+
+        this.loadSubtasks(this.taskId);
         this.updateTask('subtask');
+        // this.loadtask(this.taskId)
+        this.sidebarKey = 'subtasks';
       }
 
     })
@@ -99,7 +104,7 @@ export class SingletaskComponent {
   }
 
 
-  loadSubtasks(id:string) {
+  loadSubtasks(id: string | null) {
     this.apiservice.getData(`subtasks/${id}`).subscribe({
       next: (response) => {
         console.log(response);
@@ -219,6 +224,7 @@ export class SingletaskComponent {
     this.globalservice.isSubtaskWrapper = true;
     this.globalservice.taskWrapperOpen = true;
     this.observerservice.sendTask(this.task);
+
   }
 
 
@@ -231,9 +237,12 @@ export class SingletaskComponent {
       next: (response) => {
         const id = this.task.id
         this.loadtask(id)
-
+        this.sidebarKey = 'comments';
+        this.commentSlide = false;
+        this.comment.text = '';
       }
     })
+
   }
 
 
@@ -267,6 +276,17 @@ export class SingletaskComponent {
 
       }
     })
+  }
+
+  countCompletesSubtasks(state: string) {
+    let count = 0;
+    for (let index = 0; index < this.subtasks.length; index++) {
+      const subtask = this.subtasks[index];
+      if (subtask.state === state) {
+        count++
+      }
+    }
+    return count
   }
 
 }

@@ -99,22 +99,7 @@ section {
     }
 }
 
-.addBtn {
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 12px 16px;
-    border-radius: 4px;
-    border: solid 0.5px var(--border);
-    cursor: pointer;
-
-    >img {
-        width: 12px;
-    }
-
-}
 
 .customerListCont {
     width: 100%;
