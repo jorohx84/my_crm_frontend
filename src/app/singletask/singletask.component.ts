@@ -10,10 +10,11 @@ import { DataService } from '../services/data.service';
 import { identity, retry } from 'rxjs';
 import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 import { ObservableService } from '../services/observable.service';
+import { MemberlistComponent } from '../memberlist/memberlist.component';
 
 @Component({
   selector: 'app-singletask',
-  imports: [CommonModule, FormsModule, TaskwrapperComponent],
+  imports: [CommonModule, FormsModule, TaskwrapperComponent, MemberlistComponent],
   templateUrl: './singletask.component.html',
   styleUrl: './singletask.component.scss'
 })
@@ -32,7 +33,7 @@ export class SingletaskComponent {
     customer: null,
     assignee: null,
     state: 'todo',
-    comment: '',
+    comments: '',
     priority: 'low',
     created_at: '',
     updated_at: '',
@@ -56,7 +57,15 @@ export class SingletaskComponent {
   subtasks: any[] = [];
   subtask: any;
   commentSlide: boolean = false;
+  memberListOpen: boolean = false;
+  newAssignee: any;
+  queryType: string | null = null;
+
+
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.queryType = params['type']; // Wert auslesen
+    });
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -66,55 +75,69 @@ export class SingletaskComponent {
       }
     });
 
+
+
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
-        console.log(user);
+
       }
     })
 
     this.observerservice.taskTriggerSubject$.subscribe((subtaskData) => {
       if (subtaskData) {
         this.subtask = subtaskData;
-        console.log(subtaskData);
-
         this.loadSubtasks(this.taskId);
-        this.updateTask('subtask');
+
+        this.updateTask({ log: [] }, 'subtask');
         // this.loadtask(this.taskId)
         this.sidebarKey = 'subtasks';
       }
 
     })
-
+    this.observerservice.memberSubject$.subscribe((memberData) => {
+      if (memberData) {
+        this.memberListOpen = false;
+        this.newAssignee = memberData;
+      }
+    })
   }
+  updateAssignee() {
+    const data = {
+      assignee: this.newAssignee.id
+    }
+    this.updateTask(data, 'assignee');
+    this.memberListOpen = false;
+  }
+
 
   loadtask(id: string | null) {
     if (id) {
       this.apiservice.getData(`task/${id}`).subscribe({
         next: (response) => {
-          console.log(response);
           this.task = response;
-          // this.getProgressState();
+          console.log(response);
+
+          this.getProgressState();
           this.sortComments();
         },
-        error: (err) => console.log(err)
-
       })
+
     }
+
   }
 
 
   loadSubtasks(id: string | null) {
     this.apiservice.getData(`subtasks/${id}`).subscribe({
       next: (response) => {
-        console.log(response);
         this.subtasks = response;
       }
     })
   }
 
   backToCustomer() {
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'])
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'], null)
 
   }
 
@@ -140,8 +163,6 @@ export class SingletaskComponent {
     else
       this.linewidth = 100;
 
-    console.log(this.linewidth);
-
   }
 
 
@@ -152,48 +173,49 @@ export class SingletaskComponent {
   changePrio(prio: string, event: Event) {
     this.priochangeOpen = false;
     this.task.priority = prio;
-    this.updateTask('priority');
+    const data = {
+      priority: prio,
+    }
+    this.updateTask(data, 'priority');
     event.stopPropagation()
   }
 
   updateTaskState(newState: string, objKey: string) {
     this.task.state = newState
-    this.updateTask(objKey);
+    const data = {
+      state: newState,
+    }
+    this.updateTask(data, objKey);
   }
 
   updateDueDate(objKey: string, event: Event) {
     this.task.due_date = this.newDueDate
-    this.updateTask(objKey);
+    const data = {
+      due_date: this.newDueDate,
+    }
+    this.updateTask(data, objKey);
     this.duedateChangeOpen = false;
     event.stopPropagation()
   }
 
-  updateTask(objKey: string) {
+
+
+  updateTask(data: any, objKey: string) {
     const logData = this.createLog(objKey);
-
-    console.log(logData);
-
-    // if (this.user.id !== this.task.reviewer.id) {
-    //   return
-
-    // }
     this.task.log.push(logData);
-
-    this.apiservice.patchData(`task/${this.taskId}/`, this.task).subscribe({
+    const requestData = data;
+    requestData.log = this.task.log;
+    this.apiservice.patchData(`task/${this.taskId}/`, requestData).subscribe({
       next: (response) => {
-        console.log(response);
         this.getProgressState();
-
+        this.loadtask(this.taskId);
       }
     })
   }
 
 
-
   createLog(objKey: string) {
-    console.log(objKey);
     const logText = this.dataservice.taskLogs[objKey]
-    console.log(logText);
     const newState = this.getnewState(objKey);
 
     return {
@@ -216,6 +238,9 @@ export class SingletaskComponent {
       return newState
     } else if (objKey === 'subtask') {
       const newState = this.subtask.title;
+      return newState
+    } else if (objKey === 'assignee') {
+      const newState = this.newAssignee.fullname
       return newState
     }
   }
@@ -251,14 +276,11 @@ export class SingletaskComponent {
     const comments = this.task.comments;
     const currentComment = comments[index];
     const id = currentComment.id
-    console.log(currentComment);
-
     this.apiservice.patchData(`comments/${id}/`, currentComment).subscribe({
       next: (response) => {
         const id = this.task.id
         this.loadtask(id)
         console.log('Kommentar bearbeitet!', response);
-
       }
     })
 
@@ -289,4 +311,16 @@ export class SingletaskComponent {
     return count
   }
 
+
+  openSubtask(index: number) {
+
+    const currentSubtask = this.subtasks[index];
+    console.log(currentSubtask);
+    const id = currentSubtask.id
+    const customerId = currentSubtask.customer;
+    const queryParam = {
+      type: currentSubtask.type,
+    }
+    this.globalservice.navigateToPath(['main', 'singlecustomer', customerId, 'task', id], queryParam);
+  }
 }

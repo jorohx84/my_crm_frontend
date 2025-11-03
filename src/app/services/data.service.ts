@@ -16,6 +16,7 @@ export class DataService {
         priority: 'Priorität wurde geändert',
         due_date: 'Fälligkeit wurde geändert',
         subtask:'neue Subtask wurde erstellt',
+        assignee:'Bearbeiter wurde geändert',
     }
 
 
@@ -38,18 +39,13 @@ export class DataService {
 
     getDataFromLocalStorage(data: any) {
         const storedData = localStorage.getItem(data);
-        console.log('Rohwert aus localStorage:', storedData, 'Typ:', typeof storedData);
         if (storedData) {
             try {
                 return JSON.parse(storedData);
             } catch (e) {
-                console.log(e);
-
                 return storedData;
             }
-        } else {
-            console.log('Keine Daten im localStorage gefunden');
-        }
+        } 
     }
 
     saveDataToLocalStorage(local: string, data: any) {

@@ -16,7 +16,7 @@ import { GlobalService } from '../services/global.service';
 })
 export class TasklistComponent {
   observerservice = inject(ObservableService);
-  globalservice=inject(GlobalService);
+  globalservice = inject(GlobalService);
   apiservice = inject(APIService);
   tasks: any[] = [];
   customerID: number | string | null = null;
@@ -33,17 +33,17 @@ export class TasklistComponent {
 
     // });
 
-     this.route.parent?.paramMap.subscribe(params => {
-    const id = params.get('id');
-    this.customerID = id;
-    if (id) {
-      this.loadTasks(id);
-    }
-  });
+    this.route.parent?.paramMap.subscribe(params => {
+      const id = params.get('id');
+      this.customerID = id;
+      if (id) {
+        this.loadTasks(id);
+      }
+    });
 
     this.observerservice.taskTriggerSubject$.subscribe((data) => {
       if (this.customerID) {
-              this.loadTasks(this.customerID);
+        this.loadTasks(this.customerID);
       }
 
     })
@@ -52,7 +52,7 @@ export class TasklistComponent {
 
   loadTasks(id: string | number | null = null) {
     console.log(id);
-    
+
     this.apiservice.getData(`tasks/${id}`).subscribe({
       next: (response) => {
         console.log(response);
@@ -62,13 +62,15 @@ export class TasklistComponent {
   }
 
 
-  openTask(index:number){
-    const currentTask=this.tasks[index];
+  openTask(index: number) {
+    const currentTask = this.tasks[index];
     console.log(currentTask);
-    const taskId = currentTask.id ;
+    const taskId = currentTask.id;
     console.log(taskId);
-    
-    this.globalservice.navigateToPath(['main','singlecustomer', this.customerID, 'task', taskId]);
+    const queryParam = {
+      type: currentTask.type,
+    }
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', taskId], queryParam);
     //  this.globalservice.navigateToPath(['main', 'task', taskId]);
   }
 

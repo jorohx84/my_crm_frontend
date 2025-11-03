@@ -26,16 +26,13 @@ export class HeaderComponent {
   ngOnInit() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
-        this.user = user;
-        console.log(user);
-        
+        this.user = user;        
       }
 
     });
   }
 
   logoutUser() {
-    console.log('LOGOUT');
     this.apiservice.postData('logout/', {}, true).subscribe({
       next: (res) => {
         console.log('Logout successful');

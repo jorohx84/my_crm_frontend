@@ -16,8 +16,8 @@ export class GlobalService {
     //     this.router.navigate([path]);
     // }
 
-    navigateToPath(segments: any[]) {
-        this.router.navigate(segments);
+    navigateToPath(segments: any[], queryParam?:any) {
+        this.router.navigate(segments, { queryParams: queryParam });
     }
 
     navigateToPathID(path: string, id: any) {

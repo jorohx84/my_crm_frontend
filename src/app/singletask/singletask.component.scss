@@ -156,7 +156,8 @@ section {
     border-radius: 4px;
     background-color: white;
     z-index: 1;
-    >img{
+
+    >img {
         width: 12px;
         position: absolute;
         top: 16px;
@@ -166,32 +167,46 @@ section {
 }
 
 .prioCont {
+    width: fit-content;
     display: flex;
     align-items: center;
     gap: 16px;
+    position: relative;
+
+    >img {
+        width: 16px;
+        cursor: pointer;
+    }
 }
 
+
 .prio {
-
+    display: flex;
+    align-items: center;
     border-radius: 100px;
-    position: relative;
-    cursor: pointer;
 
+    cursor: pointer;
+}
+
+
+.prioIcon {
     >img {
         width: 50px;
     }
 }
 
 .changePrio {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+
     position: absolute;
-    right: -102px;
-    padding: 12px 0;
+    top: 50%;
+    right: -202px;
+    padding: 32px 0;
     border: solid 0.5px var(--border);
     border-radius: 4px;
     background-color: white;
@@ -200,11 +215,39 @@ section {
         width: 100%;
         text-align: center;
         cursor: pointer;
+        padding: 12px;
 
         &:hover {
             background-color: var(--listrow-hover);
         }
     }
+
+    >img {
+        width: 12px;
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        cursor: pointer;
+    }
+}
+
+.assigneeCont {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.changeAssignee{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px 64px;
+    border: solid 0.5px var(--border);
+    position: absolute;
+    top: 0;
+    right: -200px;
 }
 
 .descriptionCont {

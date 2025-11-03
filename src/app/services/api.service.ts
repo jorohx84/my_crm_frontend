@@ -54,12 +54,8 @@ export class APIService {
     }
 
     getData(endpoint: string, useAuth: boolean = true): Observable<any> {
-console.log(endpoint);
-
         const url = this.BASE_URL + endpoint;
         const options = useAuth ? { headers: this.getAuthHeaders() } : {};
-
-        console.log('[GET]', url, options);
         return this.http.get(url, options);
     }
 }

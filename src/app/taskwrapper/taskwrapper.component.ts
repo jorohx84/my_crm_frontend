@@ -41,21 +41,18 @@ export class TaskwrapperComponent {
     completed_at: '',
     log: [],
   };
-  mainTaskId: string='';
+  mainTaskId: string = '';
 
   ngOnInit() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
-        console.log(user);
       }
     })
     this.observerservice.memberSubject$.subscribe((member) => {
       if (member) {
-        console.log(member);
         this.member = member;
         this.task.assignee = member.id
-        console.log(this.task.assignee);
         this.noMember = false
       }
     });
@@ -63,21 +60,16 @@ export class TaskwrapperComponent {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.customerID = id
-      console.log(this.customerID);
     });
 
     this.observerservice.taskSubject$.subscribe((taskObj) => {
       if (taskObj) {
         this.mainTaskId = taskObj.id;
-        console.log(taskObj.id);
-
       }
     })
   }
 
   createTask(form: NgForm) {
-    console.log(this.globalservice.isSubtaskWrapper);
-
     this.noMember = this.checkMemberAdded();
     if (!form.valid || this.noMember) {
       form.control.markAllAsTouched(); // markiert alle Felder als "touched"
@@ -92,20 +84,9 @@ export class TaskwrapperComponent {
   }
 
   saveTask() {
-    console.log(this.globalservice.isSubtaskWrapper);
-  
-    let request$;
-    if (this.globalservice.isSubtaskWrapper) {
-      const requestData = this.createSubtaskObject();
-      request$ = this.apiservice.postData('subtasks/', requestData)
-    } else {
-      const requestData = this.createTaskObject();
-      request$ = this.apiservice.postData('tasks/', requestData)
-    }
-
-    request$.subscribe({
+    const requestData = this.createTaskObject();
+    this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
-        console.log(response);
         this.observerservice.triggerloadTask(response);
       },
       error: (err) => console.log(err)
@@ -128,6 +109,7 @@ export class TaskwrapperComponent {
 
   createTaskObject() {
     return {
+      parent: this.mainTaskId || null,
       title: this.task.title,
       description: this.task.description,
       customer: this.task.customer,
@@ -136,22 +118,7 @@ export class TaskwrapperComponent {
       priority: this.task.priority,
       due_date: this.task.due_date,
       log: this.task.log,
-
-    }
-  }
-
-  createSubtaskObject() {
-    return {
-      task: this.mainTaskId,
-      title: this.task.title,
-      description: this.task.description,
-      customer: this.task.customer,
-      assignee: this.task.assignee,
-      state: 'undone',
-      priority: this.task.priority,
-      due_date: this.task.due_date,
-      log: this.task.log,
-
+      type: this.globalservice.isSubtaskWrapper ? 'subtask' : 'task',
     }
   }
 
@@ -170,7 +137,6 @@ export class TaskwrapperComponent {
   }
 
   setPriority(prio: string) {
-    console.log(prio);
     this.task.priority = prio;
   }
 }

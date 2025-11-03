@@ -27,7 +27,6 @@ export class MemberlistComponent {
   loadUsers() {
     this.apiservice.getData('profile/').subscribe({
       next: (response) => {
-        console.log(response);
         this.members = response;
         this.allMembers = response;
       },
@@ -38,7 +37,6 @@ export class MemberlistComponent {
 
   sendUserdata(index: number) {
     const foundUser = this.members[index];
-    console.log(foundUser);
     this.observerservice.sendMember(foundUser);
     this.globalservice.memberListOpen = false;
   }
@@ -54,8 +52,6 @@ export class MemberlistComponent {
         const user = this.allMembers[index];
         if (user.fullname.toLowerCase().includes(this.searchValue.toLowerCase())) {
           searchedUsers.push(user);
-          console.log(searchedUsers);
-
         }
       }
       this.isFound = searchedUsers.length > 0 ? true : false;
