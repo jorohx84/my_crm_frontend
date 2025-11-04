@@ -27,7 +27,7 @@
             <!-- <div (click)="changeFolder('tasks')">
                 <h4>Aufgaben</h4>
             </div> -->
-            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'], null)">
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'], {sidebarOpen:true})">
 
                 <h4>Aufgaben</h4>
             </div>
@@ -119,9 +119,7 @@
     </div>
 
     <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
-
         <app-taskwrapper></app-taskwrapper>
-
     </div>
 
 

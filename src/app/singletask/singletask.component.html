@@ -2,19 +2,35 @@
 
     <div class="taskHeader">
         <div class="taskTitle">
+
+            <p *ngIf="task.type==='subtask'">{{task.parent.title}}</p>
+            <img *ngIf="task.type==='subtask'" src="./icons/back.svg" alt="">
             <!-- <div class="prioDot"></div> -->
-            <h2>{{task?.title}} </h2>
+            <!-- <h2>{{task?.title}} </h2> -->
+            <input [disabled]="!checkPermissions('reviewer')" (change)="changeTitle('title')" class="title"
+                [(ngModel)]="task.title" type="text">
+            <!-- <img (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt=""> -->
+            <!-- <div class="typeCont">
+                <p *ngIf="task.type==='subtask'">ToDo</p>
+                <p *ngIf="task.type==='task'">Aufgabe</p>
+            </div> -->
+
         </div>
 
         <!-- <h3>für {{task.customer.companyname}}</h3> -->
         <div class="taskMenu">
+            <!-- <div class="addBtn"><img src="./icons/add.svg" alt="">Checkliste</div> -->
+             <button>Abschließen</button>
+            <div *ngIf="task.type==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
+                Do</div>
             <div class="addBtn" (click)="commentSlide=true"><img src="./icons/add.svg" alt="">Kommentar</div>
-            <div *ngIf="task.type==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To Do</div>
-            <div class="closeBtn">
-                <img src="./icons/close.svg" alt="" (click)="backToCustomer()">
+            <div *ngIf="task.type==='task'" class="closeBtn">
+                <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
             </div>
-
+            <div *ngIf="task.type==='subtask'" (click)="navigateToMainTask()" class="closeBtn">
+                <img src="./icons/back.svg" alt="">
+            </div>
         </div>
 
     </div>
@@ -56,7 +72,10 @@
                     <p>Erstellt am: {{task?.created_at | date: 'dd.MM.yyyy'}}</p>
                     <div class="duedate">
                         <p>Fällig am: {{task?.due_date | date: 'dd.MM.yyyy'}}</p>
-                        <img (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt="">
+                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
+                            class="changeBtn"><img (click)="duedateChangeOpen=true" src="./icons/editx.svg"
+                                alt=""></button>
+
                         <div *ngIf="duedateChangeOpen" class="changeDueDate">
                             <h4>Fälligkeitsdatum ändern</h4>
                             <div class="inputfield">
@@ -78,7 +97,10 @@
 
 
                         </div>
-                        <img (click)="priochangeOpen=!priochangeOpen" src="./icons/editx.svg" alt="">
+                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
+                            class="changeBtn"><img (click)="priochangeOpen=!priochangeOpen" src="./icons/editx.svg"
+                                alt=""></button>
+
                         <div *ngIf="priochangeOpen" class="changePrio">
                             <img (click)="priochangeOpen=false" src="./icons/close.svg" alt="">
                             <p (click)="changePrio('low', $event)">Niedrig</p>
@@ -89,12 +111,23 @@
                     <h4>Zuständigkeiten:</h4>
                     <div class="assigneeCont">
                         <p>Bearbeiter: {{task.assignee?.fullname}}</p>
-                        <img class="editBtn" src="./icons/editx.svg" alt="">
-                        <div class="changeAssignee">
+                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
+                            class="changeBtn" (click)="assigneeChangeOpen=true"><img class="editBtn"
+                                src="./icons/editx.svg" alt=""></button>
+                        <div *ngIf="assigneeChangeOpen" class="changeAssignee">
+
                             <p *ngIf="!newAssignee">Bearbeiter ändern:</p>
                             <h3 *ngIf="newAssignee">{{newAssignee.fullname}}</h3>
-                            <button *ngIf="!newAssignee" (click)="memberListOpen=true">Auswählen</button>
-                            <button *ngIf="newAssignee" (click)="updateAssignee()">speichern</button>
+                            <div *ngIf="!newAssignee" class="btnCont">
+                                <button (click)="assigneeChangeOpen=false">Abbrechen</button>
+                                <button (click)="memberListOpen=true">Auswählen</button>
+                            </div>
+                            <div *ngIf="newAssignee" class="btnCont">
+                                <button (click)="newAssignee=null">Abbrechen</button>
+                                <button (click)="updateAssignee()">speichern</button>
+                            </div>
+
+
                         </div>
                     </div>
 
@@ -106,9 +139,10 @@
                     <div class="description">
                         <h4>Beschreibung</h4>
                         <textarea (change)="updateTask({description:task.description},'description')"
-                            [disabled]="task?.reviewer?.id !== user?.id " name="" id=""
+                            [disabled]="!checkPermissions('assignee')" name="" id=""
                             [(ngModel)]="task.description"></textarea>
                     </div>
+
                     <div *ngIf="task.type==='task'" class="subtasksMonitor">
                         <h3>To Do`s</h3>
                         <div class="divider"></div>
@@ -137,7 +171,33 @@
 
                     </div>
 
-            <!-- Hier kommte dann die checkliste hin -->
+                    <!-- Hier kommte dann die checkliste hin -->
+                    <div ng *ngIf="task.type==='subtask'" class="checklist">
+                        <div class="checklistHead">
+                            <h3>Checkliste</h3>
+                            <img (click)="addTodo()" src="./icons/add.svg" alt="">
+                        </div>
+                        <div *ngFor="let check of checkList, let index=index">
+                            <div class="checklistRow">
+                                <div class="inputfield">
+                                    <input (change)="saveTodo(index)" placeholder="Todo hinzufügen"
+                                        [(ngModel)]="checkList[index].text" type="text">
+                                    <div (click)="changeIsChecked(index)" class="checkbox">
+                                        <img *ngIf="check.isChecked===true" src="./icons/done.svg" alt="">
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="divider"></div>
+                        <div class="counter">
+                            <p>{{countCompletedTodos()}}</p> / <p>{{checkList.length}}</p>
+                        </div>
+                    </div>
+
                 </div>
 
 
@@ -149,7 +209,8 @@
 
         <div class="subtasksCont">
             <div class="sidabarNav">
-                <div *ngIf="task.type==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}" (click)="changeSidebarContent('subtasks')">
+                <div *ngIf="task.type==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}"
+                    (click)="changeSidebarContent('subtasks')">
                     <h4>To Do`s</h4>
                 </div>
                 <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
@@ -247,10 +308,8 @@
         </div>
     </div>
 
-    <!-- <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
-
+    <!-- <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': taskWrapperOpen}">
         <app-taskwrapper></app-taskwrapper>
-
     </div> -->
     <div class="memberListWrapper slideOut borderLeft" [ngClass]="{'slideIn': memberListOpen}">
         <app-memberlist></app-memberlist>

@@ -53,18 +53,33 @@ export class SingletaskComponent {
   sortedComments: any[] = [];
   priochangeOpen: boolean = false;
   duedateChangeOpen: boolean = false;
+  commentSlide: boolean = false;
+  memberListOpen: boolean = false;
+  assigneeChangeOpen: boolean = false;
+  taskWrapperOpen: boolean = false;
   newDueDate: string = '';
   subtasks: any[] = [];
   subtask: any;
-  commentSlide: boolean = false;
-  memberListOpen: boolean = false;
   newAssignee: any;
   queryType: string | null = null;
-
-
+  checkList: any[] = [];
+  todotext: string = '';
+  taskCompleted: boolean = false;
   ngOnInit() {
+    this.loadTemplate();
+    this.subscribeUser();
+    this.subscribeSubtasks();
+    this.subscribeMember();
+    
+  }
+
+
+  loadTemplate() {
     this.route.queryParams.subscribe(params => {
-      this.queryType = params['type']; // Wert auslesen
+      this.queryType = params['type']; 
+      this.globalservice.sidebarOpen = params['sidebarOpen']; 
+  console.log(this.globalservice.sidebarOpen);
+  
     });
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -74,27 +89,30 @@ export class SingletaskComponent {
         this.loadSubtasks(id);
       }
     });
+  }
 
-
-
+  subscribeUser() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
 
       }
     })
+  }
 
+  subscribeSubtasks() {
     this.observerservice.taskTriggerSubject$.subscribe((subtaskData) => {
       if (subtaskData) {
         this.subtask = subtaskData;
         this.loadSubtasks(this.taskId);
-
         this.updateTask({ log: [] }, 'subtask');
-        // this.loadtask(this.taskId)
         this.sidebarKey = 'subtasks';
+        this.taskWrapperOpen = false;
       }
-
     })
+  }
+
+  subscribeMember() {
     this.observerservice.memberSubject$.subscribe((memberData) => {
       if (memberData) {
         this.memberListOpen = false;
@@ -102,12 +120,24 @@ export class SingletaskComponent {
       }
     })
   }
+
+
+  checkPermissions(permission: string): boolean {
+    if (permission === 'reviewer') {
+      return this.task.reviewer?.id === this.user?.id;
+    } else if (permission === 'assignee') {
+      return this.task.assignee === this.user?.id || this.task.reviewer?.id === this.user?.id;
+    } else
+      return false
+
+  }
+
   updateAssignee() {
     const data = {
       assignee: this.newAssignee.id
     }
     this.updateTask(data, 'assignee');
-    this.memberListOpen = false;
+    this.assigneeChangeOpen = false;
   }
 
 
@@ -120,6 +150,7 @@ export class SingletaskComponent {
 
           this.getProgressState();
           this.sortComments();
+          this.checkList = response.checklist
         },
       })
 
@@ -132,6 +163,8 @@ export class SingletaskComponent {
     this.apiservice.getData(`subtasks/${id}`).subscribe({
       next: (response) => {
         this.subtasks = response;
+        console.log(response);
+
       }
     })
   }
@@ -169,8 +202,20 @@ export class SingletaskComponent {
   changeSidebarContent(key: string) {
     this.sidebarKey = key;
   }
+  changeTitle(objKey: string) {
+    const data = {
+      title: this.task.title,
+    }
+    this.updateTask(data, objKey);
+
+  }
+
 
   changePrio(prio: string, event: Event) {
+    const permission = this.checkPermissions('reviewer');
+    if (!permission) {
+      return
+    }
     this.priochangeOpen = false;
     this.task.priority = prio;
     const data = {
@@ -230,18 +275,18 @@ export class SingletaskComponent {
   }
 
   getnewState(objKey: string) {
-    if (objKey === 'description' || objKey === 'due_date') {
-      const newState = this.task[objKey]
-      return newState
+    if (objKey === 'description' || objKey === 'due_date' || objKey === 'title') {
+      return this.task[objKey]
     } else if (objKey === 'state' || objKey === 'priority') {
-      const newState = this.dataservice.interpretation[objKey][this.task[objKey]]
-      return newState
+      return this.dataservice.interpretation[objKey][this.task[objKey]]
     } else if (objKey === 'subtask') {
-      const newState = this.subtask.title;
-      return newState
+      return this.subtask.title;
     } else if (objKey === 'assignee') {
-      const newState = this.newAssignee.fullname
-      return newState
+      return this.newAssignee.fullname
+    } else if (objKey === 'checklist') {
+      return 'Aufgabe hinzugefügt'
+    } else if (objKey === 'tododone' || objKey === 'todoundone') {
+      return this.todotext
     }
   }
 
@@ -322,5 +367,68 @@ export class SingletaskComponent {
       type: currentSubtask.type,
     }
     this.globalservice.navigateToPath(['main', 'singlecustomer', customerId, 'task', id], queryParam);
+  }
+
+  navigateToMainTask() {
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'task', this.task.parent.id], null);
+  }
+
+  addTodo() {
+    const listObj = {
+      text: '',
+      isChecked: false,
+    }
+    this.checkList.push(listObj)
+    console.log(this.checkList);
+
+  }
+
+  saveTodo(index: number) {
+    console.log(index);
+    console.log(this.checkList);
+    const data = {
+      checklist: this.checkList,
+    }
+    this.updateTask(data, 'checklist');
+  }
+
+  changeIsChecked(index: number) {
+    const checkbox = this.checkList[index]
+    checkbox.isChecked = !checkbox.isChecked
+
+    const data = {
+      checklist: this.checkList,
+    }
+
+    console.log(checkbox.text);
+    this.todotext = checkbox.text
+    const log = checkbox.isChecked ? 'tododone' : 'todoundone';
+    console.log(log);
+
+
+    this.updateTask(data, log)
+  }
+
+  countCompletedTodos() {
+    let count = 0;
+    for (let index = 0; index < this.checkList.length; index++) {
+      const check = this.checkList[index];
+      if (check.isChecked === true) {
+        count++
+      }
+    }
+    return count
+  }
+
+  checkCompletion() {
+    let completion = true;
+    for (let index = 0; index < this.subtasks.length; index++) {
+      const subtasks = this.subtasks[index];
+      if (subtasks.state !== 'done') {
+        completion = false;
+      }
+    }
+    console.log(completion);
+    this.taskCompleted = completion;
   }
 }

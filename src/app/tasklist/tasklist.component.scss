@@ -6,6 +6,19 @@ section {
     padding: 24px;
     gap: 24px;
     height: calc(100vh - 229px);
+    position: relative;
+}
+.taskListHeader{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.listBtns{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
 }
 
 .divider {
@@ -22,7 +35,7 @@ section {
 }
 
 .taskRow {
-    width: 100%;
+    // width: 100%;
     display: flex;
     justify-content: space-between;
     padding: 12px;
@@ -34,18 +47,68 @@ section {
     }
 }
 
+.titlePrio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
 .taskRowleft {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-start;
 }
 
 .taskRowRight {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
     justify-content: space-between;
     align-items: flex-end;
+}
+
+.prioIcon {
+    >img {
+        width: 30px;
+        cursor: pointer;
+    }
+}
+
+.subtaskCountCont {
+    width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    >p {
+        font-size: 20px;
+    }
+}
+
+.subtaskCount {
+    display: flex;
+
+    >p {
+        font-size: 20px;
+    }
+}
+
+.countLine {
+    width: 100%;
+    height: 6px;
+    max-width: 300px;
+    border: solid 0.5px var(--border);
+    border-radius: 100px;
+    position: relative;
+}
+
+.countLineInner {
+    height: 100%;
+    background-color: var(--border);
+
 }

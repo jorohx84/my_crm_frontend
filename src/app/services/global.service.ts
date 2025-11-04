@@ -12,11 +12,12 @@ export class GlobalService {
     memberListOpen: boolean = false;
     taskWrapperOpen: boolean = false;
     isSubtaskWrapper: boolean = false;
+      sidebarOpen: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
 
-    navigateToPath(segments: any[], queryParam?:any) {
+    navigateToPath(segments: any[], queryParam?: any) {
         this.router.navigate(segments, { queryParams: queryParam });
     }
 

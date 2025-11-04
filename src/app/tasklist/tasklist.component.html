@@ -1,28 +1,62 @@
 <section>
-    <h2>Aufgaben</h2>
+    <div class="taskListHeader">
+<h2>Aufgaben</h2>
+<div class="listBtns">
+    <button (click)="filterTasks('undone')">Offen</button>
+    <button (click)="filterTasks('done')">erledigt</button>
+</div>
+    </div>
+    
     <div class="divider"></div>
     <div class="taskList">
 
 
-        <div (click)="openTask(index)" class="taskRow border" *ngFor="let task of tasks, let index=index">
+        <div (click)="openTask(index)" class="taskRow border" *ngFor="let task of filteredTaskList, let index=index">
             <div class="taskRowleft">
-                <h3> {{task.title}}</h3>
-                <span>erstellt am: {{task.created_at | date: 'dd.MM.yyyy'}}</span>
+                <div class="titlePrio">
+                    <h3> {{task.title}}</h3>
+                
+                </div>
 
-                <span *ngIf="task.state ==='undone'">Satus: unbearbeitet</span>
-                <span *ngIf="task.state ==='in_progress'">Satus: in Bearbeitung</span>
+                <div class="subtaskCountCont">
+                    <p>Todo`s</p>
+                    <div class="countLine">
+                        <div class="countLineInner" [style.width.%]="getCountLinePercentage(index)"></div>
+                    </div>
+                    <div class="subtaskCount">
+
+                        <p>{{task.counts?.completed_count}}</p>
+                        <p>/</p>
+                        <p>{{task.counts?.total_count}}</p>
+                    </div>
+
+                </div>
+
+                <!-- <span>erstellt am: {{task.created_at | date: 'dd.MM.yyyy'}}</span> -->
+                <!-- <span>Fällig am: {{task.due_date | date: 'dd.MM.yyyy'}}</span> -->
+                <!-- <span *ngIf="task.state ==='undone'">Satus: unbearbeitet</span> -->
+                <!-- <span *ngIf="task.state ==='in_progress'">Satus: in Bearbeitung</span>
                 <span *ngIf="task.state ==='under_review'">Satus: in Prüfung</span>
-                <span *ngIf="task.state ==='done'">Satus: Erledigt</span>
+                <span *ngIf="task.state ==='done'">Satus: Erledigt</span> -->
             </div>
             <div class="taskRowRight">
+                    <div class="prioIcon">
+                        <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+                        <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+                        <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
+                    </div>
+
                 <span>Fällig am: {{task.due_date | date: 'dd.MM.yyyy'}}</span>
-                <span *ngIf="task.priority==='low'">Priorität: Niedrig</span>
-                <span *ngIf="task.priority==='mid'">Priorität: Mittel</span>
-                <span *ngIf="task.priority==='high'">Priorität: Hoch</span>
-                <span>zu erledigen von: {{task.assignee.fullname}}</span>
+
+                <!-- <span>zu erledigen von: {{task.assignee.fullname}}</span> -->
             </div>
 
 
         </div>
+    </div>
+    <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
+
+        <app-taskwrapper></app-taskwrapper>
+
     </div>
 </section>

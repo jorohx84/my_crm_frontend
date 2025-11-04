@@ -10,13 +10,16 @@ export class DataService {
     customerList: any[] = [];
 
     taskLogs: Record<string, string> = {
-        titel: 'Titel wurde geändert',
+        title: 'Titel wurde geändert',
         description: 'Beschreibung wurde geändert',
         state: 'Status wurde geändert',
         priority: 'Priorität wurde geändert',
         due_date: 'Fälligkeit wurde geändert',
         subtask:'neue Subtask wurde erstellt',
         assignee:'Bearbeiter wurde geändert',
+        checklist:'Checkliste wurde bearbeitet',
+        tododone:'Checkliste: Todo abgeschlossen',
+        todoundone:'Checkliste: Todo auf unbearbeitet geändert',
     }
 
 

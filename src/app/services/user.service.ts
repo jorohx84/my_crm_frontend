@@ -36,7 +36,7 @@ export class UserService {
         created_by: null,
         updated_at: ''
     }
- 
+
 
     /**
      *  Observer der sicherstellt dass die daten aus dem localStorage verfügbar sind und dann die das eigentliche, observersubejt zurück gibt, solbald die daten verfügbar sind" 
@@ -54,7 +54,7 @@ export class UserService {
     }
 
     loadUserData(ID: number) {
-       
+
 
         this.apiservice.getData(`profile/${ID}/`, false).subscribe({
             next: (response) => {
@@ -64,4 +64,5 @@ export class UserService {
         })
     }
 
+  
 }

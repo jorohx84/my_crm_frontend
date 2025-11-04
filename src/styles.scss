@@ -51,7 +51,7 @@ textarea {
 }
 
 .slideIn {
-    transform: translateX(0);
+    transform: translateX(0) !important;
 }
 
 textarea {
@@ -113,6 +113,8 @@ h3 {
 }
 
 h4 {
+    font-size: 14px;
+    font-weight: 500;
     margin: 0;
 }
 
@@ -246,6 +248,7 @@ form {
 button {
     all: unset;
     width: 100%;
+    min-width: 160px;
     max-width: 160px;
     height: 40px;
     display: flex;
@@ -271,10 +274,11 @@ button {
     padding: 32px;
 }
 
-.closeBtn {}
+
 
 .addBtn {
     width: 120px;
+    min-width: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -289,6 +293,15 @@ button {
         width: 12px;
     }
 
+}
+
+.changeBtn{
+    background-color: white;
+    width: fit-content;
+    >img{
+        width: 16px;
+
+    }
 }
 
 
@@ -328,4 +341,11 @@ button {
 
 .borderLeft {
     border-left: solid 0.5px var(--border);
+}
+
+.close{
+    position: absolute;
+    width: 16px;
+    top: 16px;
+    right: 16px;
 }

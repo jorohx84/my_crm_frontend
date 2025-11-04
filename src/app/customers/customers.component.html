@@ -46,7 +46,7 @@
                     <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                 </div> -->
                 <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
-                    (click)="globalservice.navigateToPath(['main','singlecustomer',customer.id ])">
+                    (click)="globalservice.navigateToPath(['main','singlecustomer', customer.id], {sidebarOpen:true})">
 
                     <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                 </div>

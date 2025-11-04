@@ -40,7 +40,9 @@ export class SinglecustomerComponent {
   folder: string = '';
 
   ngOnInit() {
-    this.folder=this.dataservice.getDataFromLocalStorage('folder');
+    this.route.queryParams.subscribe(params => {
+      this.globalservice.sidebarOpen = params['sidebarOpen']; // Wert auslesen
+    });
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.customerID = id
