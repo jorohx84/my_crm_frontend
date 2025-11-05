@@ -40,9 +40,8 @@ export class SinglecustomerComponent {
   folder: string = '';
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.globalservice.sidebarOpen = params['sidebarOpen']; // Wert auslesen
-    });
+    this.globalservice.toggleSidebar(true);
+    
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.customerID = id

@@ -8,6 +8,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { SinglecustomerComponent } from './singlecustomer/singlecustomer.component';
 import { TasklistComponent } from './tasklist/tasklist.component';
 import { SingletaskComponent } from './singletask/singletask.component';
+import { BoardComponent } from './board/board.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -23,7 +24,7 @@ export const routes: Routes = [
                     { path: 'task/:id', component: SingletaskComponent },
                 ]
             },
-            // { path: 'task/:id', component: SingletaskComponent },
+            { path: 'board', component: BoardComponent },
         ]
     }
 ];

@@ -1,0 +1,47 @@
+.board {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  height: 80vh;
+  overflow-x: auto;
+}
+
+.board-column {
+  background-color: #f4f5f7;
+  border-radius: 8px;
+  padding: 12px;
+  flex: 1 1 250px;
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+}
+
+.board-column h3 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.board-column div[cdkDrag] {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  cursor: move;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.board-column div[cdkDrag]:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  border-radius: 6px;
+}
+
+.cdk-drag-placeholder {
+  background-color: #e0e0e0;
+  border-radius: 6px;
+}

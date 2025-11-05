@@ -6,6 +6,7 @@ import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 
 @Component({
   selector: 'app-header',
@@ -18,18 +19,27 @@ export class HeaderComponent {
   apiservice = inject(APIService);
   observservice = inject(ObservableService);
   userservice = inject(UserService);
-  globalservice=inject(GlobalService);
+  globalservice = inject(GlobalService);
   router = inject(Router);
   user: any;
   component: string = '';
-
+  intervalId: any;
+  date: string = '';
   ngOnInit() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
-        this.user = user;        
+        this.user = user;
       }
 
     });
+    this.setTime();
+  }
+
+
+  setTime(): void {
+    this.intervalId = setInterval(() => {
+      this.date = new Date().toISOString()
+    }, 1000);
   }
 
   logoutUser() {

@@ -296,6 +296,8 @@ button {
 }
 
 .changeBtn{
+    min-width: unset;
+    width: 16px !important;
     background-color: white;
     width: fit-content;
     >img{
@@ -348,4 +350,7 @@ button {
     width: 16px;
     top: 16px;
     right: 16px;
+}
+.flexheight{
+    height: fit-content !important;
 }

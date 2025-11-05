@@ -15,7 +15,7 @@
         </div>
 
         <div class="navBtns">
-              <div (click)="changeFolder('orders')">
+            <div (click)="changeFolder('orders')">
                 <h4>Dashboard</h4>
             </div>
             <div (click)="changeFolder('activities')">
@@ -27,7 +27,8 @@
             <!-- <div (click)="changeFolder('tasks')">
                 <h4>Aufgaben</h4>
             </div> -->
-            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'], {sidebarOpen:true})">
+            <div
+                (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'], {sidebarOpen:true})">
 
                 <h4>Aufgaben</h4>
             </div>
@@ -36,7 +37,8 @@
             </div>
         </div>
         <div class="actionBtns">
-            <div *ngIf="!isEdit" class="menuBtn" (click)="globalservice.taskWrapperOpen=true; globalservice.isSubtaskWrapper=false;">
+            <div *ngIf="!isEdit" class="menuBtn"
+                (click)="globalservice.taskWrapperOpen=true; globalservice.isSubtaskWrapper=false;">
                 <img src=" ./icons/tasks.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
@@ -108,14 +110,14 @@
 
         <!-- BOARD -->
         <div class="customerBoard">
-      
-           <router-outlet></router-outlet>
+
+            <router-outlet></router-outlet>
         </div>
 
 
 
         <!-- SIDEBAR -->
-        <!-- <div class="customerSidebar"></div> -->
+        <div *ngIf="globalservice.sidebarOpen===true" class="customerSidebar"></div>
     </div>
 
     <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">

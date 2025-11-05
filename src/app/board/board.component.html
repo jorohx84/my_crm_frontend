@@ -1,0 +1,93 @@
+<!-- <div *ngFor="let undoneTask of board.undone, let index=index">
+    <p>{{undoneTask?.title}}</p>
+</div>
+<div *ngFor="let progressTask of board.in_progress, let index=index">
+    <p>{{progressTask?.title}}</p>
+</div>
+<div *ngFor="let reviewTask of board.under_review, let index=index">
+    <p>{{reviewTask?.title}}</p>
+</div>
+<div *ngFor="let doneTask of board.done, let index=index">
+    <p>{{doneTask?.title}}</p>
+</div> -->
+
+
+<!-- <div class="board-column" cdkDropList [cdkDropListData]="board.undone" (cdkDropListDropped)="drop($event, 'undone')">
+  <h3>Undone</h3>
+  <div *ngFor="let task of board.undone" cdkDrag>
+    <p>{{task?.title}}</p>
+  </div>
+</div>
+
+<div class="board-column" cdkDropList [cdkDropListData]="board.in_progress" (cdkDropListDropped)="drop($event, 'in_progress')">
+  <h3>In Progress</h3>
+  <div *ngFor="let task of board.in_progress" cdkDrag>
+    <p>{{task?.title}}</p>
+  </div>
+</div>
+
+<div class="board-column" cdkDropList [cdkDropListData]="board.under_review" (cdkDropListDropped)="drop($event, 'under_review')">
+  <h3>Under Review</h3>
+  <div *ngFor="let task of board.under_review" cdkDrag>
+    <p>{{task?.title}}</p>
+  </div>
+</div>
+
+<div class="board-column" cdkDropList [cdkDropListData]="board.done" (cdkDropListDropped)="drop($event, 'done')">
+  <h3>Done</h3>
+  <div *ngFor="let task of board.done" cdkDrag>
+    <p>{{task?.title}}</p>
+  </div>
+</div> -->
+<div class="board">
+
+    <!-- Undone -->
+    <div class="board-column" cdkDropList #undoneList="cdkDropList" id="undoneList" [cdkDropListData]="board.undone"
+        [cdkDropListConnectedTo]="['inProgressList', 'underReviewList', 'doneList']"
+        (cdkDropListDropped)="drop($event, 'undone')">
+        <h3>{{ stateLabels['undone'] }}</h3>
+        <div *ngFor="let task of board.undone" cdkDrag [cdkDragData]="task">
+               <div (click)="openTaskInCustomer(task)">
+                <p>{{ task.title }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- In Progress -->
+    <div class="board-column" cdkDropList #inProgressList="cdkDropList" id="inProgressList"
+        [cdkDropListData]="board.in_progress" [cdkDropListConnectedTo]="['undoneList', 'underReviewList', 'doneList']"
+        (cdkDropListDropped)="drop($event, 'in_progress')">
+        <h3>{{ stateLabels['in_progress'] }}</h3>
+        <div *ngFor="let task of board.in_progress" cdkDrag [cdkDragData]="task">
+               <div (click)="openTaskInCustomer(task)">
+                <p>{{ task.title }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Under Review -->
+    <div class="board-column" cdkDropList #underReviewList="cdkDropList" id="underReviewList"
+        [cdkDropListData]="board.under_review" [cdkDropListConnectedTo]="['undoneList', 'inProgressList', 'doneList']"
+        (cdkDropListDropped)="drop($event, 'under_review')">
+        <h3>{{ stateLabels['under_review'] }}</h3>
+        <div *ngFor="let task of board.under_review" cdkDrag [cdkDragData]="task">
+               <div (click)="openTaskInCustomer(task)">
+                <p>{{ task.title }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Done -->
+    <div class="board-column" cdkDropList #doneList="cdkDropList" id="doneList" [cdkDropListData]="board.done"
+        [cdkDropListConnectedTo]="['undoneList', 'inProgressList', 'underReviewList']"
+        (cdkDropListDropped)="drop($event, 'done')">
+        <h3>{{ stateLabels['done'] }}</h3>
+        <div *ngFor="let task of board.done" cdkDrag [cdkDragData]="task">
+            <div (click)="openTaskInCustomer(task)">
+                <p>{{ task.title }}</p>
+            </div>
+
+        </div>
+    </div>
+
+</div>

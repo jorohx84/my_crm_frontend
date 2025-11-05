@@ -3,8 +3,8 @@
     <div class="taskHeader">
         <div class="taskTitle">
 
-            <p *ngIf="task.type==='subtask'">{{task.parent.title}}</p>
-            <img *ngIf="task.type==='subtask'" src="./icons/back.svg" alt="">
+            <p *ngIf="queryType==='subtask'">{{task.parent.title}}</p>
+            <img *ngIf="queryType==='subtask'" src="./icons/back.svg" alt="">
             <!-- <div class="prioDot"></div> -->
             <!-- <h2>{{task?.title}} </h2> -->
             <input [disabled]="!checkPermissions('reviewer')" (change)="changeTitle('title')" class="title"
@@ -21,14 +21,14 @@
         <div class="taskMenu">
             <!-- <div class="addBtn"><img src="./icons/add.svg" alt="">Checkliste</div> -->
              <button>Abschließen</button>
-            <div *ngIf="task.type==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
+            <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
                 Do</div>
             <div class="addBtn" (click)="commentSlide=true"><img src="./icons/add.svg" alt="">Kommentar</div>
-            <div *ngIf="task.type==='task'" class="closeBtn">
+            <div *ngIf="queryType==='task'" class="closeBtn">
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
             </div>
-            <div *ngIf="task.type==='subtask'" (click)="navigateToMainTask()" class="closeBtn">
+            <div *ngIf="queryType==='subtask'" (click)="navigateToMainTask()" class="closeBtn">
                 <img src="./icons/back.svg" alt="">
             </div>
         </div>
@@ -143,7 +143,7 @@
                             [(ngModel)]="task.description"></textarea>
                     </div>
 
-                    <div *ngIf="task.type==='task'" class="subtasksMonitor">
+                    <div *ngIf="queryType==='task'" class="subtasksMonitor">
                         <h3>To Do`s</h3>
                         <div class="divider"></div>
                         <div>
@@ -172,7 +172,7 @@
                     </div>
 
                     <!-- Hier kommte dann die checkliste hin -->
-                    <div ng *ngIf="task.type==='subtask'" class="checklist">
+                    <div ng *ngIf="queryType==='subtask'" class="checklist">
                         <div class="checklistHead">
                             <h3>Checkliste</h3>
                             <img (click)="addTodo()" src="./icons/add.svg" alt="">
@@ -209,7 +209,7 @@
 
         <div class="subtasksCont">
             <div class="sidabarNav">
-                <div *ngIf="task.type==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}"
+                <div *ngIf="queryType==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}"
                     (click)="changeSidebarContent('subtasks')">
                     <h4>To Do`s</h4>
                 </div>
@@ -263,7 +263,7 @@
 
             </div>
 
-            <div *ngIf="sidebarKey==='subtasks' && task.type==='task'" class="sidebarList">
+            <div *ngIf="sidebarKey==='subtasks' && queryType==='task'" class="sidebarList">
 
                 <div *ngFor="let subtask of subtasks, let index=index">
                     <div (click)="openSubtask(index)" class="subtaskCard">

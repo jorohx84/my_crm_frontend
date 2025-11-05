@@ -1,26 +1,29 @@
-
-
 <section>
     <div class="navLogoCont">
-    
+
         <h1>CRM</h1>
-    <nav>
-        <div class="navlink" (click)="globalservice.navigateToPath(['main','customers'])">
-         
-            <p>Kunden</p>
-        </div>
-         <div class="navlink" (click)="globalservice.navigateToPath(['main','customers'])">
-            
-            <p>Aufgaben</p>
-        </div>
-    </nav>
+        <nav>
+            <div class="navlink" (click)="globalservice.navigateToPath(['main','customers'])">
+
+                <p>Kunden</p>
+            </div>
+            <div class="navlink" (click)="globalservice.navigateToPath(['main','board'])">
+
+                <p>Aufgaben</p>
+            </div>
+        </nav>
 
     </div>
 
-<div class="profileCont" >
-    <p>{{user?.displayName}}</p>
-<img (click)="logoutUser()" src="./icons/logout.svg" alt="">
+    <div class="profileCont">
 
-</div>
+        <p>{{user?.fullname}}</p>
+        <img (click)="logoutUser()" src="./icons/logout.svg" alt="">
+        <div class="date">
+            <p>{{date | date: 'HH:mm'}} Uhr</p>
+            <!-- <p>{{date | date: 'dd.MM.yyyy'}}</p> -->
+        </div>
+
+    </div>
 
 </section>

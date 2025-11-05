@@ -19,19 +19,22 @@ export class TasklistComponent {
   observerservice = inject(ObservableService);
   globalservice = inject(GlobalService);
   apiservice = inject(APIService);
+  dataservice = inject(DataService);
   tasks: any[] = [];
   customerID: number | string | null = null;
   route = inject(ActivatedRoute);
   counts: any[] = [];
   countsLoaded: boolean = false;
   filteredTaskList: any[] = [];
-
+  constructor() {
+    this.globalservice.toggleSidebar(true)
+  }
   ngOnInit() {
 
-    this.route.queryParams.subscribe(params => {
-      this.globalservice.sidebarOpen = params['sidebarOpen']; // Wert auslesen
-    });
-
+    // this.route.queryParams.subscribe(params => {
+    //   this.globalservice.sidebarOpen = params['sidebarOpen']; // Wert auslesen
+    // });
+    // this.globalservice.sidebarOpen=this.dataservice.getDataFromLocalStorage('sidebarOpen')
     this.route.parent?.paramMap.subscribe(params => {
       const id = params.get('id');
       this.customerID = id;
@@ -94,8 +97,9 @@ export class TasklistComponent {
     const taskId = currentTask.id;
     const queryParam = {
       type: currentTask.type,
-      sidebarOpen:false,
+      sidebarOpen: false,
     }
+    // this.globalservice.toggleSidebar(false);
     this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', taskId], queryParam);
     //  this.globalservice.navigateToPath(['main', 'task', taskId]);
 

@@ -7,10 +7,12 @@ import { UserService } from '../services/user.service';
 import { APIService } from '../services/api.service';
 import { response } from 'express';
 import { DataService } from '../services/data.service';
+import { CustomerwrapperComponent } from '../customerwrapper/customerwrapper.component';
+import { ObservableService } from '../services/observable.service';
 
 @Component({
   selector: 'app-customers',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomerwrapperComponent],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss'
 })
@@ -19,13 +21,14 @@ export class CustomersComponent {
   userservice = inject(UserService);
   dataservice = inject(DataService);
   apiservice = inject(APIService);
+  observerservice = inject(ObservableService);
   isOpen: boolean = false;
   customer = this.userservice.emptyCustomer;
   user: any;
   customers: any[] = [];
   allCustomers: any[] = [];
-  isValid: boolean = false;
-  isSend: boolean = false;
+  // isValid: boolean = false;
+  // isSend: boolean = false;
   isFound: boolean = false;
   searchFilterOpen: boolean = false;
   isloading: boolean = true;
@@ -36,9 +39,9 @@ export class CustomersComponent {
     { fieldName: 'areacode', displayName: 'Postleitzahl' },
     { fieldName: 'city', displayName: 'Stadt' },
     { fieldName: 'country', displayName: 'Land' },
-    { fieldName: 'email', displayName: 'E-Mail' },
-    { fieldName: 'phone', displayName: 'Telefon' },
-    { fieldName: 'website', displayName: 'Webseite' },
+    // { fieldName: 'email', displayName: 'E-Mail' },
+    // { fieldName: 'phone', displayName: 'Telefon' },
+    // { fieldName: 'website', displayName: 'Webseite' },
     { fieldName: 'branch', displayName: 'Branche' },
 
   ];
@@ -105,31 +108,11 @@ export class CustomersComponent {
         this.user = user;
       }
     })
-    this.loadCustomers()
-  }
-
-  onSubmit(form: NgForm) {
-    if (form.invalid) {
-      this.isSend = true
-      this.isValid = false;
-      return
-    }
-
-    const customerData = this.createCustomerObject();
-    this.apiservice.postData('customers/', customerData).subscribe({
-      next: (response) => {
-        this.loadCustomers();
-        this.isOpen = false;
-        this.isSend = true
-        this.isValid = true
-      },
-      error: (err) => {
-        console.error("Daten konnten nicht geladen werden", err);
-        this.isSend = false
-        this.isValid = true
-      }
+    this.observerservice.customerTriggersubject$.subscribe(() => {
+      this.loadCustomers();
     })
 
+    this.loadCustomers()
   }
 
   loadCustomers() {
@@ -149,46 +132,24 @@ export class CustomersComponent {
 
   }
 
-  createCustomerObject() {
-    return {
-      companyname: this.customer.companyName,
-      street: this.customer.street,
-      areacode: this.customer.areacode,
-      city: this.customer.city,
-      country: this.customer.country,
-      email: this.customer.email,
-      phone: this.customer.phone,
-      website: this.customer.website,
-      branch: this.customer.branch,
-
-    }
-  }
-
-  reserFormData(form: NgForm) {
-    form.resetForm();
-    this.isOpen = false;
-    this.customer = new Customer();
-    this.isSend = false;
-  }
-
   sortList() {
     this.customers.sort((a, b) => a.companyname.localeCompare(b.companyname));
     this.allCustomers.sort((a, b) => a.companyname.localeCompare(b.companyname));
   }
 
-  fillDB() {
+  // fillDB() {
 
-    for (let index = 0; index < this.customerList.length; index++) {
-      const customer = this.customerList[index];
-      this.apiservice.postData('customers/', customer).subscribe({
-        next: (response) => {
-          console.log('Daten erfolgreich gespeichert', response);
+  //   for (let index = 0; index < this.customerList.length; index++) {
+  //     const customer = this.customerList[index];
+  //     this.apiservice.postData('customers/', customer).subscribe({
+  //       next: (response) => {
+  //         console.log('Daten erfolgreich gespeichert', response);
 
-        },
-        error: (err) => console.error(err)
-      });
-    }
-  }
+  //       },
+  //       error: (err) => console.error(err)
+  //     });
+  //   }
+  // }
 
   openFilter() {
     this.searchFilterOpen = !this.searchFilterOpen;
@@ -217,5 +178,11 @@ export class CustomersComponent {
       this.customers = this.allCustomers;
       this.isSearch = false;
     }
+  }
+
+  openCustomerFile(index: number) {
+    const customer = this.customers[index];
+    this.globalservice.navigateToPath(['main', 'singlecustomer', customer.id], { sidebarOpen: true })
+
   }
 }

@@ -65,21 +65,24 @@ export class SingletaskComponent {
   checkList: any[] = [];
   todotext: string = '';
   taskCompleted: boolean = false;
+
+  constructor() {
+    this.globalservice.toggleSidebar(false);
+
+  }
   ngOnInit() {
     this.loadTemplate();
     this.subscribeUser();
     this.subscribeSubtasks();
     this.subscribeMember();
-    
+
   }
 
 
   loadTemplate() {
     this.route.queryParams.subscribe(params => {
-      this.queryType = params['type']; 
-      this.globalservice.sidebarOpen = params['sidebarOpen']; 
-  console.log(this.globalservice.sidebarOpen);
-  
+      this.queryType = params['type'];
+
     });
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -170,8 +173,7 @@ export class SingletaskComponent {
   }
 
   backToCustomer() {
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'], null)
-
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'], null);
   }
 
   sortComments() {
@@ -370,7 +372,10 @@ export class SingletaskComponent {
   }
 
   navigateToMainTask() {
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'task', this.task.parent.id], null);
+    const queryParam = {
+      type: 'task',
+    }
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'task', this.task.parent.id], queryParam);
   }
 
   addTodo() {
