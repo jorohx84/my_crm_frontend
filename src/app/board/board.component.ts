@@ -7,6 +7,7 @@ import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-board',
   imports: [CommonModule, DragDropModule],
@@ -20,14 +21,21 @@ export class BoardComponent {
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
   user: any;
-  tasks: any[] = [];
+  countsLoaded: boolean = false;
+  // assignedTasks: any[] = [];
+  // reviewedTasks: any[] = [];
+  boardKey: string = '';
+  tasks: any = {
+    assigned: [],
+    reviewed: [],
+  };
   board: any = {
     undone: [],
     in_progress: [],
     under_review: [],
     done: [],
   }
-  connectedBoards: any[] = [];
+  // connectedBoards: any[] = [];
   stateKeys = ['undone', 'in_progress', 'under_review', 'done'];
   stateLabels: any = {
     undone: 'Undone',
@@ -36,9 +44,25 @@ export class BoardComponent {
     done: 'Done'
   };
 
+  columns = [
+    { id: 'undoneList', key: 'undone' },
+    { id: 'inProgressList', key: 'in_progress' },
+    { id: 'underReviewList', key: 'under_review' },
+    { id: 'doneList', key: 'done' },
+  ];
+
+
+  constructor() {
+    this.boardKey = this.dataservice.getDataFromLocalStorage('board') || 'assigned';
+  }
+
   ngOnInit() {
     this.loadUser()
-    this.connectedBoards = Object.values(this.board);
+    // this.connectedBoards = Object.values(this.board);
+  }
+
+  connectedLists(currentId: string) {
+    return this.columns.filter(col => col.id !== currentId).map(col => col.id);
   }
 
   loadUser() {
@@ -46,48 +70,88 @@ export class BoardComponent {
       if (userData) {
         this.user = userData
         console.log(userData);
-        this.loadTasks(userData.id)
+        // this.loadAssignedTasks(userData.id);
+        // this.loadReviewedTasks(userData.id);
+
+        this.loadTasks(userData.id, this.boardKey);
+
       }
     })
   }
 
-
-  loadTasks(id: number) {
-    this.apiservice.getData(`board/${id}/`).subscribe({
+  loadTasks(id: number, taskKey: string) {
+    this.apiservice.getData(`board/${id}/${taskKey}/`).subscribe({
       next: (response) => {
-        console.log(response);
-        this.tasks = response;
-        this.loadBoard();
+        this.setTasks(response, taskKey);
+
       }
     })
   }
 
+  setTasks(taskList: any[], taskKey: string) {
+    this.tasks[taskKey] = taskList;
+    console.log(this.tasks);
 
-
-
-  loadBoard() {
-    this.stateKeys.forEach(key => {
-      this.board[key] = this.tasks.filter(task => task.state === key);
-    });
+    if (taskKey !== 'releases') {
+      this.loadBoard(taskKey);
+    } else {
+      this.getSubtaskCount(this.tasks[taskKey])
+    }
   }
 
+  loadBoard(taskKey: string) {
+
+    const tasks = this.tasks[taskKey];
+    console.log(tasks);
+   this.getSubtaskCount(tasks)
+    this.stateKeys.forEach(key => {
+      this.board[key] = tasks.filter((task: any) => task.state === key).sort((a: any, b: any) => a.board_position - b.board_position);
+    });
+ 
+  }
+
+  getSubtaskCount(tasks: any[]) {
+    for (let index = 0; index < tasks.length; index++) {
+      const task = tasks[index];
+
+      this.apiservice.getData(`subtasks/count/${task.id}`).subscribe({
+        next: (response) => {
+          task.counts = response
+          this.countsLoaded = true;
+        }
+      })
+    }
+
+  }
+
+  getCountLinePercentage(index: number, array: any) {
+
+    if (this.countsLoaded) {
+      const task = array[index];
+      const completedTasks = task.counts?.completed_count;
+      const totalTasks = task.counts?.total_count;
+      const percentage = (completedTasks / totalTasks) * 100 || 0;
+      return percentage
+    }
+    return 0
+
+  }
 
   drop(event: CdkDragDrop<any[]>, newState: string) {
     const movedTask = event.item?.data;
 
-    // Wenn kein Task vorhanden → ignorieren
-    if (!movedTask) return;
-    console.log('shit');
+    // // Wenn kein Task vorhanden → ignorieren
+    // if (!movedTask) return;
 
-    // Wenn nichts geändert wurde → ignorieren
-    if (event.previousContainer === event.container && event.previousIndex === event.currentIndex) {
-      return;
-    }
+    // // Wenn nichts geändert wurde → ignorieren
+    // if (event.previousContainer === event.container && event.previousIndex === event.currentIndex) {
+    //   return;
+    // }
 
     // Wenn zwischen Spalten verschoben
     if (event.previousContainer !== event.container) {
-      console.log('%cTask wurde verschoben nach: ' + newState, 'color: limegreen; font-weight: bold');
-      console.log('Task:', movedTask);
+      // console.log('%cTask wurde verschoben nach: ' + newState, 'color: limegreen; font-weight: bold');
+      // console.log('Task:', movedTask);
 
       // Verschiebe das Element im Datenmodell
       transferArrayItem(
@@ -96,26 +160,54 @@ export class BoardComponent {
         event.previousIndex,
         event.currentIndex
       );
-      console.log('hallo');
-
-      // Aktualisiere State im Task-Objekt
-      movedTask.state = newState;
-      this.apiservice.patchData(`task/${movedTask.id}/`, { state: newState }).subscribe({
-        next: (response) => {
-          console.log(response);
-
-        }
-      })
+      this.updateBoardPosition(event.container.data, newState)
     } else {
       // Innerhalb derselben Spalte neu sortiert
       console.log('Task innerhalb von', newState, 'verschoben');
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+      console.log('nix passiert');
+      this.updateBoardPosition(event.container.data, newState)
+
+
     }
   }
 
+  updateBoardPosition(tasks: any[], newState: string) {
+    tasks.forEach((task, index) => {
+      task.board_position = index;
+      const data = {
+        state: newState,
+        board_position: index,
+      }
+      // Aktualisiere State im Task-Objekt
+      // movedTask.state = newState;
+      this.apiservice.patchData(`task/${task.id}/`, data).subscribe({
+        next: (response) => {
+          console.log(response);
+        }
+      })
+
+    })
+  }
+
+
+
+
+
   openTaskInCustomer(task: any) {
     console.log(task);
-  
-this.globalservice.navigateToPath(['main', 'singlecustomer', task.customer, 'task', task.id ])
+    const queryParams = {
+      type: task.type
+    }
+    console.log(queryParams);
+
+
+    this.globalservice.navigateToPath(['main', 'singlecustomer', task.customer, 'task', task.id], queryParams)
+  }
+
+  changeList(list: string) {
+    this.boardKey = list;
+    console.log(this.boardKey);
+    this.dataservice.saveDataToLocalStorage('board', list);
   }
 }
