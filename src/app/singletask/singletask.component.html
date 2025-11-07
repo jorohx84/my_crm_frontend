@@ -3,7 +3,7 @@
     <div class="taskHeader">
         <div class="taskTitle">
 
-            <p *ngIf="queryType==='subtask'">{{task.parent.title}}</p>
+            <p *ngIf="queryType==='subtask'">{{task?.parent?.title}}</p>
             <img *ngIf="queryType==='subtask'" src="./icons/back.svg" alt="">
             <!-- <div class="prioDot"></div> -->
             <!-- <h2>{{task?.title}} </h2> -->
@@ -20,7 +20,7 @@
         <!-- <h3>für {{task.customer.companyname}}</h3> -->
         <div class="taskMenu">
             <!-- <div class="addBtn"><img src="./icons/add.svg" alt="">Checkliste</div> -->
-             <button>Abschließen</button>
+             <button *ngIf="task.reviewer.id===user.id && task.state==='done'">Abschließen</button>
             <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
                 Do</div>
             <div class="addBtn" (click)="commentSlide=true"><img src="./icons/add.svg" alt="">Kommentar</div>

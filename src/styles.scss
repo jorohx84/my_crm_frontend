@@ -12,12 +12,14 @@
     --inputborder: #0783b0;
     --border: #10779d;
     --box: #10779d;
-    --box-light: #10779d24;
+    // --box-light: #10779d24;
+      --box-light: #10779d12;
     --error: rgb(187, 2, 2);
     --listrow: #10779d20;
     --listrow-light: #10779d0c;
     --listrow-hover: #10779d81;
     --input: #10779d28;
+    --greenLine: #18A408;
 }
 
 //#B02323
@@ -295,12 +297,13 @@ button {
 
 }
 
-.changeBtn{
+.changeBtn {
     min-width: unset;
     width: 16px !important;
     background-color: white;
     width: fit-content;
-    >img{
+
+    >img {
         width: 16px;
 
     }
@@ -345,12 +348,13 @@ button {
     border-left: solid 0.5px var(--border);
 }
 
-.close{
+.close {
     position: absolute;
     width: 16px;
     top: 16px;
     right: 16px;
 }
-.flexheight{
+
+.flexheight {
     height: fit-content !important;
 }

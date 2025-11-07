@@ -43,12 +43,12 @@
 <section>
   <div class="boardHeader">
     <h1 *ngIf="boardKey==='assigned'">Meine Aufgaben</h1>
-     <h1 *ngIf="boardKey==='reviewed'">Meine Reviews</h1>
-      <h1 *ngIf="boardKey==='releases'">Freigaben</h1>
+    <h1 *ngIf="boardKey==='reviewed'">Meine Reviews</h1>
+    <h1 *ngIf="boardKey==='releases'">Freigaben</h1>
     <div class="navBtns">
       <button (click)="loadTasks(user.id, 'assigned'); changeList('assigned')">Meine Aufgaben</button>
       <button (click)="loadTasks(user.id, 'reviewed'); changeList('reviewed')">Meine Reviews</button>
-      <button (click)="changeList('releases')">Freigaben</button>
+      <button (click)="toggleReleasesWrapper()">Freigaben</button>
     </div>
   </div>
 
@@ -61,17 +61,17 @@
         <h3>{{ stateLabels[column.key] }}</h3>
         <div class="taskCard" *ngFor="let task of board[column.key] let index=index" cdkDrag [cdkDragData]="task"
           (click)="openTaskInCustomer(task)">
-          <p *ngIf="task.type==='task'"></p>
-          <h4>{{ task.title }}</h4>
-          <p>{{task.description}}</p>
-          <div class="prioIcon">
-            <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
-            <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
-            <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
-          </div>
-          <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
-          <p>Prüfer: {{task.reviewer.fullname}}</p>
 
+          <div class="topLine">
+            <h4>{{ task.title }}</h4>
+            <div class="prioIcon">
+              <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+              <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+              <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
+            </div>
+          </div>
+          <!-- <p *ngIf="task.type==='task'">Hauptaufgabe</p>
+          <p *ngIf="task.type==='subtask'">Teilaufgabe</p> -->
           <div *ngIf="task.type==='task' && task.counts?.total_count>0" class="subtaskCountCont">
             <p>Todo`s</p>
             <div class="countLine">
@@ -85,17 +85,111 @@
             </div>
 
           </div>
+          <div *ngIf="task.type==='subtask' && task.checklist.length !==0" class="CheckListCount">
+            <p>Checks</p>
+            <div class="countLine">
+              <div class="countLineInner greenLine"
+                [style.width.%]="countChecklistDone(index, board[column.key],'percentage')"></div>
+            </div>
+            <div class="subtaskCount">
+
+              <p>{{countChecklistDone(index, board[column.key],'')}}</p>
+              <p>/</p>
+              <p>{{task.checklist?.length}}</p>
+            </div>
+
+          </div>
+          <!-- <p *ngIf="task.type==='subtask' && task.checklist.length ===0">Keine Teilaufgabe</p>
+          <p *ngIf="task.type==='task' && task.counts?.total_count ===0">keine todos</p> -->
+          <div class="bottomLine">
+            <div class="reviewer">
+              <img src="./icons/review.svg" alt="">
+              <p>{{task.reviewer.fullname}}</p>
+            </div>
+
+            <div class="duedate">
+              <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
+              <img src="./icons/duedate.svg" alt="">
+
+            </div>
+          </div>
+
         </div>
 
       </div>
     </ng-container>
+
+    <div (mouseleave)="toggleReleasesWrapper()" class="releasesWrapper slideOut"
+      [ngClass]="{'slideIn': releasesWrapperOpen}">
+      <div class="wrapperHeadline">
+        <h3>Freigaben</h3>
+      </div>
+      <div class="releasesList">
+        <div class="taskCard" *ngFor="let task of releases, let index=index" (click)="openTaskInCustomer(task)">
+
+          <div class="topLine">
+            <h4>{{ task.title }}</h4>
+            <div class="prioIcon">
+              <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+              <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+              <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
+            </div>
+          </div>
+
+          <div *ngIf="task.type==='task' && task.counts?.total_count>0" class="subtaskCountCont">
+            <p>Todo`s</p>
+            <div class="countLine">
+              <div class="countLineInner" [style.width.%]="getCountLinePercentage(index,releases)"></div>
+            </div>
+            <div class="subtaskCount">
+
+              <p>{{task.counts?.completed_count}}</p>
+              <p>/</p>
+              <p>{{task.counts?.total_count}}</p>
+            </div>
+
+          </div>
+
+          <div *ngIf="task.type==='subtask' && task.checklist.length !==0" class="CheckListCount">
+            <p>Checks</p>
+            <div class="countLine">
+              <div class="countLineInner greenLine" [style.width.%]="countChecklistDone(index, releases,'percentage')">
+              </div>
+            </div>
+            <div class="subtaskCount">
+
+              <p>{{countChecklistDone(index, releases,'')}}</p>
+              <p>/</p>
+              <p>{{task.checklist?.length}}</p>
+            </div>
+
+          </div>
+          <p *ngIf="task.type==='subtask' && task.checklist.length ===0">Keine Teilaufgabe</p>
+          <p *ngIf="task.type==='task' && task.counts?.total_count ===0">keine todos</p>
+
+          <div class="bottomLine">
+            <div class="reviewer">
+              <img src="./icons/review.svg" alt="">
+              <p>{{task.reviewer.fullname}}</p>
+            </div>
+
+            <div class="duedate">
+              <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
+              <img src="./icons/duedate.svg" alt="">
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <div *ngIf="boardKey==='releases'" class="reviewerList">
+  <!-- <div *ngIf="boardKey==='releases'" class="reviewerList">
     <div *ngFor="let task of tasks.reviewed">
       <p>{{task.title}}</p>
     </div>
-  </div>
+  </div> -->
   <!-- <div class="board">
 
    

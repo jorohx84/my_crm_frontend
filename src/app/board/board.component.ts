@@ -7,7 +7,8 @@ import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { filter } from 'rxjs';
+import { filter, subscribeOn } from 'rxjs';
+import { TasklistComponent } from '../tasklist/tasklist.component';
 @Component({
   selector: 'app-board',
   imports: [CommonModule, DragDropModule],
@@ -22,6 +23,7 @@ export class BoardComponent {
   observerservice = inject(ObservableService);
   user: any;
   countsLoaded: boolean = false;
+  releasesWrapperOpen: boolean = false;
   // assignedTasks: any[] = [];
   // reviewedTasks: any[] = [];
   boardKey: string = '';
@@ -35,6 +37,7 @@ export class BoardComponent {
     under_review: [],
     done: [],
   }
+  releases: any[] = [];
   // connectedBoards: any[] = [];
   stateKeys = ['undone', 'in_progress', 'under_review', 'done'];
   stateLabels: any = {
@@ -54,6 +57,7 @@ export class BoardComponent {
 
   constructor() {
     this.boardKey = this.dataservice.getDataFromLocalStorage('board') || 'assigned';
+    this.releasesWrapperOpen = this.dataservice.getDataFromLocalStorage('releases');
   }
 
   ngOnInit() {
@@ -74,6 +78,10 @@ export class BoardComponent {
         // this.loadReviewedTasks(userData.id);
 
         this.loadTasks(userData.id, this.boardKey);
+        if (this.releasesWrapperOpen) {
+          this.loadReleases();
+
+        }
 
       }
     })
@@ -103,11 +111,11 @@ export class BoardComponent {
 
     const tasks = this.tasks[taskKey];
     console.log(tasks);
-   this.getSubtaskCount(tasks)
+    this.getSubtaskCount(tasks)
     this.stateKeys.forEach(key => {
       this.board[key] = tasks.filter((task: any) => task.state === key).sort((a: any, b: any) => a.board_position - b.board_position);
     });
- 
+
   }
 
   getSubtaskCount(tasks: any[]) {
@@ -190,7 +198,25 @@ export class BoardComponent {
     })
   }
 
+  toggleReleasesWrapper() {
+    this.releasesWrapperOpen = !this.releasesWrapperOpen;
+    this.dataservice.saveDataToLocalStorage('releases', this.releasesWrapperOpen)
+    if (!this.releasesWrapperOpen) {
+      return
+    }
+    
+    this.loadReleases()
+  }
 
+  loadReleases() {
+    this.apiservice.getData(`board/${this.user.id}/releases/`).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.releases = response
+        this.getSubtaskCount(this.releases);
+      }
+    })
+  }
 
 
 
@@ -209,5 +235,27 @@ export class BoardComponent {
     this.boardKey = list;
     console.log(this.boardKey);
     this.dataservice.saveDataToLocalStorage('board', list);
+    this.releasesWrapperOpen = false;
+    this.dataservice.saveDataToLocalStorage('releases', false)
+  }
+
+  countChecklistDone(index: number, tasksList: any[], countKey: string) {
+    const tasks = tasksList;
+    const task = tasks[index]
+    let count = 0;
+    for (let index = 0; index < task.checklist.length; index++) {
+      const check = task.checklist[index];
+      if (check.isChecked) {
+        count++;
+      }
+    }
+    const percentage = (count / task.checklist.length) * 100
+    if (countKey === 'percentage') {
+      return percentage
+    } else {
+      return count
+    }
+
+
   }
 }
