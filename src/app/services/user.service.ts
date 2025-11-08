@@ -64,5 +64,9 @@ export class UserService {
         })
     }
 
-  
+    checkNewMessages() {
+        setInterval(() => {
+
+        }, 1000);
+    }
 }

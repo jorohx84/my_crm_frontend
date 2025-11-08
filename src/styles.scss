@@ -358,3 +358,15 @@ button {
 .flexheight {
     height: fit-content !important;
 }
+.alertCont{
+    position: relative;
+}
+.redDot{
+    position: absolute;
+    top: -5px;
+    right: -2px;
+    min-width: 10px;
+    min-height: 10px;
+    background-color: var(--error);
+    border-radius: 100px;
+}

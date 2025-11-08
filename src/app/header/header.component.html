@@ -3,7 +3,7 @@
 
         <h1>CRM</h1>
         <nav>
-             <div class="navlink" (click)="globalservice.navigateToPath(['main','dashboard'])">
+            <div class="navlink" (click)="globalservice.navigateToPath(['main','dashboard'])">
 
                 <p>Dashboard</p>
             </div>
@@ -20,6 +20,10 @@
     </div>
 
     <div class="profileCont">
+        <div class="alertCont" (click)="openSystemMessages()">
+            <img src="./icons/ring.svg" alt="">
+            <div *ngIf="globalservice.isNewSystemMessage" class="redDot"></div>
+        </div>
 
         <p>{{user?.fullname}}</p>
         <img (click)="logoutUser()" src="./icons/logout.svg" alt="">
@@ -29,5 +33,7 @@
         </div>
 
     </div>
-
+    <div class="messageWrapper slideOut" [ngClass]="{'slideIn': globalservice.messageWrapperOpen}">
+        <app-messagewrapper></app-messagewrapper>
+    </div>
 </section>

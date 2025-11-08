@@ -118,7 +118,6 @@ export class CustomersComponent {
   loadCustomers() {
     this.apiservice.getData('customers/').subscribe({
       next: (response) => {
-        console.log(response);
         this.customers = response;
         this.allCustomers = response;
         this.isloading = false;

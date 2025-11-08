@@ -16,6 +16,8 @@ export class GlobalService {
     isSubtaskWrapper: boolean = false;
     sidebarOpen: boolean = false;
     customerWrapperOpen: boolean = false;
+    messageWrapperOpen: boolean = false;
+    isNewSystemMessage: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }

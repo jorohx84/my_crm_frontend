@@ -28,7 +28,7 @@ section {
     // }
 }
 
-.navLogoCont{
+.navLogoCont {
     display: flex;
     align-items: center;
     gap: 56px;
@@ -41,7 +41,7 @@ nav {
 
     >div {
         >p {
-           
+
             font-weight: 400;
         }
 
@@ -49,13 +49,31 @@ nav {
 
 }
 
-.navlink{
+.navlink {
     cursor: pointer;
 }
 
-.date{
+.date {
     display: flex;
- 
+
     align-items: flex-end;
     gap: 4px;
+}
+
+.alertCont {
+    >img {
+        width: 20px;
+    }
+}
+
+.messageWrapper {
+    position: absolute;
+    top: 80px;
+    right: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    border-left: solid 1px var(--border);
+    background-color: white;
+    z-index: 4;
 }

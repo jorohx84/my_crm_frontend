@@ -87,7 +87,13 @@ export class TaskwrapperComponent {
     const requestData = this.createTaskObject();
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
+        console.log(this.globalservice.isSubtaskWrapper);
+
+
         this.observerservice.triggerloadTask(response);
+
+ 
+
       },
       error: (err) => console.log(err)
     })

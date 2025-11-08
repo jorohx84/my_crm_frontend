@@ -106,6 +106,9 @@ export class SingletaskComponent {
   subscribeSubtasks() {
     this.observerservice.taskTriggerSubject$.subscribe((subtaskData) => {
       if (subtaskData) {
+        if (subtaskData.type === 'task') {
+          return
+        }
         this.subtask = subtaskData;
         this.loadSubtasks(this.taskId);
         this.updateTask({ log: [] }, 'subtask');
@@ -476,7 +479,7 @@ export class SingletaskComponent {
     this.apiservice.postData('system-messages/', data).subscribe({
       next: (response) => {
         console.log(response);
-
+        this.observerservice.sendSystemMessages([]);
       }
     })
 

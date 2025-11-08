@@ -1,0 +1,9 @@
+<section>
+    <div>
+        <div *ngFor="let message of systemMessages, let index=index">
+            <p (click)="openMessage(message)">{{message.text}}</p>
+
+
+        </div>
+    </div>
+</section>
