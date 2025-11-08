@@ -20,6 +20,8 @@ export class DataService {
         checklist:'Checkliste wurde bearbeitet',
         tododone:'Checkliste: Todo abgeschlossen',
         todoundone:'Checkliste: Todo auf unbearbeitet geändert',
+        release: 'Aufgabe wurde freigegeben',
+        close:'Aufgabe wurde geschlossen',
     }
 
 

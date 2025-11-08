@@ -1,1 +1,7 @@
-<h1>Herzlich Willkommen {{user.fullname}}</h1>
+<h1>Herzlich Willkommen {{user?.fullname}}</h1>
+
+<div *ngFor="let message of systemMessages">
+    <p (click)="globalservice.navigateToPath(message.url)">{{message.text}}</p>
+
+
+</div>

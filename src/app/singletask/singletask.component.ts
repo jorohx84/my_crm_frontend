@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { APIService } from '../services/api.service';
 import { UserService } from '../services/user.service';
 import { FormsModule } from '@angular/forms';
-import { response } from 'express';
+import { response, text } from 'express';
 import { DataService } from '../services/data.service';
 import { identity, retry } from 'rxjs';
 import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
@@ -190,10 +190,16 @@ export class SingletaskComponent {
       this.linewidth = 0;
     }
     else if (this.task.state === 'in_progress') {
-      this.linewidth = 33.3;
+      this.linewidth = 20;
     }
     else if (this.task.state === 'under_review') {
-      this.linewidth = 66.6;
+      this.linewidth = 40;
+    }
+    else if (this.task.state === 'done') {
+      this.linewidth = 60;
+    }
+    else if (this.task.state === 'released') {
+      this.linewidth = 80;
     }
     else
       this.linewidth = 100;
@@ -289,6 +295,10 @@ export class SingletaskComponent {
       return 'Aufgabe hinzugefügt'
     } else if (objKey === 'tododone' || objKey === 'todoundone') {
       return this.todotext
+    } else if (objKey === 'release') {
+      return 'Freigabe erteilt durch Prüfer'
+    } else if (objKey === 'close') {
+      return 'Aufgabe abgeschlossen durch Bearbeiter'
     }
   }
 
@@ -435,5 +445,47 @@ export class SingletaskComponent {
     }
     console.log(completion);
     this.taskCompleted = completion;
+  }
+
+  releaseTask() {
+    console.log(this.task);
+
+    const data = {
+      state: 'released'
+    }
+    this.updateTask(data, 'release');
+    const urlStr = ['main', 'singlecustomer', this.task.customer.id, 'task', this.task.id];
+    const text = 'Aufgabe wurde freigegeben'
+    const messagedata = this.createSystemMessage(this.task.assignee.id, urlStr, text);
+    this.sendSystemMessage(this.user.id, messagedata);
+  }
+
+  createSystemMessage(assignee: number, url: any[], text: string) {
+    const messageData = {
+      recipient: assignee,
+      text: text,
+      url: url
+    }
+    return messageData
+
+  }
+
+  sendSystemMessage(userID: number, data: any) {
+    console.log(userID);
+    console.log(data);
+    this.apiservice.postData('system-messages/', data).subscribe({
+      next: (response) => {
+        console.log(response);
+
+      }
+    })
+
+  }
+
+  closeTask() {
+    const data = {
+      state: 'closed',
+    }
+    this.updateTask(data, 'close');
   }
 }

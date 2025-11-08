@@ -41,10 +41,11 @@ export class BoardComponent {
   // connectedBoards: any[] = [];
   stateKeys = ['undone', 'in_progress', 'under_review', 'done'];
   stateLabels: any = {
-    undone: 'Undone',
-    in_progress: 'In Progress',
-    under_review: 'Under Review',
-    done: 'Done'
+    undone: 'Offen',
+    in_progress: 'In Bearbeitung',
+    under_review: 'Rückmeldung',
+    done: 'Erledigt',
+    
   };
 
   columns = [
@@ -52,6 +53,7 @@ export class BoardComponent {
     { id: 'inProgressList', key: 'in_progress' },
     { id: 'underReviewList', key: 'under_review' },
     { id: 'doneList', key: 'done' },
+    
   ];
 
 

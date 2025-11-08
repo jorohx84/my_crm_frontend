@@ -1,50 +1,10 @@
-<!-- <div *ngFor="let undoneTask of board.undone, let index=index">
-    <p>{{undoneTask?.title}}</p>
-</div>
-<div *ngFor="let progressTask of board.in_progress, let index=index">
-    <p>{{progressTask?.title}}</p>
-</div>
-<div *ngFor="let reviewTask of board.under_review, let index=index">
-    <p>{{reviewTask?.title}}</p>
-</div>
-<div *ngFor="let doneTask of board.done, let index=index">
-    <p>{{doneTask?.title}}</p>
-</div> -->
 
-
-<!-- <div class="board-column" cdkDropList [cdkDropListData]="board.undone" (cdkDropListDropped)="drop($event, 'undone')">
-  <h3>Undone</h3>
-  <div *ngFor="let task of board.undone" cdkDrag>
-    <p>{{task?.title}}</p>
-  </div>
-</div>
-
-<div class="board-column" cdkDropList [cdkDropListData]="board.in_progress" (cdkDropListDropped)="drop($event, 'in_progress')">
-  <h3>In Progress</h3>
-  <div *ngFor="let task of board.in_progress" cdkDrag>
-    <p>{{task?.title}}</p>
-  </div>
-</div>
-
-<div class="board-column" cdkDropList [cdkDropListData]="board.under_review" (cdkDropListDropped)="drop($event, 'under_review')">
-  <h3>Under Review</h3>
-  <div *ngFor="let task of board.under_review" cdkDrag>
-    <p>{{task?.title}}</p>
-  </div>
-</div>
-
-<div class="board-column" cdkDropList [cdkDropListData]="board.done" (cdkDropListDropped)="drop($event, 'done')">
-  <h3>Done</h3>
-  <div *ngFor="let task of board.done" cdkDrag>
-    <p>{{task?.title}}</p>
-  </div>
-</div> -->
 
 <section>
   <div class="boardHeader">
     <h1 *ngIf="boardKey==='assigned'">Meine Aufgaben</h1>
     <h1 *ngIf="boardKey==='reviewed'">Meine Reviews</h1>
-    <h1 *ngIf="boardKey==='releases'">Freigaben</h1>
+    <h1 *ngIf="boardKey==='releases'">Meine Freigaben</h1>
     <div class="navBtns">
       <button (click)="loadTasks(user.id, 'assigned'); changeList('assigned')">Meine Aufgaben</button>
       <button (click)="loadTasks(user.id, 'reviewed'); changeList('reviewed')">Meine Reviews</button>
@@ -73,7 +33,7 @@
           <!-- <p *ngIf="task.type==='task'">Hauptaufgabe</p>
           <p *ngIf="task.type==='subtask'">Teilaufgabe</p> -->
           <div *ngIf="task.type==='task' && task.counts?.total_count>0" class="subtaskCountCont">
-            <p>Todo`s</p>
+            <img src="./icons/task_blue.svg" alt="">
             <div class="countLine">
               <div class="countLineInner" [style.width.%]="getCountLinePercentage(index, board[column.key])"></div>
             </div>
@@ -86,7 +46,10 @@
 
           </div>
           <div *ngIf="task.type==='subtask' && task.checklist.length !==0" class="CheckListCount">
-            <p>Checks</p>
+            <div class="checkbox">
+              <img src="./icons/done.svg" alt="">
+            </div>
+
             <div class="countLine">
               <div class="countLineInner greenLine"
                 [style.width.%]="countChecklistDone(index, board[column.key],'percentage')"></div>

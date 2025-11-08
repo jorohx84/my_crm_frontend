@@ -36,7 +36,7 @@ section {
 
   width: 100%;
   border-radius: 4px;
-  min-height: 300vh;
+
   // padding: 12px;
   display: flex;
   flex-direction: column;
@@ -44,7 +44,7 @@ section {
   gap: 16px;
   max-height: 100%;
   transition: background-color 0.3s ease-in-out;
-  overflow-y: auto;
+  overflow-y: scroll;
   // &:hover{
   //   background-color: var(--box-light);
   // }
@@ -143,7 +143,9 @@ section {
   display: flex;
   align-items: center;
   gap: 16px;
-
+>img{
+  width: 24px;
+}
   >p {
     font-size: 16px;
   }
@@ -168,7 +170,18 @@ section {
     font-size: 16px;
   }
 }
-
+.checkbox{
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px var(--border);
+  border-radius: 4px;
+>img{
+  width: 16px;
+}
+}
 .greenLine{
   background-color: var(--greenLine) !important;
 }

@@ -14,13 +14,21 @@
                 <p *ngIf="task.type==='subtask'">ToDo</p>
                 <p *ngIf="task.type==='task'">Aufgabe</p>
             </div> -->
+            <div *ngIf="task?.state==='closed'" class="closeText">
+                <h1>Abgschlossen</h1>
+                <img src="./icons/done.svg" alt="">
+
+            </div>
 
         </div>
 
         <!-- <h3>für {{task.customer.companyname}}</h3> -->
         <div class="taskMenu">
             <!-- <div class="addBtn"><img src="./icons/add.svg" alt="">Checkliste</div> -->
-             <button *ngIf="task.reviewer.id===user.id && task.state==='done'">Abschließen</button>
+            <button *ngIf="task?.reviewer?.id===user?.id && task?.state==='done'"
+                (click)="releaseTask()">Freigeben</button>
+            <button *ngIf="task?.assignee?.id===user?.id && task?.state==='released'"
+                (click)="closeTask()">Abschließen</button>
             <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
                 Do</div>
             <div class="addBtn" (click)="commentSlide=true"><img src="./icons/add.svg" alt="">Kommentar</div>
@@ -60,6 +68,12 @@
                     <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='done'}"
                         (click)="updateTaskState('done', 'state')">
                         <p>Erledigt</p>
+                    </div>
+                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='released'}">
+                        <p>Freigabe erteilt</p>
+                    </div>
+                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='closed'}">
+                        <p>Geschlossen</p>
                     </div>
                     <div class="progressLineInner" [style.width.%]=linewidth></div>
                     <div class="progressLine"></div>
@@ -131,7 +145,7 @@
                         </div>
                     </div>
 
-                    <p>Prüfer: {{task.reviewer?.fullname}}</p>
+                    <p>Prüfer: {{task?.reviewer.fullname}}</p>
 
                 </div>
 
