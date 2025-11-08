@@ -38,6 +38,12 @@ export class HeaderComponent {
   ngOnInit() {
     this.loadUser()
     this.setTime();
+
+    this.observservice.systemMessagesSubject$.subscribe(() => {
+      console.log('hallo');
+
+      this.loadCount();
+    })
   }
 
   loadUser() {
@@ -45,7 +51,7 @@ export class HeaderComponent {
       if (user) {
         this.user = user;
         console.log(user);
-        this.checkNewMessages(user)
+        this.loadCount()
       }
 
     });
@@ -91,52 +97,19 @@ export class HeaderComponent {
   openSystemMessages() {
     this.observservice.sendSystemMessages(this.systemMessages);
     this.globalservice.messageWrapperOpen = !this.globalservice.messageWrapperOpen;
-
-    this.updateProfile()
   }
 
-  updateProfile() {
-    const data = {
-      last_inbox_check: new Date().toISOString()
-    }
-    this.apiservice.patchData(`profile/${this.user.id}/`, data).subscribe({
+
+
+
+
+
+
+
+  loadCount() {
+    this.apiservice.getData(`messages/count/`).subscribe({
       next: (response) => {
-        // this.loadUser()
-
-        this.currentTime = response.last_inbox_check;
-      }
-    })
-  }
-
-
-
-
-  checkNewMessages(user: any) {
-    // // Zeit aus dem LocalStorage holen (kann null sein)
-    // const storedTime = this.dataservice.getDataFromLocalStorage('time');
-    // const lastInboxCheck = this.user.last_inbox_check;
-
-    // // In Date-Objekte umwandeln (sicherer Vergleich)
-    // const storedDate = storedTime ? new Date(storedTime) : null;
-    // const logoutDate = new Date(lastInboxCheck);
-
-    // // Entscheidung, welche Zeit gilt
-    // if (!storedDate || storedDate < logoutDate) {
-    //   this.currentTime = lastInboxCheck;
-    // } else {
-    //   this.currentTime = storedTime;
-    // }
-
-    // console.log('Aktuelle Vergleichszeit:', this.currentTime);
-    this.currentTime = user.last_inbox_check || new Date().toISOString();
-    this.loadCount(this.currentTime);
-    this.setNewMessageObserver(this.currentTime);
-  }
-
-  loadCount(time: string) {
-    this.apiservice.getData(`messages/count/${time}`).subscribe({
-      next: (response) => {
-        // console.log(response);
+        console.log(response);
         const count = response.count;
         this.setRedDot(count)
       }
@@ -144,20 +117,15 @@ export class HeaderComponent {
   }
 
   setRedDot(count: number) {
-    if (count > 0) {
-      this.globalservice.isNewSystemMessage = true;
-    } else {
+    if (count === 0) {
       this.globalservice.isNewSystemMessage = false;
+    } else {
+      this.globalservice.isNewSystemMessage = true;
     }
   }
 
 
-  setNewMessageObserver(time: string) {
-    // this.currentTime = new Date().toISOString();
-    setInterval(() => {
 
-      this.loadCount(this.currentTime);
-    }, 1000);
-  }
+
 
 }
