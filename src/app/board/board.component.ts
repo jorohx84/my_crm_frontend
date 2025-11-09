@@ -113,9 +113,13 @@ export class BoardComponent {
 
     const tasks = this.tasks[taskKey];
     console.log(tasks);
+    
+    console.log(tasks);
     this.getSubtaskCount(tasks)
     this.stateKeys.forEach(key => {
       this.board[key] = tasks.filter((task: any) => task.state === key).sort((a: any, b: any) => a.board_position - b.board_position);
+      console.log(this.board[key]);
+      
     });
 
   }

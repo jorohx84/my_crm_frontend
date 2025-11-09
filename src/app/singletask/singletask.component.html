@@ -31,7 +31,8 @@
                 (click)="closeTask()">Abschließen</button>
             <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
                 Do</div>
-            <div class="addBtn" (click)="commentSlide=true"><img src="./icons/add.svg" alt="">Kommentar</div>
+            <div class="addBtn" (click)="changeSidebarContent('comments')"><img src="./icons/add.svg" alt="">Kommentar
+            </div>
             <div *ngIf="queryType==='task'" class="closeBtn">
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
@@ -52,21 +53,16 @@
                 <!-- <h4>Status</h4> -->
 
                 <div class="progressLineCont">
-                    <div class="progressDot activeDot" (click)="updateTaskState('undone', 'state')">
+                    <div class="progressDot activeDot" [ngClass]="{'activeDot': task?.state ==='undone'}">
                         <p>unbearbeitet</p>
                     </div>
-                    <div class="progressDot"
-                        [ngClass]="{'activeDot': task?.state ==='in_progress' || task?.state ==='under_review' || task?.state ==='done'}"
-                        (click)="updateTaskState('in_progress', 'state')">
+                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='in_progress'}">
                         <p>in Bearbeitung</p>
                     </div>
-                    <div class="progressDot"
-                        [ngClass]="{'activeDot': task?.state ==='under_review' || task?.state ==='done'}"
-                        (click)="updateTaskState('under_review', 'state')">
-                        <p>in Prüfung</p>
+                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='under_review'}">
+                        <p>Rückmeldung</p>
                     </div>
-                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='done'}"
-                        (click)="updateTaskState('done', 'state')">
+                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='done'}">
                         <p>Erledigt</p>
                     </div>
                     <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='released'}">
@@ -80,6 +76,7 @@
                 </div>
 
             </div>
+
             <div class="taskInfoSubCont">
                 <div class="taskInfos">
                     <h4>Informationen</h4>
@@ -235,6 +232,12 @@
                 </div>
 
             </div>
+            <div class="commentCont">
+
+                <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
+                    placeholder="Schreibe ein Kommentar" id=""></textarea>
+                <img (click)="createComment()" src="./icons/send.svg" alt="">
+            </div>
             <div *ngIf="sidebarKey==='comments'" class="sidebarList">
 
                 <div class="" *ngFor="let comment of sortedComments, let index=index">
@@ -260,7 +263,7 @@
 
             <div *ngIf="sidebarKey==='logs'" class="sidebarList">
 
-                <div *ngFor="let log of task.log">
+                <div *ngFor="let log of logBook">
                     <div class="logCard">
                         <p>{{log.logged_at | date: 'dd.MM.yyyy : HH:mm'}} Uhr</p>
                         <div class="divider"></div>
@@ -329,13 +332,4 @@
         <app-memberlist></app-memberlist>
     </div>
 
-    <div class="commentInputWrapper" [ngClass]="{'commentSlide': commentSlide}">
-        <img (click)="commentSlide=false" src="./icons/close.svg" alt="">
-        <div class="commentCont">
-            <p>Kommentar</p>
-            <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
-                placeholder="Schreibe ein Kommentar" id=""></textarea>
-            <img (click)="createComment()" src="./icons/send.svg" alt="">
-        </div>
-    </div>
 </section>

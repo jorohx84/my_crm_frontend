@@ -10,14 +10,17 @@ section {
 
 .profileCont {
     // background-color: var(--box);
+    width: 100%;
+    min-width: fit-content;
+    max-width: 50%;
     border-radius: 100px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    gap: 16px;
+    gap: 32px;
     padding: 8px;
     transition: transform 0.3s ease-in-out;
-    cursor: pointer;
+  
 
     >img {
         width: 32px;
@@ -59,7 +62,13 @@ nav {
     align-items: flex-end;
     gap: 4px;
 }
-
+.widthInput{
+    max-width: 300px !important;
+    height: 30px;
+    >img{
+        width: 16px;
+    }
+}
 .alertCont {
     >img {
         width: 20px;

@@ -25,6 +25,7 @@ export class TasklistComponent {
   route = inject(ActivatedRoute);
   counts: any[] = [];
   countsLoaded: boolean = false;
+  
   filteredTaskList: any[] = [];
   constructor() {
     this.globalservice.toggleSidebar(true)
@@ -39,13 +40,13 @@ export class TasklistComponent {
       const id = params.get('id');
       this.customerID = id;
       if (id) {
-        this.loadTasks(id);
+        this.loadTasks(id, 'open');
       }
     });
 
     this.observerservice.taskTriggerSubject$.subscribe((data) => {
       if (this.customerID) {
-        this.loadTasks(this.customerID);
+        this.loadTasks(this.customerID,'open');
       }
 
     })
@@ -67,33 +68,33 @@ export class TasklistComponent {
 
   }
 
-  loadTasks(id: string | number | null = null) {
+  loadTasks(id: string | number | null = null, filter:string) {
     console.log(id);
 
-    this.apiservice.getData(`tasks/${id}`).subscribe({
+    this.apiservice.getData(`tasks/${id}/${filter}`).subscribe({
       next: (response) => {
         this.tasks = response;
         this.getSubtaskCount()
-        this.filterTasks('undone')
+        // this.filterTasks('undone')
       }
     })
   }
-  filterTasks(filter: string) {
-    console.log(filter);
-    if (filter === 'done') {
-      const filteredTasks = this.tasks.filter(task => task.state === 'done');
-      this.filteredTaskList = filteredTasks
-    } else if (filter === 'undone') {
-      const filteredTasks = this.tasks.filter(task => task.state !== 'done');
-      this.filteredTaskList = filteredTasks
-    }
+  // filterTasks(filter: string) {
+  //   console.log(filter);
+  //   if (filter === 'done') {
+  //     const filteredTasks = this.tasks.filter(task => task.state === 'done');
+  //     this.filteredTaskList = filteredTasks
+  //   } else if (filter === 'undone') {
+  //     const filteredTasks = this.tasks.filter(task => task.state !== 'done');
+  //     this.filteredTaskList = filteredTasks
+  //   }
 
-    console.log(this.filteredTaskList);
+  //   console.log(this.filteredTaskList);
 
-  }
+  // }
 
   openTask(index: number) {
-    const currentTask = this.filteredTaskList[index];
+    const currentTask = this.tasks[index];
     const taskId = currentTask.id;
     const queryParam = {
       type: currentTask.type,

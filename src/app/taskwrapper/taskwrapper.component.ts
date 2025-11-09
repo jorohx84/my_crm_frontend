@@ -10,6 +10,7 @@ import { APIService } from '../services/api.service';
 import { response } from 'express';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
+import { MessageService } from '../services/message.service';
 @Component({
   selector: 'app-taskwrapper',
   imports: [CommonModule, FormsModule, MemberlistComponent],
@@ -21,6 +22,7 @@ export class TaskwrapperComponent {
   globalservice = inject(GlobalService);
   observerservice = inject(ObservableService);
   userservice = inject(UserService);
+  messageservice = inject(MessageService);
   route = inject(ActivatedRoute);
   member: any;
   noMember: boolean = false;
@@ -44,11 +46,21 @@ export class TaskwrapperComponent {
   mainTaskId: string = '';
 
   ngOnInit() {
+    this.loadUser()
+    this.loadMember();
+    this.loadTemplate();
+    this.loadTask();
+  }
+
+
+  loadUser() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
       }
     })
+  }
+  loadMember() {
     this.observerservice.memberSubject$.subscribe((member) => {
       if (member) {
         this.member = member;
@@ -56,12 +68,16 @@ export class TaskwrapperComponent {
         this.noMember = false
       }
     });
+  }
 
+  loadTemplate() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.customerID = id
     });
+  }
 
+  loadTask() {
     this.observerservice.taskSubject$.subscribe((taskObj) => {
       if (taskObj) {
         this.mainTaskId = taskObj.id;
@@ -69,10 +85,11 @@ export class TaskwrapperComponent {
     })
   }
 
+
   createTask(form: NgForm) {
     this.noMember = this.checkMemberAdded();
     if (!form.valid || this.noMember) {
-      form.control.markAllAsTouched(); // markiert alle Felder als "touched"
+      form.control.markAllAsTouched();
       return;
     }
     this.task.customer = this.customerID;
@@ -82,24 +99,6 @@ export class TaskwrapperComponent {
     this.globalservice.isSubtaskWrapper = false;
     this.resetTask(form)
   }
-
-  saveTask() {
-    const requestData = this.createTaskObject();
-    this.apiservice.postData('tasks/', requestData).subscribe({
-      next: (response) => {
-        console.log(this.globalservice.isSubtaskWrapper);
-
-
-        this.observerservice.triggerloadTask(response);
-
- 
-
-      },
-      error: (err) => console.log(err)
-    })
-
-  }
-
 
   createLogElement() {
     this.task.log.push({
@@ -112,7 +111,6 @@ export class TaskwrapperComponent {
       newState: '',
     });
   }
-
   createTaskObject() {
     return {
       parent: this.mainTaskId || null,
@@ -127,6 +125,37 @@ export class TaskwrapperComponent {
       type: this.globalservice.isSubtaskWrapper ? 'subtask' : 'task',
     }
   }
+
+  saveTask() {
+    const requestData = this.createTaskObject();
+    this.apiservice.postData('tasks/', requestData).subscribe({
+      next: (response) => {
+        this.openNewTask(response);
+        this.sendSystemMessage(response)
+
+      },
+      error: (err) => console.log(err)
+    })
+  }
+
+  sendSystemMessage(task: any) {
+    console.log(task);
+    
+    const text = 'Neue Aufgabe wurde Ihrem Board hinzugefügt';
+    const urlStr = ['main', 'singlecustomer', this.customerID, 'task', task.id]
+    const param = { type: task.type }
+    console.log(param);
+    
+    this.messageservice.sendSystemMessage(this.user.id, this.task.assignee, urlStr, text, param);
+  }
+
+  openNewTask(task: any) {
+    const taskID = task.id
+    const param = { type: task.type };
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', taskID], param);
+  }
+
+
 
   checkMemberAdded() {
     const isMember = this.member ? false : true;

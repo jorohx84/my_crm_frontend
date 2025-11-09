@@ -9,10 +9,12 @@ import { UserService } from '../services/user.service';
 import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { MessagewrapperComponent } from '../messagewrapper/messagewrapper.component';
 import { response } from 'express';
+import { FormsModule } from '@angular/forms';
+import { subscribeOn } from 'rxjs';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, MessagewrapperComponent],
+  imports: [CommonModule, FormsModule, MessagewrapperComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -30,7 +32,7 @@ export class HeaderComponent {
   isNewMessage: boolean = false;
   systemMessages: any[] = [];
   currentTime: string = '';
-
+  searchInput: string = '';
   constructor() {
 
 
@@ -57,7 +59,15 @@ export class HeaderComponent {
     });
   }
 
-
+  globalSearch() {
+    console.log(this.searchInput);
+    this.apiservice.getData(`search/${this.searchInput}`).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.searchInput = '';
+      }
+    })
+  }
 
   setTime(): void {
     this.intervalId = setInterval(() => {

@@ -2,8 +2,9 @@
     <div class="taskListHeader">
         <h2>Aufgaben</h2>
         <div class="listBtns">
-            <button (click)="filterTasks('undone')">Offen</button>
-            <button (click)="filterTasks('done')">erledigt</button>
+            <button (click)="loadTasks(customerID,'open')">Offen</button>
+              <button (click)="loadTasks(customerID,'released')">Freigegeben</button>
+            <button (click)="loadTasks(customerID, 'closed')">Abgschlossen</button>
         </div>
     </div>
 
@@ -11,7 +12,7 @@
     <div class="taskList">
 
 
-        <div (click)="openTask(index)" class="taskRow border" *ngFor="let task of filteredTaskList, let index=index">
+        <div (click)="openTask(index)" class="taskRow border" *ngFor="let task of tasks, let index=index">
             <div class="taskRowleft">
                 <div class="titlePrio">
                     <p> {{task.title}}</p>

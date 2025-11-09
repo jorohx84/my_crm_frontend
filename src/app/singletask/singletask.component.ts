@@ -11,6 +11,7 @@ import { identity, retry } from 'rxjs';
 import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 import { ObservableService } from '../services/observable.service';
 import { MemberlistComponent } from '../memberlist/memberlist.component';
+import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-singletask',
@@ -25,8 +26,9 @@ export class SingletaskComponent {
   route = inject(ActivatedRoute);
   userservice = inject(UserService);
   dataservice = inject(DataService);
+  messageservice = inject(MessageService);
   taskId: string | null = null;
-  sidebarKey: string = 'subtasks';
+  sidebarKey: string = 'comments';
   task: any = {
     title: '',
     description: '',
@@ -65,7 +67,7 @@ export class SingletaskComponent {
   checkList: any[] = [];
   todotext: string = '';
   taskCompleted: boolean = false;
-
+  logBook: any[] = [];
   constructor() {
     this.globalservice.toggleSidebar(false);
 
@@ -82,7 +84,6 @@ export class SingletaskComponent {
   loadTemplate() {
     this.route.queryParams.subscribe(params => {
       this.queryType = params['type'];
-
     });
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -94,11 +95,11 @@ export class SingletaskComponent {
     });
   }
 
+
   subscribeUser() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
-
       }
     })
   }
@@ -109,10 +110,10 @@ export class SingletaskComponent {
         if (subtaskData.type === 'task') {
           return
         }
-        this.subtask = subtaskData;
-        this.loadSubtasks(this.taskId);
+        // this.subtask = subtaskData;
+        // this.loadSubtasks(this.taskId);
         this.updateTask({ log: [] }, 'subtask');
-        this.sidebarKey = 'subtasks';
+        this.sidebarKey = 'comments';
         this.taskWrapperOpen = false;
       }
     })
@@ -153,9 +154,10 @@ export class SingletaskComponent {
         next: (response) => {
           this.task = response;
           console.log(response);
-
+          this.loadLog(response)
           this.getProgressState();
           this.sortComments();
+
           this.checkList = response.checklist
         },
       })
@@ -163,7 +165,10 @@ export class SingletaskComponent {
     }
 
   }
-
+  loadLog(task: any) {
+    console.log(task);
+    this.logBook = task.log.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
+  }
 
   loadSubtasks(id: string | null) {
     this.apiservice.getData(`subtasks/${id}`).subscribe({
@@ -236,13 +241,13 @@ export class SingletaskComponent {
     event.stopPropagation()
   }
 
-  updateTaskState(newState: string, objKey: string) {
-    this.task.state = newState
-    const data = {
-      state: newState,
-    }
-    this.updateTask(data, objKey);
-  }
+  // updateTaskState(newState: string, objKey: string) {
+  //   this.task.state = newState
+  //   const data = {
+  //     state: newState,
+  //   }
+  //   this.updateTask(data, objKey);
+  // }
 
   updateDueDate(objKey: string, event: Event) {
     this.task.due_date = this.newDueDate
@@ -373,9 +378,7 @@ export class SingletaskComponent {
 
 
   openSubtask(index: number) {
-
     const currentSubtask = this.subtasks[index];
-    console.log(currentSubtask);
     const id = currentSubtask.id
     const customerId = currentSubtask.customer;
     const queryParam = {
@@ -397,13 +400,9 @@ export class SingletaskComponent {
       isChecked: false,
     }
     this.checkList.push(listObj)
-    console.log(this.checkList);
-
   }
 
   saveTodo(index: number) {
-    console.log(index);
-    console.log(this.checkList);
     const data = {
       checklist: this.checkList,
     }
@@ -446,43 +445,22 @@ export class SingletaskComponent {
         completion = false;
       }
     }
-    console.log(completion);
     this.taskCompleted = completion;
   }
 
   releaseTask() {
-    console.log(this.task);
-
     const data = {
       state: 'released'
     }
     this.updateTask(data, 'release');
+    this.sendSystemMessage();
+  }
+
+  sendSystemMessage() {
     const urlStr = ['main', 'singlecustomer', this.task.customer.id, 'task', this.task.id];
     const text = 'Aufgabe wurde freigegeben'
-    const messagedata = this.createSystemMessage(this.task.assignee.id, urlStr, text);
-    this.sendSystemMessage(this.user.id, messagedata);
-  }
-
-  createSystemMessage(assignee: number, url: any[], text: string) {
-    const messageData = {
-      recipient: assignee,
-      text: text,
-      url: url
-    }
-    return messageData
-
-  }
-
-  sendSystemMessage(userID: number, data: any) {
-    console.log(userID);
-    console.log(data);
-    this.apiservice.postData('system-messages/', data).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.observerservice.sendSystemMessages([]);
-      }
-    })
-
+    const param = { type: this.task.type }
+    this.messageservice.sendSystemMessage(this.user.id, this.task.assignee.id, urlStr, text, param);
   }
 
   closeTask() {
@@ -491,4 +469,5 @@ export class SingletaskComponent {
     }
     this.updateTask(data, 'close');
   }
+
 }

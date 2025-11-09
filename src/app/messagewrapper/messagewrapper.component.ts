@@ -33,7 +33,10 @@ export class MessagewrapperComponent {
     });
 
     this.observservice.systemMessagesSubject$.subscribe(() => {
-      this.loadSystemMessages(this.user.id)
+      if (this.user) {
+        this.loadSystemMessages(this.user.id)
+      }
+
     })
   }
 
@@ -41,15 +44,17 @@ export class MessagewrapperComponent {
     this.apiservice.getData(`system-messages/user/${id}`).subscribe({
       next: (response) => {
         console.log(response);
-        this.systemMessages = response;
+        this.systemMessages = response.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+);
+
       }
     })
   }
 
 
   openMessage(message: any) {
-    // this.globalservice.navigateToPath(message.url);
-    // this.globalservice.messageWrapperOpen = false;
+    this.globalservice.navigateToPath(message.url, message.param);
+    this.globalservice.messageWrapperOpen = false;
     this.updateMessageState(message.id);
   }
 
