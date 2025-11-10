@@ -40,7 +40,7 @@ export class DashboardComponent {
 
   loadDasboard(id: number) {
     console.log(id);
-    this.loadSystemMessages(id)
+    // this.loadSystemMessages(id)
   }
 
   loadSystemMessages(id: number) {

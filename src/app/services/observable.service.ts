@@ -16,8 +16,8 @@ export class ObservableService {
     public customerTriggersubject$ = this.customerTriggersubject.asObservable();
     private taskTriggerSubject = new BehaviorSubject<any>(null);
     public taskTriggerSubject$ = this.taskTriggerSubject.asObservable();
-    private systemMessagesSubject = new BehaviorSubject<any>(null);
-    public systemMessagesSubject$ = this.systemMessagesSubject.asObservable();
+    private notificationSubject = new BehaviorSubject<any>(null);
+    public notificationSubject$ = this.notificationSubject.asObservable();
     // private systemMessagesTriggerSubject = new BehaviorSubject<any>(null);
     // public systemMessagesTriggerSubject$ = this.systemMessagesTriggerSubject.asObservable();
 
@@ -41,8 +41,8 @@ export class ObservableService {
         this.taskTriggerSubject.next(task);
     }
 
-    sendSystemMessages(messages: any[]) {
-        this.systemMessagesSubject.next(messages);
+    sendNotification(notification: any[]) {
+        this.notificationSubject.next(notification);
     }
  
 

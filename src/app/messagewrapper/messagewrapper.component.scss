@@ -7,9 +7,11 @@ section{
 }
 
 .messageList{
+    height: calc(100vh - 130px);
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow-y: scroll;
 }
 
 .messageCard {

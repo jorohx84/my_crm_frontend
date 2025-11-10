@@ -8,7 +8,6 @@ import { APIService } from "./api.service";
 
 export class DataService {
     customerList: any[] = [];
-
     taskLogs: Record<string, string> = {
         title: 'Titel wurde geändert',
         description: 'Beschreibung wurde geändert',

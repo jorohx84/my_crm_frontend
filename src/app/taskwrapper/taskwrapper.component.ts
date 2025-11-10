@@ -131,7 +131,7 @@ export class TaskwrapperComponent {
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
         this.openNewTask(response);
-        this.sendSystemMessage(response)
+        // this.sendSystemMessage(response)
 
       },
       error: (err) => console.log(err)
@@ -146,7 +146,7 @@ export class TaskwrapperComponent {
     const param = { type: task.type }
     console.log(param);
     
-    this.messageservice.sendSystemMessage(this.user.id, this.task.assignee, urlStr, text, param);
+    // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee, urlStr, text, param);
   }
 
   openNewTask(task: any) {

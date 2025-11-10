@@ -22,29 +22,29 @@ export class MessagewrapperComponent {
   observservice = inject(ObservableService);
   globalservice = inject(GlobalService);
   user: any;
-  systemMessages: any[] = [];
+  notifications: any[] = [];
   ngOnInit() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
-        this.loadSystemMessages(user.id)
+        this.loadNotifications(user.id)
       }
 
     });
 
-    this.observservice.systemMessagesSubject$.subscribe(() => {
+    this.observservice.notificationSubject$.subscribe(() => {
       if (this.user) {
-        this.loadSystemMessages(this.user.id)
+        this.loadNotifications(this.user.id)
       }
 
     })
   }
 
-  loadSystemMessages(id: number) {
-    this.apiservice.getData(`system-messages/user/${id}`).subscribe({
+  loadNotifications(id: number) {
+    this.apiservice.getData(`notifications/user/${id}`).subscribe({
       next: (response) => {
         console.log(response);
-        this.systemMessages = response.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        this.notifications = response.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
 );
 
       }
@@ -62,12 +62,12 @@ export class MessagewrapperComponent {
     const data = {
       is_read: true,
     }
-    this.apiservice.patchData(`system-messages/${id}/`, data).subscribe({
+    this.apiservice.patchData(`notifications/${id}/`, data).subscribe({
       next: (response) => {
         console.log(response.is_read);
 
-        this.loadSystemMessages
-        this.observservice.sendSystemMessages(this.systemMessages)
+        // this.loadSystemMessages
+        this.observservice.sendNotification(this.notifications)
       }
     })
   }

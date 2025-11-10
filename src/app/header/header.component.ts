@@ -33,6 +33,7 @@ export class HeaderComponent {
   systemMessages: any[] = [];
   currentTime: string = '';
   searchInput: string = '';
+  
   constructor() {
 
 
@@ -41,7 +42,7 @@ export class HeaderComponent {
     this.loadUser()
     this.setTime();
 
-    this.observservice.systemMessagesSubject$.subscribe(() => {
+    this.observservice.notificationSubject$.subscribe(() => {
       console.log('hallo');
 
       this.loadCount();
@@ -53,11 +54,36 @@ export class HeaderComponent {
       if (user) {
         this.user = user;
         console.log(user);
+        // this.loadWebsocket(user.id);
         this.loadCount()
       }
 
     });
   }
+
+// websocket: WebSocket | null = null;
+
+// loadWebsocket(id: number) {
+//   if (this.websocket && this.websocket.readyState !== WebSocket.CLOSED) {
+//     console.log("WebSocket bereits geöffnet");
+//     return;
+//   }
+
+//   this.websocket = new WebSocket(`ws://localhost:8000/ws/notifications/${id}/`);
+  
+//   this.websocket.onopen = () => console.log("✅ WebSocket geöffnet!");
+//   this.websocket.onerror = e => console.error("❌ Fehler:", e);
+//   this.websocket.onmessage = (event) => {
+//     const notification = JSON.parse(event.data);
+//     console.log("📩 Nachricht:", notification);
+
+//     setTimeout(() => {
+//          this.loadCount();
+//     }, 2000);
+ 
+//   };
+// }
+
 
   globalSearch() {
     console.log(this.searchInput);
@@ -105,7 +131,7 @@ export class HeaderComponent {
 
 
   openSystemMessages() {
-    this.observservice.sendSystemMessages(this.systemMessages);
+    // this.observservice.sendNotification(this.systemMessages);
     this.globalservice.messageWrapperOpen = !this.globalservice.messageWrapperOpen;
   }
 
@@ -117,6 +143,8 @@ export class HeaderComponent {
 
 
   loadCount() {
+    console.log('count wird geladen')
+    
     this.apiservice.getData(`messages/count/`).subscribe({
       next: (response) => {
         console.log(response);

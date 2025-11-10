@@ -453,14 +453,14 @@ export class SingletaskComponent {
       state: 'released'
     }
     this.updateTask(data, 'release');
-    this.sendSystemMessage();
+    // this.sendSystemMessage();
   }
 
   sendSystemMessage() {
     const urlStr = ['main', 'singlecustomer', this.task.customer.id, 'task', this.task.id];
     const text = 'Aufgabe wurde freigegeben'
     const param = { type: this.task.type }
-    this.messageservice.sendSystemMessage(this.user.id, this.task.assignee.id, urlStr, text, param);
+    // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee.id, urlStr, text, param);
   }
 
   closeTask() {
