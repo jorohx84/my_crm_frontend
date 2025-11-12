@@ -7,6 +7,9 @@
             <img *ngIf="queryType==='subtask'" src="./icons/back.svg" alt="">
             <!-- <div class="prioDot"></div> -->
             <!-- <h2>{{task?.title}} </h2> -->
+             <!-- <div class="taskIcon">
+                <img src="./icons/task_white.svg" alt="">
+             </div> -->
             <input [disabled]="!checkPermissions('reviewer')" (change)="changeTitle('title')" class="title"
                 [(ngModel)]="task.title" type="text">
             <!-- <img (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt=""> -->
@@ -122,7 +125,7 @@
                     <h4>Zuständigkeiten:</h4>
                     <div class="assigneeCont">
                         <p>Bearbeiter: {{task.assignee?.fullname}}</p>
-                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
+                        <button *ngIf="checkPermissions('reviewer')"
                             class="changeBtn" (click)="assigneeChangeOpen=true"><img class="editBtn"
                                 src="./icons/editx.svg" alt=""></button>
                         <div *ngIf="assigneeChangeOpen" class="changeAssignee">
@@ -232,7 +235,7 @@
                 </div>
 
             </div>
-            <div class="commentCont">
+            <div *ngIf="sidebarKey==='comments'" class="commentCont">
 
                 <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
                     placeholder="Schreibe ein Kommentar" id=""></textarea>
@@ -268,7 +271,7 @@
                         <p>{{log.logged_at | date: 'dd.MM.yyyy : HH:mm'}} Uhr</p>
                         <div class="divider"></div>
                         <h4>{{log.log}}</h4>
-                        <p>{{log.newState}}</p>
+                        <p>{{log.new_state}}</p>
                         <p>Änderung durch: {{log.updated_by.fullname}}</p>
                     </div>
 
@@ -315,8 +318,6 @@
                         </div>
 
                     </div>
-
-
 
                 </div>
 

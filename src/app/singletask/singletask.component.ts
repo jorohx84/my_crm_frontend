@@ -166,8 +166,14 @@ export class SingletaskComponent {
 
   }
   loadLog(task: any) {
-    console.log(task);
-    this.logBook = task.log.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
+    // console.log(task);
+    // this.logBook = task.log.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
+    this.apiservice.getData(`task/logs/${task.id}`).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.logBook = response.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
+      }
+    })
   }
 
   loadSubtasks(id: string | null) {
@@ -262,14 +268,29 @@ export class SingletaskComponent {
 
 
   updateTask(data: any, objKey: string) {
-    const logData = this.createLog(objKey);
-    this.task.log.push(logData);
+
+    // this.task.log.push(logData);
     const requestData = data;
-    requestData.log = this.task.log;
+    // requestData.log = this.task.log;
+
     this.apiservice.patchData(`task/${this.taskId}/`, requestData).subscribe({
       next: (response) => {
         this.getProgressState();
+
+        this.saveLog(objKey)
         this.loadtask(this.taskId);
+
+      }
+    })
+  }
+
+  saveLog(objKey:string) {
+    console.log(objKey);
+    const logData = this.createLog(objKey);
+    this.apiservice.postData('task/logs/', logData).subscribe({
+      next: (response) => {
+        console.log(response);
+
       }
     })
   }
@@ -280,13 +301,10 @@ export class SingletaskComponent {
     const newState = this.getnewState(objKey);
 
     return {
+      task: this.task.id,
       log: logText,
-      logged_at: new Date().toISOString(),
-      updated_by: {
-        id: this.user.id,
-        fullname: this.user.fullname,
-      },
-      newState: newState
+      // updated_by: this.user.id,
+      new_state: newState
     }
   }
 

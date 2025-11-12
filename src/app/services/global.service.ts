@@ -56,4 +56,6 @@ export class GlobalService {
             date.getFullYear() === today.getFullYear();
     }
 
+    
+
 }

@@ -93,23 +93,29 @@ export class TaskwrapperComponent {
       return;
     }
     this.task.customer = this.customerID;
-    this.createLogElement()
+    // this.createLogElement()
     this.saveTask();
     this.globalservice.taskWrapperOpen = false;
     this.globalservice.isSubtaskWrapper = false;
     this.resetTask(form)
   }
 
-  createLogElement() {
-    this.task.log.push({
-      logged_at: new Date().toISOString(),
-      updated_by: {
-        id: this.user.id,
-        fullname: this.user.fullname,
-      },
+  createLogElement(task: any) {
+    // this.task.log.push({
+    //   logged_at: new Date().toISOString(),
+    //   updated_by: {
+    //     id: this.user.id,
+    //     fullname: this.user.fullname,
+    //   },
+    //   log: 'Aufgabe wurde erstellt',
+    //   newState: '',
+    // });
+    return {
+      task: task.id,
       log: 'Aufgabe wurde erstellt',
-      newState: '',
-    });
+      // updated_by: this.user.id,
+      new_state: 'Neue Aufgabe',
+    }
   }
   createTaskObject() {
     return {
@@ -121,7 +127,7 @@ export class TaskwrapperComponent {
       state: 'undone',
       priority: this.task.priority,
       due_date: this.task.due_date,
-      log: this.task.log,
+      log: [],
       type: this.globalservice.isSubtaskWrapper ? 'subtask' : 'task',
     }
   }
@@ -132,22 +138,37 @@ export class TaskwrapperComponent {
       next: (response) => {
         this.openNewTask(response);
         // this.sendSystemMessage(response)
-
+      
+              this.saveLog(response);
+      
+    
       },
       error: (err) => console.log(err)
     })
   }
 
-  sendSystemMessage(task: any) {
-    console.log(task);
-    
-    const text = 'Neue Aufgabe wurde Ihrem Board hinzugefügt';
-    const urlStr = ['main', 'singlecustomer', this.customerID, 'task', task.id]
-    const param = { type: task.type }
-    console.log(param);
-    
-    // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee, urlStr, text, param);
+
+  saveLog(task: any) {
+    const data = this.createLogElement(task);
+    console.log(data);
+    this.apiservice.postData('task/logs/', data).subscribe({
+      next: (response) => {
+        console.log(response);
+
+      }
+    })
+
   }
+  // sendSystemMessage(task: any) {
+  //   console.log(task);
+
+  //   const text = 'Neue Aufgabe wurde Ihrem Board hinzugefügt';
+  //   const urlStr = ['main', 'singlecustomer', this.customerID, 'task', task.id]
+  //   const param = { type: task.type }
+  //   console.log(param);
+
+  //   // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee, urlStr, text, param);
+  // }
 
   openNewTask(task: any) {
     const taskID = task.id

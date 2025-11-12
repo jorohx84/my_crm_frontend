@@ -45,7 +45,7 @@ export class BoardComponent {
     in_progress: 'In Bearbeitung',
     under_review: 'Rückmeldung',
     done: 'Erledigt',
-    
+
   };
 
   columns = [
@@ -53,7 +53,7 @@ export class BoardComponent {
     { id: 'inProgressList', key: 'in_progress' },
     { id: 'underReviewList', key: 'under_review' },
     { id: 'doneList', key: 'done' },
-    
+
   ];
 
 
@@ -113,13 +113,13 @@ export class BoardComponent {
 
     const tasks = this.tasks[taskKey];
     console.log(tasks);
-    
+
     console.log(tasks);
     this.getSubtaskCount(tasks)
     this.stateKeys.forEach(key => {
       this.board[key] = tasks.filter((task: any) => task.state === key).sort((a: any, b: any) => a.board_position - b.board_position);
       console.log(this.board[key]);
-      
+
     });
 
   }
@@ -198,10 +198,29 @@ export class BoardComponent {
       this.apiservice.patchData(`task/${task.id}/`, data).subscribe({
         next: (response) => {
           console.log(response);
+          this.savelog(response);
         }
       })
 
     })
+  }
+
+
+  savelog(task: any) {
+    console.log(task.state);
+    
+    const logData = {
+      task: task.id,
+      log: 'Status wurde geändert',
+      new_state: this.dataservice.interpretation['state'][task.state]
+    }
+  this.apiservice.postData('task/logs/', logData).subscribe({
+    next:(response)=>{
+      console.log(response);
+      
+    }
+  })
+
   }
 
   toggleReleasesWrapper() {
@@ -210,7 +229,7 @@ export class BoardComponent {
     if (!this.releasesWrapperOpen) {
       return
     }
-    
+
     this.loadReleases()
   }
 
