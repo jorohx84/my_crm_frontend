@@ -18,6 +18,7 @@ export class GlobalService {
     customerWrapperOpen: boolean = false;
     messageWrapperOpen: boolean = false;
     isNewSystemMessage: boolean = false;
+    searchWrapperOpen: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }

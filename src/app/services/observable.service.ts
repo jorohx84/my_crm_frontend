@@ -20,7 +20,8 @@ export class ObservableService {
     public notificationSubject$ = this.notificationSubject.asObservable();
     // private systemMessagesTriggerSubject = new BehaviorSubject<any>(null);
     // public systemMessagesTriggerSubject$ = this.systemMessagesTriggerSubject.asObservable();
-
+    private globalsearchSubject = new BehaviorSubject<any>(null);
+    public globalsearchSubject$ = this.globalsearchSubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -44,6 +45,8 @@ export class ObservableService {
     sendNotification(notification: any[]) {
         this.notificationSubject.next(notification);
     }
- 
 
+    sendSearch(data: any) {
+        this.globalsearchSubject.next(data);
+    }
 }

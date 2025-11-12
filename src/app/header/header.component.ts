@@ -33,7 +33,7 @@ export class HeaderComponent {
   systemMessages: any[] = [];
   currentTime: string = '';
   searchInput: string = '';
-  
+
   constructor() {
 
 
@@ -61,28 +61,28 @@ export class HeaderComponent {
     });
   }
 
-// websocket: WebSocket | null = null;
+  // websocket: WebSocket | null = null;
 
-// loadWebsocket(id: number) {
-//   if (this.websocket && this.websocket.readyState !== WebSocket.CLOSED) {
-//     console.log("WebSocket bereits geöffnet");
-//     return;
-//   }
+  // loadWebsocket(id: number) {
+  //   if (this.websocket && this.websocket.readyState !== WebSocket.CLOSED) {
+  //     console.log("WebSocket bereits geöffnet");
+  //     return;
+  //   }
 
-//   this.websocket = new WebSocket(`ws://localhost:8000/ws/notifications/${id}/`);
-  
-//   this.websocket.onopen = () => console.log("✅ WebSocket geöffnet!");
-//   this.websocket.onerror = e => console.error("❌ Fehler:", e);
-//   this.websocket.onmessage = (event) => {
-//     const notification = JSON.parse(event.data);
-//     console.log("📩 Nachricht:", notification);
+  //   this.websocket = new WebSocket(`ws://localhost:8000/ws/notifications/${id}/`);
 
-//     setTimeout(() => {
-//          this.loadCount();
-//     }, 2000);
- 
-//   };
-// }
+  //   this.websocket.onopen = () => console.log("✅ WebSocket geöffnet!");
+  //   this.websocket.onerror = e => console.error("❌ Fehler:", e);
+  //   this.websocket.onmessage = (event) => {
+  //     const notification = JSON.parse(event.data);
+  //     console.log("📩 Nachricht:", notification);
+
+  //     setTimeout(() => {
+  //          this.loadCount();
+  //     }, 2000);
+
+  //   };
+  // }
 
 
   globalSearch() {
@@ -91,6 +91,8 @@ export class HeaderComponent {
       next: (response) => {
         console.log(response);
         this.searchInput = '';
+        this.observservice.sendSearch(response);
+        this.globalservice.searchWrapperOpen = true;
       }
     })
   }
@@ -144,7 +146,7 @@ export class HeaderComponent {
 
   loadCount() {
     console.log('count wird geladen')
-    
+
     this.apiservice.getData(`messages/count/`).subscribe({
       next: (response) => {
         console.log(response);

@@ -1,0 +1,61 @@
+<section>
+    <div (click)="globalservice.searchWrapperOpen=false;" class="closeBtn">
+        <img class="imgSize" src="./icons/close.svg" alt="">
+    </div>
+    <h1>Suchergebnisse</h1>
+    <div class="searchList">
+        <div class="listrow" *ngFor="let member of members">
+            <img src="./icons/profile.svg" alt="">
+            <div class="infos">
+                <p>{{member.first_name}} {{member.last_name}}</p>
+                <div class="divider"></div>
+                <p>Position/Abteilung</p>
+
+                <div class="contact">
+                    <img src="./icons/mail.svg" alt="">
+                    <a [href]="'mailto:' + member.email">{{ member.email }}</a>
+                </div>
+
+                <div class="contact">
+                    <img src="./icons/phone.svg" alt="">
+                    <a [href]="'mailto:' + member.email">Telefon</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="listrow" *ngFor="let customer of customers"
+            (click)="openCard(['main', 'singlecustomer', customer.id])">
+            <div class="icon">
+                <img src="./icons/building.svg" alt="">
+            </div>
+            <div class="infos">
+                <p>{{customer.companyname}} </p>
+                <div class="divider"></div>
+                <p>{{customer.city}}</p>
+
+                <div class="contact">
+                    <img src="./icons/mail.svg" alt="">
+                    <a [href]="'mailto:' + customer.email">{{ customer.email }}</a>
+                </div>
+                <div class="contact">
+                    <img src="./icons/phone.svg" alt="">
+                    <a [href]="'tel:' + customer.phone">{{customer.phone}}</a>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="listrow" *ngFor="let task of tasks"
+            (click)="openCard(['main', 'singlecustomer', task.customer, 'task', task.id], {type: task.type})">
+            <div class="icon">
+                <img src="./icons/task_white.svg" alt="">
+            </div>
+            <div class="infos">
+                <p>{{task.title}}</p>
+                <div class="divider"></div>
+                <p>{{task.description}}</p>
+            </div>
+        </div>
+    </div>
+
+</section>

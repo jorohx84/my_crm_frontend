@@ -43,7 +43,6 @@ export class MessagewrapperComponent {
   loadNotifications(id: number) {
     this.apiservice.getData(`notifications/user/${id}`).subscribe({
       next: (response) => {
-        console.log(response);
         this.notifications = response.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
 );
 
@@ -64,8 +63,6 @@ export class MessagewrapperComponent {
     }
     this.apiservice.patchData(`notifications/${id}/`, data).subscribe({
       next: (response) => {
-        console.log(response.is_read);
-
         // this.loadSystemMessages
         this.observservice.sendNotification(this.notifications)
       }

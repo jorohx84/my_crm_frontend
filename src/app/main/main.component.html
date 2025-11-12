@@ -35,4 +35,7 @@
 
 
 <!-- <div class="overlay"></div> -->
+ <div [ngClass]="{'slideIn': globalservice.searchWrapperOpen===true}" class="globalSearchWrapper slideOut">
+    <app-globalsearchwrapper></app-globalsearchwrapper>
+ </div>
 </section>
