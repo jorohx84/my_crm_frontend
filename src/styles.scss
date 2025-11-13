@@ -13,7 +13,7 @@
     --border: #10779d;
     --box: #10779d;
     // --box-light: #10779d24;
-      --box-light: #10779d12;
+    --box-light: #10779d12;
     --error: rgb(187, 2, 2);
     --listrow: #10779d20;
     --listrow-light: #10779d0c;
@@ -21,13 +21,15 @@
     --input: #10779d28;
     --greenLine: #18A408;
 }
-html{
+
+html {
     overflow: hidden;
 }
 
-body{
+body {
     overflow: hidden;
 }
+
 //#B02323
 //#D98014
 section,
@@ -40,18 +42,7 @@ textarea {
 
 }
 
-.taskFormWrapper {
-    width: 100%;
-    max-width: 600px;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 32px;
-    background-color: white;
-    border-left: solid 0.5px var(--border);
-    z-index: 2;
-}
+
 
 .slideOut {
     transition: transform 0.3s ease-in-out;
@@ -66,6 +57,7 @@ textarea {
 
     all: unset;
     width: 100%;
+    max-width: 600px;
     height: 100px;
     overflow: auto;
     resize: none;
@@ -337,13 +329,28 @@ button {
     width: 100%;
     height: 100%;
     max-width: 600px;
-    padding: 24px;
+    // padding: 24px;
     position: absolute;
     top: 0;
     right: 0;
     background-color: white;
     z-index: 1;
 }
+
+.formWrapper {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    position: absolute;
+    top: 113px;
+    right: 0;
+
+    background-color: white;
+    border-left: solid 0.5px var(--border);
+    z-index: 2;
+}
+
+
 
 .editBtn {
     width: 16px;
@@ -364,10 +371,12 @@ button {
 .flexheight {
     height: fit-content !important;
 }
-.alertCont{
+
+.alertCont {
     position: relative;
 }
-.redDot{
+
+.redDot {
     position: absolute;
     top: -5px;
     right: -2px;
@@ -375,4 +384,21 @@ button {
     min-height: 10px;
     background-color: var(--error);
     border-radius: 100px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    border: solid 1px var(--border);
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+
+    >img {
+        width: 14px;
+
+    }
 }

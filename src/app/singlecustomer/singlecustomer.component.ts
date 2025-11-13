@@ -13,9 +13,10 @@ import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 import { DataService } from '../services/data.service';
 import { TasklistComponent } from '../tasklist/tasklist.component';
 import { RouterOutlet } from '@angular/router';
+import { ContactwrapperComponent } from '../contactwrapper/contactwrapper.component';
 @Component({
   selector: 'app-singlecustomer',
-  imports: [CommonModule, FormsModule, TaskwrapperComponent, RouterOutlet],
+  imports: [CommonModule, FormsModule, TaskwrapperComponent, ContactwrapperComponent, RouterOutlet],
   templateUrl: './singlecustomer.component.html',
   styleUrl: './singlecustomer.component.scss'
 })

@@ -21,7 +21,8 @@
             <div (click)="changeFolder('activities')">
                 <h4>Aktivitäten</h4>
             </div>
-            <div (click)="changeFolder('contacts')">
+            <div
+                (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'contacts'], {sidebarOpen:true})">
                 <h4>Kontakte</h4>
             </div>
             <!-- <div (click)="changeFolder('tasks')">
@@ -41,8 +42,8 @@
                 (click)="globalservice.taskWrapperOpen=true; globalservice.isSubtaskWrapper=false;">
                 <img src=" ./icons/tasks.svg" alt="">
             </div>
-            <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
-                <img src=" ./icons/contact.svg" alt="">
+            <div *ngIf="!isEdit" class="menuBtn">
+                <img (click)="globalservice.contactWrapperOpen=!globalservice.contactWrapperOpen" src=" ./icons/contact.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
                 <img src=" ./icons/trash.svg" alt="">
@@ -120,13 +121,17 @@
         <div *ngIf="globalservice.sidebarOpen===true" class="customerSidebar"></div>
     </div>
 
-    <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
+    <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
         <app-taskwrapper></app-taskwrapper>
+    </div>
+
+    <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
+        <app-contactwrapper></app-contactwrapper>
     </div>
 
 
     <div *ngIf="isOpen" class="deleteWrapper border">
-        <div *ngIf="!isDelete">
+        <div class="textCont" *ngIf="!isDelete">
             <p>Wollen Sie den Kunden</p>
             <h3>- {{customer?.companyname}} -</h3>
             <p>wirklich löschen?</p>

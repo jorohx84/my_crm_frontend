@@ -193,35 +193,17 @@ export class BoardComponent {
         state: newState,
         board_position: index,
       }
-      // Aktualisiere State im Task-Objekt
-      // movedTask.state = newState;
       this.apiservice.patchData(`task/${task.id}/`, data).subscribe({
         next: (response) => {
           console.log(response);
-          this.savelog(response);
+          
+          this.globalservice.saveLog('state', response)
         }
       })
 
     })
   }
 
-
-  savelog(task: any) {
-    console.log(task.state);
-    
-    const logData = {
-      task: task.id,
-      log: 'Status wurde geändert',
-      new_state: this.dataservice.interpretation['state'][task.state]
-    }
-  this.apiservice.postData('task/logs/', logData).subscribe({
-    next:(response)=>{
-      console.log(response);
-      
-    }
-  })
-
-  }
 
   toggleReleasesWrapper() {
     this.releasesWrapperOpen = !this.releasesWrapperOpen;

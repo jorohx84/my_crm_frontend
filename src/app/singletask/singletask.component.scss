@@ -586,21 +586,7 @@ section {
     //     }
 }
 
-.checkbox {
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-content: center;
-    align-self: center;
-    border: solid 1px var(--border);
-    border-radius: 4px;
-    position: relative;
 
-    >img {
-        width: 14px;
-
-    }
-}
 
 .counter {
     width: 100%;

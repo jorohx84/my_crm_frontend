@@ -1,0 +1,81 @@
+<section>
+    <div class="contactsHeader">
+        <h2>Kontakte</h2>
+        <div class="menubar">
+            <img src="./icons/contact.svg" alt="">
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="contactCont">
+        <div class="contactList">
+            <div class="contactCard" *ngFor="let contact of contacts let index=index" (click)="openContact(index)">
+                <img src="./icons/profile.svg" alt="">
+                <div class="infos">
+                    <p>{{contact?.name}}</p>
+                    <div class="divider"></div>
+                    <p>{{contact?.department}}</p>
+
+                    <div class="contact">
+                        <img src="./icons/mail.svg" alt="">
+                        <a [href]="'mailto:' + contact?.email">{{ contact?.email }}</a>
+                    </div>
+
+                    <div class="contact">
+                        <img src="./icons/phone.svg" alt="">
+                        <a [href]="'mailto:' + contact?.phone">{{contact?.phone}}</a>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="verticaldivider"></div>
+        <div class="contactInfos">
+            <div class="infocont">
+                <input class="title" name="" type="text" [(ngModel)]="currentContact.name">
+                <input type="text" [(ngModel)]="currentContact.position">
+            </div>
+
+
+
+
+
+            <div class="divider"></div>
+
+            <div class="infocont">
+                <h4>Abteilung</h4>
+                <input type="text" [(ngModel)]="currentContact.department">
+            </div>
+
+
+            <div class="infocont">
+                <h4>Funktion</h4>
+                <input type="text" [(ngModel)]="currentContact.function">
+            </div>
+
+            <div class="infocont">
+                <h4>Kontaktdaten</h4>
+
+                <div class="contact">
+                    <img src="./icons/mail.svg" alt="">
+                    <input type="text" [(ngModel)]="currentContact.email">
+                </div>
+
+                <div class="contact">
+                    <img *ngIf="currentContact.newsletter_opt_in===true" src="./icons/phone.svg" alt="">
+                    <input type="text" [(ngModel)]="currentContact.phone">
+                </div>
+
+            </div>
+            <div class="newsletter">
+                <div class="checkbox">
+                    <img src="./icons/done.svg" alt="">
+                </div>
+                <p>Newsletter</p>
+            </div>
+            <textarea name="" id="" placeholder="Notizen"></textarea>
+            <p>Erstellt von: {{currentContact?.created_by.fullname}}</p>
+        </div>
+    </div>
+</section>

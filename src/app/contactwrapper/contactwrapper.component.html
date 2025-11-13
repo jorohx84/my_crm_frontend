@@ -1,0 +1,70 @@
+<section>
+    <h2>Kontakt erstellen</h2>
+
+    <form #contactCreationFrom="ngForm" (ngSubmit)="createContact(contactCreationFrom)">
+        <div class="inputCont">
+            <div class="inputfield">
+                <input #name="ngModel" type="text" [(ngModel)]="contact.name" name="name" placeholder="Name" required>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="name.invalid && name.touched">*Pflichtfeld</p>
+            </div>
+        </div>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input #function="ngModel" type="text" [(ngModel)]="contact.function" name="function"
+                    placeholder="Funktion" required>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="function.invalid && function.touched">*Pflichtfeld</p>
+            </div>
+        </div>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input #position="ngModel" type="text" [(ngModel)]="contact.position" name="position"
+                    placeholder="Position" required>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="position.invalid && position.touched">*Pflichtfeld</p>
+            </div>
+        </div>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input #department="ngModel" type="text" [(ngModel)]="contact.department" name="position"
+                    placeholder="Abteilung" required>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="department.invalid && department.touched">*Pflichtfeld</p>
+            </div>
+        </div>
+          <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': email.invalid && email.touched}">
+                    <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
+                        [(ngModel)]="contact.email" required
+                        pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="email.invalid && email.touched">Bitte gültige E-Mail eingeben</p>
+                </div>
+            </div>
+
+            <!-- phone -->
+            <div class="inputCont">
+                <div class="inputfield" [ngClass]="{'errorBorder': phone.invalid && phone.touched}">
+                    <input #phone="ngModel" type="tel" id="phone" name="phone" placeholder="Telefonnummer"
+                        [(ngModel)]="contact.phone" required pattern="^[0-9\-\+\s\(\)]*$">
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="phone.invalid && phone.touched">Bitte gültige Telefonnummer eingeben</p>
+                </div>
+            </div>
+
+
+
+        <div class="btnCont">
+
+            <button type="button">Abbrechen</button>
+            <button type="submit">Speichern</button>
+        </div>
+    </form>
+</section>

@@ -43,8 +43,6 @@ export class HeaderComponent {
     this.setTime();
 
     this.observservice.notificationSubject$.subscribe(() => {
-      console.log('hallo');
-
       this.loadCount();
     })
   }
@@ -53,43 +51,18 @@ export class HeaderComponent {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
-        console.log(user);
-        // this.loadWebsocket(user.id);
         this.loadCount()
       }
 
     });
   }
 
-  // websocket: WebSocket | null = null;
 
-  // loadWebsocket(id: number) {
-  //   if (this.websocket && this.websocket.readyState !== WebSocket.CLOSED) {
-  //     console.log("WebSocket bereits geöffnet");
-  //     return;
-  //   }
-
-  //   this.websocket = new WebSocket(`ws://localhost:8000/ws/notifications/${id}/`);
-
-  //   this.websocket.onopen = () => console.log("✅ WebSocket geöffnet!");
-  //   this.websocket.onerror = e => console.error("❌ Fehler:", e);
-  //   this.websocket.onmessage = (event) => {
-  //     const notification = JSON.parse(event.data);
-  //     console.log("📩 Nachricht:", notification);
-
-  //     setTimeout(() => {
-  //          this.loadCount();
-  //     }, 2000);
-
-  //   };
-  // }
 
 
   globalSearch() {
-    console.log(this.searchInput);
     this.apiservice.getData(`search/${this.searchInput}`).subscribe({
       next: (response) => {
-        console.log(response);
         this.searchInput = '';
         this.observservice.sendSearch(response);
         this.globalservice.searchWrapperOpen = true;
@@ -102,6 +75,7 @@ export class HeaderComponent {
       this.date = new Date().toISOString()
     }, 1000);
   }
+
 
   logoutUser() {
     this.setLogoutTimeStamp()
@@ -125,15 +99,12 @@ export class HeaderComponent {
     }
     this.apiservice.patchData(`profile/${this.user.id}/`, timestamp).subscribe({
       next: (response) => {
-        console.log(response);
-
       }
     })
   }
 
 
   openSystemMessages() {
-    // this.observservice.sendNotification(this.systemMessages);
     this.globalservice.messageWrapperOpen = !this.globalservice.messageWrapperOpen;
   }
 
@@ -145,11 +116,8 @@ export class HeaderComponent {
 
 
   loadCount() {
-    console.log('count wird geladen')
-
     this.apiservice.getData(`messages/count/`).subscribe({
       next: (response) => {
-        console.log(response);
         const count = response.count;
         this.setRedDot(count)
       }

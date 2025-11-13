@@ -43,7 +43,7 @@ export class TaskwrapperComponent {
     completed_at: '',
     log: [],
   };
-  mainTaskId: string = '';
+  mainTask: any;
 
   ngOnInit() {
     this.loadUser()
@@ -80,7 +80,7 @@ export class TaskwrapperComponent {
   loadTask() {
     this.observerservice.taskSubject$.subscribe((taskObj) => {
       if (taskObj) {
-        this.mainTaskId = taskObj.id;
+        this.mainTask = taskObj;
       }
     })
   }
@@ -118,8 +118,10 @@ export class TaskwrapperComponent {
     }
   }
   createTaskObject() {
+    console.log(this.mainTask);
+    
     return {
-      parent: this.mainTaskId || null,
+      parent: this.mainTask.id || null,
       title: this.task.title,
       description: this.task.description,
       customer: this.task.customer,
@@ -138,27 +140,29 @@ export class TaskwrapperComponent {
       next: (response) => {
         this.openNewTask(response);
         // this.sendSystemMessage(response)
-      
-              this.saveLog(response);
-      
-    
+        if (response.type === 'subtask') {
+          this.globalservice.saveLog('subtask', this.mainTask, response);
+        }
+        this.globalservice.saveLog('create', response);
+
+
       },
       error: (err) => console.log(err)
     })
   }
 
 
-  saveLog(task: any) {
-    const data = this.createLogElement(task);
-    console.log(data);
-    this.apiservice.postData('task/logs/', data).subscribe({
-      next: (response) => {
-        console.log(response);
+  // saveLog(task: any) {
+  //   const data = this.createLogElement(task);
+  //   console.log(data);
+  //   this.apiservice.postData('task/logs/', data).subscribe({
+  //     next: (response) => {
+  //       console.log(response);
 
-      }
-    })
+  //     }
+  //   })
 
-  }
+  // }
   // sendSystemMessage(task: any) {
   //   console.log(task);
 

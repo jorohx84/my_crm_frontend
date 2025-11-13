@@ -1,6 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router, Route, ActivatedRoute } from "@angular/router";
 import { DataService } from "./data.service";
+import { APIService } from "./api.service";
 
 
 @Injectable({
@@ -10,6 +11,7 @@ import { DataService } from "./data.service";
 export class GlobalService {
     router = inject(Router);
     dataservice = inject(DataService);
+    apiservice = inject(APIService);
     number: number | null = null;
     memberListOpen: boolean = false;
     taskWrapperOpen: boolean = false;
@@ -19,9 +21,41 @@ export class GlobalService {
     messageWrapperOpen: boolean = false;
     isNewSystemMessage: boolean = false;
     searchWrapperOpen: boolean = false;
+    contactWrapperOpen: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
+    taskLogs: Record<string, string> = {
+        title: 'Titel wurde geändert',
+        description: 'Beschreibung wurde geändert',
+        state: 'Status wurde geändert',
+        priority: 'Priorität wurde geändert',
+        due_date: 'Fälligkeit wurde geändert',
+        subtask: 'neue Subtask wurde erstellt',
+        assignee: 'Bearbeiter wurde geändert',
+        checklist: 'Checkliste wurde bearbeitet',
+        tododone: 'Checkliste: Todo abgeschlossen',
+        todoundone: 'Checkliste: Todo auf unbearbeitet geändert',
+        release: 'Aufgabe wurde freigegeben',
+        close: 'Aufgabe wurde geschlossen',
+        create: 'Aufgabe wurde erstellt'
+    }
+
+
+    interpretation: Record<string, Record<string, string>> = {
+        priority: {
+            low: 'Niedrig',
+            mid: 'Mittel',
+            high: 'Hoch',
+        },
+        state: {
+            undone: 'unbearbeitet',
+            in_progress: 'in Bearbeitung',
+            under_review: 'in Prüfung',
+            done: 'Erledigt',
+        }
+
+    }
 
 
     constructor() {
@@ -56,6 +90,52 @@ export class GlobalService {
             date.getFullYear() === today.getFullYear();
     }
 
-    
 
+    saveLog(objKey: string, task: any, variableObj: any = null) {
+        console.log(objKey);
+        const logData = this.createLog(objKey, task, variableObj);
+        console.log(logData);
+
+        this.apiservice.postData('task/logs/', logData).subscribe({
+            next: (response) => {
+                console.log(response);
+
+            }
+        })
+    }
+
+
+    createLog(objKey: string, task: any, variableObj: any) {
+        const logText = this.taskLogs[objKey]
+        const newState = this.getnewState(objKey, task, variableObj);
+
+        return {
+            task: task.id,
+            log: logText,
+            // updated_by: this.user.id,
+            new_state: newState
+        }
+    }
+
+    getnewState(objKey: string, task: any, variableObj: any) {
+        if (objKey === 'description' || objKey === 'due_date' || objKey === 'title') {
+            return task[objKey]
+        } else if (objKey === 'state' || objKey === 'priority') {
+            return this.interpretation[objKey][task[objKey]]
+        } else if (objKey === 'subtask') {
+            return variableObj.title;
+        } else if (objKey === 'assignee') {
+            return variableObj.fullname
+        } else if (objKey === 'checklist') {
+            return 'Aufgabe hinzugefügt'
+        } else if (objKey === 'tododone' || objKey === 'todoundone') {
+            return variableObj
+        } else if (objKey === 'release') {
+            return 'Freigabe erteilt durch Prüfer'
+        } else if (objKey === 'close') {
+            return 'Aufgabe abgeschlossen durch Bearbeiter'
+        } else if (objKey === 'create') {
+            return 'Neue Aufgabe'
+        }
+    }
 }

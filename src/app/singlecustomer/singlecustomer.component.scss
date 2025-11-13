@@ -266,5 +266,12 @@ section {
     padding: 24px;
     background-color: white;
 
+    .textCont {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
 }
 

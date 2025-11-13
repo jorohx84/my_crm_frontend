@@ -9,6 +9,7 @@ import { SinglecustomerComponent } from './singlecustomer/singlecustomer.compone
 import { TasklistComponent } from './tasklist/tasklist.component';
 import { SingletaskComponent } from './singletask/singletask.component';
 import { BoardComponent } from './board/board.component';
+import { ContactsComponent } from './contacts/contacts.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -22,6 +23,7 @@ export const routes: Routes = [
                 path: 'singlecustomer/:id', component: SinglecustomerComponent, children: [
                     { path: 'tasklist', component: TasklistComponent },
                     { path: 'task/:id', component: SingletaskComponent },
+                    {path:'contacts', component: ContactsComponent},
                 ]
             },
             { path: 'board', component: BoardComponent },

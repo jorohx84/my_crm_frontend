@@ -8,36 +8,6 @@ import { APIService } from "./api.service";
 
 export class DataService {
     customerList: any[] = [];
-    taskLogs: Record<string, string> = {
-        title: 'Titel wurde geändert',
-        description: 'Beschreibung wurde geändert',
-        state: 'Status wurde geändert',
-        priority: 'Priorität wurde geändert',
-        due_date: 'Fälligkeit wurde geändert',
-        subtask: 'neue Subtask wurde erstellt',
-        assignee: 'Bearbeiter wurde geändert',
-        checklist: 'Checkliste wurde bearbeitet',
-        tododone: 'Checkliste: Todo abgeschlossen',
-        todoundone: 'Checkliste: Todo auf unbearbeitet geändert',
-        release: 'Aufgabe wurde freigegeben',
-        close: 'Aufgabe wurde geschlossen',
-    }
-
-
-    interpretation: Record<string, Record<string, string>> = {
-        priority: {
-            low: 'Niedrig',
-            mid: 'Mittel',
-            high: 'Hoch',
-        },
-        state: {
-            undone: 'unbearbeitet',
-            in_progress: 'in Bearbeitung',
-            under_review: 'in Prüfung',
-            done: 'Erledigt',
-        }
-
-    }
 
 
 

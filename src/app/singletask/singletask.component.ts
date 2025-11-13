@@ -276,57 +276,65 @@ export class SingletaskComponent {
     this.apiservice.patchData(`task/${this.taskId}/`, requestData).subscribe({
       next: (response) => {
         this.getProgressState();
+        if (objKey === 'assignee') {
+          this.globalservice.saveLog(objKey, response, this.newAssignee);
+        } else if (objKey === 'tododone' || objKey === 'todoundone') {
+          this.globalservice.saveLog(objKey, response, this.todotext);
+        } else if (objKey === 'subtask') {
+          this.globalservice.saveLog(objKey, response, this.subtask);
+        } else {
+          this.globalservice.saveLog(objKey, response);
+        }
 
-        this.saveLog(objKey)
         this.loadtask(this.taskId);
 
       }
     })
   }
 
-  saveLog(objKey:string) {
-    console.log(objKey);
-    const logData = this.createLog(objKey);
-    this.apiservice.postData('task/logs/', logData).subscribe({
-      next: (response) => {
-        console.log(response);
+  // saveLog(objKey:string) {
+  //   console.log(objKey);
+  //   const logData = this.createLog(objKey);
+  //   this.apiservice.postData('task/logs/', logData).subscribe({
+  //     next: (response) => {
+  //       console.log(response);
 
-      }
-    })
-  }
+  //     }
+  //   })
+  // }
 
 
-  createLog(objKey: string) {
-    const logText = this.dataservice.taskLogs[objKey]
-    const newState = this.getnewState(objKey);
+  // createLog(objKey: string) {
+  //   const logText = this.dataservice.taskLogs[objKey]
+  //   const newState = this.getnewState(objKey);
 
-    return {
-      task: this.task.id,
-      log: logText,
-      // updated_by: this.user.id,
-      new_state: newState
-    }
-  }
+  //   return {
+  //     task: this.task.id,
+  //     log: logText,
+  //     // updated_by: this.user.id,
+  //     new_state: newState
+  //   }
+  // }
 
-  getnewState(objKey: string) {
-    if (objKey === 'description' || objKey === 'due_date' || objKey === 'title') {
-      return this.task[objKey]
-    } else if (objKey === 'state' || objKey === 'priority') {
-      return this.dataservice.interpretation[objKey][this.task[objKey]]
-    } else if (objKey === 'subtask') {
-      return this.subtask.title;
-    } else if (objKey === 'assignee') {
-      return this.newAssignee.fullname
-    } else if (objKey === 'checklist') {
-      return 'Aufgabe hinzugefügt'
-    } else if (objKey === 'tododone' || objKey === 'todoundone') {
-      return this.todotext
-    } else if (objKey === 'release') {
-      return 'Freigabe erteilt durch Prüfer'
-    } else if (objKey === 'close') {
-      return 'Aufgabe abgeschlossen durch Bearbeiter'
-    }
-  }
+  // getnewState(objKey: string) {
+  //   if (objKey === 'description' || objKey === 'due_date' || objKey === 'title') {
+  //     return this.task[objKey]
+  //   } else if (objKey === 'state' || objKey === 'priority') {
+  //     return this.dataservice.interpretation[objKey][this.task[objKey]]
+  //   } else if (objKey === 'subtask') {
+  //     return this.subtask.title;
+  //   } else if (objKey === 'assignee') {
+  //     return this.newAssignee.fullname
+  //   } else if (objKey === 'checklist') {
+  //     return 'Aufgabe hinzugefügt'
+  //   } else if (objKey === 'tododone' || objKey === 'todoundone') {
+  //     return this.todotext
+  //   } else if (objKey === 'release') {
+  //     return 'Freigabe erteilt durch Prüfer'
+  //   } else if (objKey === 'close') {
+  //     return 'Aufgabe abgeschlossen durch Bearbeiter'
+  //   }
+  // }
 
   addSubtask() {
     this.globalservice.isSubtaskWrapper = true;
