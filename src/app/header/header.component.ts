@@ -63,6 +63,8 @@ export class HeaderComponent {
   globalSearch() {
     this.apiservice.getData(`search/${this.searchInput}`).subscribe({
       next: (response) => {
+        console.log(response);
+        
         this.searchInput = '';
         this.observservice.sendSearch(response);
         this.globalservice.searchWrapperOpen = true;

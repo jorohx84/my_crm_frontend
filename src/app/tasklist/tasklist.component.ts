@@ -11,7 +11,7 @@ import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 
 @Component({
   selector: 'app-tasklist',
-  imports: [CommonModule, TaskwrapperComponent],
+  imports: [CommonModule],
   templateUrl: './tasklist.component.html',
   styleUrl: './tasklist.component.scss'
 })

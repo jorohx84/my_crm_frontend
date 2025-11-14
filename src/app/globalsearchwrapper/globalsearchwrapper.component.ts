@@ -15,12 +15,14 @@ export class GlobalsearchwrapperComponent {
   members: any;
   tasks: any;
   customers: any;
+  contacts:any;
   ngOnInit() {
     this.observerservice.globalsearchSubject$.subscribe((data) => {
       if (data) {
         this.members = data.members;
         this.tasks = data.tasks;
         this.customers = data.customers
+        this.contacts=data.contacts
       }
     })
   }

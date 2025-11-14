@@ -15,7 +15,7 @@ import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-singletask',
-  imports: [CommonModule, FormsModule, TaskwrapperComponent, MemberlistComponent],
+  imports: [CommonModule, FormsModule, MemberlistComponent],
   templateUrl: './singletask.component.html',
   styleUrl: './singletask.component.scss'
 })
