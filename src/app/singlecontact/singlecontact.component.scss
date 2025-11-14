@@ -1,0 +1,156 @@
+section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.contactHeader {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 12px;
+    border-bottom: solid 0.5px var(--border);
+}
+
+.ContactTitleCont {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menubar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tabs {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+
+    .tab {
+
+        border: solid 1px var(--border);
+        border-radius: 4px;
+        padding: 6px;
+        cursor: pointer;
+    }
+}
+
+.tabActive {
+    background-color: var(--border) !important;
+    color: white !important;
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    >img {
+        width: 24px;
+        cursor: pointer;
+    }
+}
+
+
+.title {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.contactInfos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.infocont {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+}
+
+.newsletter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contactCont {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 24px;
+}
+
+.contact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    >img {
+        width: 16px;
+    }
+}
+
+.acitvityForm {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 500px;
+}
+
+.typeChoices {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+
+    .typeBtn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 30px;
+        // background-color: var(--box);
+        border: solid 1px var(--border);
+
+        border-radius: 4px;
+    }
+}
+
+.activityList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.listrow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    align-items: center;
+    cursor: pointer;
+    background-color: var(--box-light);
+    border-radius: 4px;
+padding: 12px;
+    >img {
+        width: 24px;
+    }
+
+    >p {
+        width: 100%;
+    }
+
+}
+

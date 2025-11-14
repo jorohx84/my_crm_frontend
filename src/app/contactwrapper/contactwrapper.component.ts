@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { APIService } from '../services/api.service';
 import { response } from 'express';
 import { ObservableService } from '../services/observable.service';
+import { GlobalService } from '../services/global.service';
 @Component({
   selector: 'app-contactwrapper',
   imports: [CommonModule, FormsModule],
@@ -14,6 +15,7 @@ import { ObservableService } from '../services/observable.service';
 export class ContactwrapperComponent {
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
+  globalservice = inject(GlobalService);
   route = inject(ActivatedRoute);
   customerId: string | null = null;
   contact: any = {
@@ -36,7 +38,7 @@ export class ContactwrapperComponent {
 
   ngOnInit() {
     this.route.paramMap.subscribe((param) => {
-      const id = param.get('id');
+      const id = param.get('customer_id');
       this.customerId = id;
     })
   }
@@ -49,14 +51,15 @@ export class ContactwrapperComponent {
     }
 
     const requestData = this.createRequestData();
-    this.saveContact(requestData);
+    this.saveContact(requestData, form);
   }
 
-  saveContact(data: any) {
+  saveContact(data: any, form: NgForm) {
     this.apiservice.postData('contacts/', data).subscribe({
       next: (response) => {
         console.log(response);
         this.observerservice.sendContact(response);
+        this.resetFrom(form)
       }
     })
 
@@ -72,6 +75,11 @@ export class ContactwrapperComponent {
       phone: this.contact.phone,
       email: this.contact.email,
     }
+  }
+
+  resetFrom(form: NgForm) {
+    form.reset()
+    this.globalservice.contactWrapperOpen = false;
   }
 
 }

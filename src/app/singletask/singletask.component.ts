@@ -86,7 +86,7 @@ export class SingletaskComponent {
       this.queryType = params['type'];
     });
     this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+      const id = params.get('task_id');
       if (id) {
         this.taskId = id
         this.loadtask(id);

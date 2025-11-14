@@ -1,0 +1,149 @@
+<section>
+    <div class="infocont">
+        <div class="contactHeader">
+
+            <div class="ContactTitleCont">
+                <input class="title" name="name" type="text" [(ngModel)]="contact.name"
+                    (change)="updateContact('name')">
+                <input type="text" [(ngModel)]="contact.position" (change)="updateContact('position')">
+            </div>
+
+
+
+            <div class="menubar">
+                <div class="tabs">
+                    <div class="tab" (click)="changeTab('infos')" [ngClass]="{'tabActive': tabKey==='infos'}">
+                        <p>Information</p>
+                    </div>
+                    <div class="tab" (click)="changeTab('activities')" [ngClass]="{'tabActive': tabKey==='activities'}">
+                        <p>Aktivitäten</p>
+                    </div>
+                </div>
+                <!-- <div class="navbar">
+                    <img src="./icons/phone.svg" alt="">
+                    <img src="./icons/phone.svg" alt="">
+                    <img src="./icons/phone.svg" alt="">
+                    <img src="./icons/phone.svg" alt="">
+                    <img src="./icons/phone.svg" alt="">
+                    <img src="./icons/phone.svg" alt="">
+
+                </div> -->
+                <div (click)="changeTab('new')" class="addBtn"><img src="./icons/add.svg" alt="">Aktivität</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- <div class="divider"></div> -->
+
+    <!-- Infos -->
+    <div class="contactInfos" *ngIf="tabKey==='infos'">
+
+
+        <div class="infocont">
+            <h4>Abteilung</h4>
+            <input type="text" [(ngModel)]="contact.department" (change)="updateContact('department')">
+        </div>
+
+
+        <div class="infocont">
+            <h4>Funktion</h4>
+            <input type="text" [(ngModel)]="contact.function" (change)="updateContact('function')">
+        </div>
+
+        <div class="infocont">
+            <h4>Kontaktdaten</h4>
+
+            <div class="contact">
+                <img src="./icons/mail.svg" alt="">
+                <input type="text" [(ngModel)]="contact.email" (change)="updateContact('email')">
+            </div>
+
+            <div class="contact">
+                <img src="./icons/phone.svg" alt="">
+                <input type="text" [(ngModel)]="contact.phone" (change)="updateContact('phone')">
+            </div>
+
+        </div>
+        <div class="newsletter">
+            <div class="checkbox" (click)="updateContact('newsletter_opt_in')">
+                <img *ngIf="contact.newsletter_opt_in" src="./icons/done.svg" alt="">
+            </div>
+            <p>Newsletter</p>
+        </div>
+        <textarea name="" id="" placeholder="Notizen" [(ngModel)]="contact.notes"
+            (change)="updateContact('notes')"></textarea>
+        <p>Erstellt von: {{contact?.created_by.fullname}}</p>
+    </div>
+    <!-- Activities -->
+    <div *ngIf="tabKey==='activities'">
+        <div class="activityList">
+            <div class="listrow" *ngFor="let activity of activities let index=index">
+                <img [src]="types[activity.type]?.path" alt="">
+                <p>{{types[activity.type]?.label}}</p>
+                <p>{{activity?.date | date: 'dd.MM.yy'}}</p>
+
+                <p>{{activity?.description}}</p>
+                <p>{{activity?.user.fullname}}</p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div *ngIf="tabKey==='new'" class="acitvityForm">
+        <h3>Neue Aktivität</h3>
+        <div>
+            <div class="typeChoices">
+                <div class="typeBtn" (click)="changeActivityType('call')"
+                    [ngClass]="{'tabActive': activity.type==='call'}">
+                    <p>Anruf</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('email')"
+                    [ngClass]="{'tabActive': activity.type==='email'}">
+                    <p>E-Mail</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('invite')"
+                    [ngClass]="{'tabActive': activity.type==='invite'}">
+                    <p>Besuch</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('video')"
+                    [ngClass]="{'tabActive': activity.type==='video'}">
+                    <p>VideoCall</p>
+                </div>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="typeInvalid">*Pflichtfeld</p>
+            </div>
+
+        </div>
+
+        <form #createActivityForm="ngForm" (ngSubmit)="createActivity(createActivityForm)">
+
+
+            <div class="inputCont">
+                <h4>Start</h4>
+                <div class="inputfield">
+                    <input #date="ngModel" type="datetime-local" [(ngModel)]="activity.date" name="date" required>
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+                </div>
+            </div>
+
+            <div class="inputCont">
+                <h4>Beschreibung</h4>
+                <textarea #description="ngModel" [(ngModel)]="activity.description" name="description" id=""
+                    required></textarea>
+                <div class="errorTxt">
+                    <p *ngIf="description.invalid && description.touched">*Pflichtfeld</p>
+                </div>
+            </div>
+
+            <div class="btnCont">
+                <button (click)="changeTab('infos')" type="button">Abbrechen</button>
+                <button type="submit">Speichern</button>
+            </div>
+        </form>
+    </div>
+</section>

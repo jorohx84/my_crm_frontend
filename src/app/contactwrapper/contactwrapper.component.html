@@ -13,7 +13,7 @@
         <div class="inputCont">
             <div class="inputfield">
                 <input #function="ngModel" type="text" [(ngModel)]="contact.function" name="function"
-                    placeholder="Funktion" required>
+                    placeholder="Funktion ( z.B. Softwareentwickler, Controller ... ) " required>
             </div>
             <div class="errorTxt">
                 <p *ngIf="function.invalid && function.touched">*Pflichtfeld</p>
@@ -22,7 +22,7 @@
         <div class="inputCont">
             <div class="inputfield">
                 <input #position="ngModel" type="text" [(ngModel)]="contact.position" name="position"
-                    placeholder="Position" required>
+                    placeholder="Position ( z.B. Geschäftsführer, Teamleiter ...)" required>
             </div>
             <div class="errorTxt">
                 <p *ngIf="position.invalid && position.touched">*Pflichtfeld</p>
@@ -30,8 +30,8 @@
         </div>
         <div class="inputCont">
             <div class="inputfield">
-                <input #department="ngModel" type="text" [(ngModel)]="contact.department" name="position"
-                    placeholder="Abteilung" required>
+                <input #department="ngModel" type="text" [(ngModel)]="contact.department" name="department"
+                    placeholder="Abteilung ( z.B. Vertrieb, Backoffice, IT ... )" required>
             </div>
             <div class="errorTxt">
                 <p *ngIf="department.invalid && department.touched">*Pflichtfeld</p>
@@ -63,7 +63,7 @@
 
         <div class="btnCont">
 
-            <button type="button">Abbrechen</button>
+            <button (click)="resetFrom(contactCreationFrom)" type="button">Abbrechen</button>
             <button type="submit">Speichern</button>
         </div>
     </form>

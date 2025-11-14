@@ -45,15 +45,7 @@
             <div *ngIf="!isEdit" class="menuBtn">
                 <img (click)="globalservice.contactWrapperOpen=!globalservice.contactWrapperOpen" src=" ./icons/contact.svg" alt="">
             </div>
-            <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
-                <img src=" ./icons/trash.svg" alt="">
-            </div>
-            <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
-                <img src=" ./icons/trash.svg" alt="">
-            </div>
-            <div *ngIf="!isEdit" class="menuBtn" (click)="isOpen=true">
-                <img src=" ./icons/trash.svg" alt="">
-            </div>
+           
         </div>
     </div>
     <div class="divider"></div>
@@ -113,13 +105,7 @@
         <div class="customerBoard">
 
             <router-outlet></router-outlet>
-        </div>
 
-
-
-        <!-- SIDEBAR -->
-        <div *ngIf="globalservice.sidebarOpen===true" class="customerSidebar"></div>
-    </div>
 
     <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
         <app-taskwrapper></app-taskwrapper>
@@ -128,6 +114,21 @@
     <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
         <app-contactwrapper></app-contactwrapper>
     </div>
+        </div>
+
+
+
+        <!-- SIDEBAR -->
+        <div *ngIf="globalservice.sidebarOpen===true" class="customerSidebar"></div>
+    </div>
+
+    <!-- <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
+        <app-taskwrapper></app-taskwrapper>
+    </div>
+
+    <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
+        <app-contactwrapper></app-contactwrapper>
+    </div> -->
 
 
     <div *ngIf="isOpen" class="deleteWrapper border">

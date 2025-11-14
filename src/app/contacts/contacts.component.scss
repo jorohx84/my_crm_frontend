@@ -10,6 +10,7 @@ section {
 
 .contactsHeader {
     width: 100%;
+    height: 80px;
     display: flex;
     justify-content: space-between;
 }
@@ -36,11 +37,21 @@ section {
 .contactList {
     width: 100%;
     max-width: 500px;
-    height: 100%;
+    height: calc(100vh - 340px);
     display: flex;
     flex-direction: column;
     gap: 12px;
-    
+
+
+}
+
+.listCont {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: scroll;
 }
 
 .contactCard {
@@ -107,30 +118,15 @@ section {
     }
 }
 
-.contactInfos{
+.singleContactCont {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.title{
-    font-size: 24px;
-    font-weight: 400;
+    height: 100%;
 }
 
 
-.infocont{
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
 
+@media(max-width: 1600px) {
+    .contactList {
+        max-width: 380px;
+    }
 }
-
-.newsletter{
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-

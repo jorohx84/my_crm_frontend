@@ -10,6 +10,7 @@ import { TasklistComponent } from './tasklist/tasklist.component';
 import { SingletaskComponent } from './singletask/singletask.component';
 import { BoardComponent } from './board/board.component';
 import { ContactsComponent } from './contacts/contacts.component';
+import { SinglecontactComponent } from './singlecontact/singlecontact.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -20,10 +21,14 @@ export const routes: Routes = [
             { path: 'dashboard', component: DashboardComponent },
             { path: 'customers', component: CustomersComponent },
             {
-                path: 'singlecustomer/:id', component: SinglecustomerComponent, children: [
+                path: 'singlecustomer/:customer_id', component: SinglecustomerComponent, children: [
                     { path: 'tasklist', component: TasklistComponent },
-                    { path: 'task/:id', component: SingletaskComponent },
-                    {path:'contacts', component: ContactsComponent},
+                    { path: 'task/:task_id', component: SingletaskComponent },
+                    {
+                        path: 'contacts', component: ContactsComponent, children: [
+                            { path: 'singlecontact/:contact_id', component: SinglecontactComponent },
+                        ]
+                    },
                 ]
             },
             { path: 'board', component: BoardComponent },

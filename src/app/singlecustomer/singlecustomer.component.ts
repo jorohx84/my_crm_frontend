@@ -44,7 +44,7 @@ export class SinglecustomerComponent {
     this.globalservice.toggleSidebar(true);
     
     this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+      const id = params.get('customer_id');
       this.customerID = id
       if (id) {
         this.loadCustomer(id)

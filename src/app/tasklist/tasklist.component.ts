@@ -37,7 +37,7 @@ export class TasklistComponent {
     // });
     // this.globalservice.sidebarOpen=this.dataservice.getDataFromLocalStorage('sidebarOpen')
     this.route.parent?.paramMap.subscribe(params => {
-      const id = params.get('id');
+      const id = params.get('customer_id');
       this.customerID = id;
       if (id) {
         this.loadTasks(id, 'open');

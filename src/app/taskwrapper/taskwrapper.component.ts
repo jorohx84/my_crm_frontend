@@ -43,7 +43,7 @@ export class TaskwrapperComponent {
     completed_at: '',
     log: [],
   };
-  mainTask: any;
+  mainTask: any | null = null;
 
   ngOnInit() {
     this.loadUser()
@@ -72,7 +72,7 @@ export class TaskwrapperComponent {
 
   loadTemplate() {
     this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+      const id = params.get('customer_id');
       this.customerID = id
     });
   }
@@ -80,6 +80,8 @@ export class TaskwrapperComponent {
   loadTask() {
     this.observerservice.taskSubject$.subscribe((taskObj) => {
       if (taskObj) {
+        console.log(taskObj);
+
         this.mainTask = taskObj;
       }
     })
@@ -119,9 +121,9 @@ export class TaskwrapperComponent {
   }
   createTaskObject() {
     console.log(this.mainTask);
-    
+
     return {
-      parent: this.mainTask.id || null,
+      parent: null,
       title: this.task.title,
       description: this.task.description,
       customer: this.task.customer,
@@ -136,6 +138,9 @@ export class TaskwrapperComponent {
 
   saveTask() {
     const requestData = this.createTaskObject();
+    if (this.globalservice.isSubtaskWrapper) {
+      requestData.parent = this.mainTask.id
+    }
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
         this.openNewTask(response);
