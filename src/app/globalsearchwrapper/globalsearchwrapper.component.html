@@ -46,7 +46,7 @@
 
         </div>
         <div class="listrow" *ngFor="let contact of contacts"
-            (click)="openCard(['main', 'singlecustomer', contact.id])">
+            (click)="openCard(['main', 'singlecustomer', contact.customer, 'singlecontact', contact.id])">
           
                 <img src="./icons/profile.svg" alt="">
          

@@ -1,8 +1,10 @@
 section {
     width: 100%;
+    min-height: calc(100vh - 190px);
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    // gap: 24px;
+    position: relative;
 }
 
 .contactHeader {
@@ -11,11 +13,23 @@ section {
     flex-direction: column;
     justify-content: space-between;
     gap: 24px;
-    padding-bottom: 12px;
-    border-bottom: solid 0.5px var(--border);
+    padding: 24px;
+    // border-bottom: solid 0.5px var(--border);
 }
 
 .ContactTitleCont {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 4px;
+
+    >img {
+        width: 16px;
+        cursor: pointer;
+    }
+}
+
+.contactTitle {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -24,6 +38,7 @@ section {
 .menubar {
     display: flex;
     justify-content: space-between;
+    gap: 16px;
 }
 
 .tabs {
@@ -69,6 +84,7 @@ section {
     display: flex;
     flex-direction: column;
     gap: 24px;
+    padding: 24px;
 }
 
 .infocont {
@@ -127,12 +143,34 @@ section {
     }
 }
 
+.activityListCont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+}
+
+.activityListHeadline {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 0 12px;
+
+    >p {
+        width: 100%;
+
+    }
+}
+
 .activityList {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
+
 
 .listrow {
     width: 100%;
@@ -143,14 +181,24 @@ section {
     cursor: pointer;
     background-color: var(--box-light);
     border-radius: 4px;
-    padding: 12px;
+    padding: 14px;
+
+
+
+    >p {
+        width: 100%;
+
+    }
+
+}
+
+.typeCont {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 
     >img {
         width: 24px;
     }
-
-    >p {
-        width: 100%;
-    }
-
 }

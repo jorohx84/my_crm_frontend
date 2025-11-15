@@ -1,0 +1,57 @@
+<section>
+    <div class="acitvityForm">
+        <h3>Neue Aktivität</h3>
+        <div>
+            <div class="typeChoices">
+                <div class="typeBtn" (click)="changeActivityType('call')"
+                    [ngClass]="{'tabActive': activity.type==='call'}">
+                    <p>Anruf</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('email')"
+                    [ngClass]="{'tabActive': activity.type==='email'}">
+                    <p>E-Mail</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('invite')"
+                    [ngClass]="{'tabActive': activity.type==='invite'}">
+                    <p>Besuch</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('video')"
+                    [ngClass]="{'tabActive': activity.type==='video'}">
+                    <p>VideoCall</p>
+                </div>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="typeInvalid">*Pflichtfeld</p>
+            </div>
+
+        </div>
+
+        <form #createActivityForm="ngForm" (ngSubmit)="createActivity(createActivityForm)">
+
+
+            <div class="inputCont">
+                <h4>Start</h4>
+                <div class="inputfield">
+                    <input #date="ngModel" type="datetime-local" [(ngModel)]="activity.date" name="date" required>
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+                </div>
+            </div>
+
+            <div class="inputCont">
+                <h4>Beschreibung</h4>
+                <textarea #description="ngModel" [(ngModel)]="activity.description" name="description" id=""
+                    required></textarea>
+                <div class="errorTxt">
+                    <p *ngIf="description.invalid && description.touched">*Pflichtfeld</p>
+                </div>
+            </div>
+
+            <div class="btnCont">
+                <button (click)="resetForm(createActivityForm)" type="button">Abbrechen</button>
+                <button type="submit">Speichern</button>
+            </div>
+        </form>
+    </div>
+</section>

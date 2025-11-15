@@ -254,6 +254,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
     background-color: var(--button);
     color: white;
     border-radius: 4px;
@@ -263,6 +264,10 @@ button {
 
     &:active {
         transform: scale(0.95);
+    }
+
+    >img{
+        width: 16px;
     }
 }
 
@@ -400,5 +405,18 @@ button {
     >img {
         width: 14px;
 
+    }
+}
+
+
+.closeBtn {
+    padding: 12px;
+    display: flex;
+    cursor: pointer;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+
+    >img {
+        width: 16px;
     }
 }

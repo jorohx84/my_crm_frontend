@@ -30,6 +30,8 @@ export class GlobalsearchwrapperComponent {
 
   openCard(path: any[], param: any = null) {
     this.globalservice.searchWrapperOpen = false
+    console.log(path);
+    
     this.globalservice.navigateToPath(path, param)
 
   }

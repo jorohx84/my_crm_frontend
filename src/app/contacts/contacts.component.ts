@@ -21,6 +21,16 @@ export class ContactsComponent {
   contacts: any[] = [];
   allContacts: any[] = [];
   searchValue: string = '';
+
+  contactFields = [
+    { field: 'name', label: 'Name' },
+    { field: 'position', label: 'Position' },
+    { field: 'function', label: 'Funktion' },
+    { field: 'department', label: 'Abteilung' },
+    { field: 'email', label: 'E-Mail' },
+    { field: 'phone', label: 'Telefon' },
+  ];
+
   constructor() {
     this.globalservice.toggleSidebar(false)
   }
@@ -40,6 +50,7 @@ export class ContactsComponent {
         this.loadContacts(id);
       }
     });
+
   }
 
   subscribeContact() {
@@ -67,8 +78,9 @@ export class ContactsComponent {
   openContact(index: number) {
     console.log(index);
     const currentContact = this.contacts[index];
+    console.log();
 
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'contacts', 'singlecontact', currentContact.id]);
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singlecontact', currentContact.id]);
   }
   searchContact() {
 

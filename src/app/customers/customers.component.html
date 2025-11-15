@@ -52,7 +52,7 @@
                     
                     <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                 </div> -->
-                    <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
+                    <div class="customerListRow"
                         (click)="openCustomerFile(index)">
 
                         <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>

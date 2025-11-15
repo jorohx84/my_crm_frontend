@@ -157,7 +157,7 @@
                             [(ngModel)]="task.description"></textarea>
                     </div>
 
-                    <div *ngIf="queryType==='task'" class="subtasksMonitor">
+                    <!-- <div *ngIf="queryType==='task'" class="subtasksMonitor">
                         <h3>To Do`s</h3>
                         <div class="divider"></div>
                         <div>
@@ -183,12 +183,12 @@
                         </div>
 
 
-                    </div>
+                    </div> -->
 
                     <!-- Hier kommte dann die checkliste hin -->
-                    <div ng *ngIf="queryType==='subtask'" class="checklist">
+                    <div class="checklist">
                         <div class="checklistHead">
-                            <h3>Checkliste</h3>
+                            <h3>Aufgabenliste</h3>
                             <img (click)="addTodo()" src="./icons/add.svg" alt="">
                         </div>
                         <div *ngFor="let check of checkList, let index=index">
@@ -206,7 +206,7 @@
 
                         </div>
 
-                        <div class="divider"></div>
+                        <!-- <div class="divider"></div> -->
                         <div class="counter">
                             <p>{{countCompletedTodos()}}</p> / <p>{{checkList.length}}</p>
                         </div>
@@ -231,7 +231,7 @@
                     <h4>Kommentare</h4>
                 </div>
                 <div [ngClass]="{'btnHlgt': sidebarKey==='logs'}" (click)="changeSidebarContent('logs')">
-                    <h4>Logbuch</h4>
+                    <h4>Historie</h4>
                 </div>
 
             </div>

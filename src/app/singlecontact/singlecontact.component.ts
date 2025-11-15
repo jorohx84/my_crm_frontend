@@ -7,10 +7,12 @@ import { DataService } from '../services/data.service';
 import { subscribeOn } from 'rxjs';
 import { ObservableService } from '../services/observable.service';
 import { response } from 'express';
+import { ActivitywrapperComponent } from '../activitywrapper/activitywrapper.component';
+import { GlobalService } from '../services/global.service';
 
 @Component({
   selector: 'app-singlecontact',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ActivitywrapperComponent],
   templateUrl: './singlecontact.component.html',
   styleUrl: './singlecontact.component.scss'
 })
@@ -19,6 +21,7 @@ export class SinglecontactComponent {
   apiservice = inject(APIService);
   dataservice = inject(DataService);
   observerservice = inject(ObservableService);
+  globalservice = inject(GlobalService);
   activities: any[] = [];
   contact: any = {
     name: '',
@@ -38,18 +41,10 @@ export class SinglecontactComponent {
     updated_by: '',
   };
 
-  activity: any = {
-    title: '',
-    description: '',
-    type: '',
-    contact: null,
-    customer: null,
-    date: '',
-  }
+
 
   contactID: string = '';
   tabKey: string = 'infos';
-  typeInvalid: boolean = false;
 
 
 
@@ -59,7 +54,7 @@ export class SinglecontactComponent {
       label: 'Anruf'
     },
     invite: {
-      path: './icons/phone.svg',
+      path: './icons/invite.svg',
       label: 'Besuch'
     },
     video: {
@@ -72,8 +67,30 @@ export class SinglecontactComponent {
     },
   };
 
+  activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
+    { fieldName: 'type', displayName: 'Typ' },
+    { fieldName: 'date', displayName: 'Datum' },
+    { fieldName: 'description', displayName: 'Beschreibung' },
+    { fieldName: 'user', displayName: 'Mitarbeiter' },
+
+  ];
+
   ngOnInit() {
     this.loadTemplate()
+    this.subscribeActivity();
+    this.dataservice.saveDataToLocalStorage('sidebarOpen', false);
+  }
+
+  subscribeActivity() {
+    this.observerservice.activtySubject$.subscribe((activityData) => {
+      if (activityData) {
+        console.log('Hallo');
+        console.log(this.contact.id);
+
+        this.loadActivities(this.contact.id)
+      }
+
+    })
   }
 
 
@@ -88,6 +105,8 @@ export class SinglecontactComponent {
       const id = param.get('contact_id')
       if (id) {
         this.contactID = id
+        console.log(id);
+
         this.loadContact(id);
         // this.tabKey = 'infos';
       }
@@ -109,7 +128,7 @@ export class SinglecontactComponent {
     this.apiservice.getData(`activities/${id}`).subscribe({
       next: (response) => {
         console.log(response);
-        this.activities = response;
+        this.activities = response.sort((a:any, b:any)=> new Date(b.date).getTime() - new Date(a.date).getTime());
       }
     })
   }
@@ -135,62 +154,17 @@ export class SinglecontactComponent {
     this.dataservice.saveDataToLocalStorage('contactTab', tab);
   }
 
-  createActivity(form: NgForm) {
-    if (this.activity.type === '') {
-      this.typeInvalid = true;
-      form.control.markAllAsTouched();
-      return
-    } else {
-      this.typeInvalid = false;
-    }
-    if (!form.valid) {
-      form.control.markAllAsTouched();
-      return
-    }
-    const requestData = this.createActivityData();
-    console.log(requestData);
-    this.saveActivity(requestData);
-    this.resetForm(form);
 
+
+  openActivityForm() {
+    console.log(this.contact);
+    this.observerservice.sendContact(this.contact);
+    this.globalservice.activityWrapperOpen = true
   }
 
-
-  saveActivity(data: any) {
-    this.apiservice.postData('activities/', data).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.loadActivities(response.contact)
-      }
-    })
-  }
-
-  createActivityData() {
-    return {
-      contact: this.contact.id,
-      customer: this.contact.customer,
-      type: this.activity.type,
-      description: this.activity.description,
-      date: this.activity.date,
-
-    }
-  }
-
-  changeActivityType(type: string) {
-    this.activity.type = type;
-    console.log(this.activity);
-
-  }
-
-  resetForm(form: NgForm) {
-    form.reset();
-    this.tabKey = 'activities';
-    this.activity = null
-  }
-
-  openActivity(index:number){
-    this.activity=this.activities[index];
-    console.log(this.activity);
-    
-  this.changeTab('new');
+  backToContactList() {
+    console.log(this.contact.customer);
+    const customerID = this.contact.customer;
+    this.globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'contacts']);
   }
 }

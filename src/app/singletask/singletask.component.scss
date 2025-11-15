@@ -37,6 +37,10 @@ section {
     font-size: 24px;
 }
 
+textarea{
+    max-width: unset;
+}
+
 .taskIcon {
     width: 60px;
     height: 60px;
@@ -78,17 +82,7 @@ section {
     gap: 24px;
 }
 
-.closeBtn {
-    padding: 12px;
-    display: flex;
-    cursor: pointer;
-    border: solid 0.5px var(--border);
-    border-radius: 4px;
 
-    >img {
-        width: 24px;
-    }
-}
 
 .taskContent {
     width: 100%;

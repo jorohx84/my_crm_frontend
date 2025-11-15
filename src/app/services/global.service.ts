@@ -22,6 +22,7 @@ export class GlobalService {
     isNewSystemMessage: boolean = false;
     searchWrapperOpen: boolean = false;
     contactWrapperOpen: boolean = false;
+    activityWrapperOpen: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
