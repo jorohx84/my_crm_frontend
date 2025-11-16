@@ -42,9 +42,10 @@ export class TaskwrapperComponent {
     reviewer: '',
     completed_at: '',
     log: [],
+    checklist:[],
   };
   mainTask: any | null = null;
-
+  taskTemplates: any[] = [];
   ngOnInit() {
     this.loadUser()
     this.loadMember();
@@ -83,6 +84,16 @@ export class TaskwrapperComponent {
         console.log(taskObj);
 
         this.mainTask = taskObj;
+      }
+    })
+  }
+
+  loadTemplates() {
+    this.apiservice.getData('task/template/').subscribe({
+      next: (response) => {
+        console.log(response);
+        this.taskTemplates = response;
+
       }
     })
   }
@@ -133,6 +144,7 @@ export class TaskwrapperComponent {
       due_date: this.task.due_date,
       log: [],
       type: this.globalservice.isSubtaskWrapper ? 'subtask' : 'task',
+      checklist: this.task.checklist,
     }
   }
 
@@ -141,6 +153,8 @@ export class TaskwrapperComponent {
     if (this.globalservice.isSubtaskWrapper) {
       requestData.parent = this.mainTask.id
     }
+  
+
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
         this.openNewTask(response);
@@ -203,5 +217,13 @@ export class TaskwrapperComponent {
 
   setPriority(prio: string) {
     this.task.priority = prio;
+  }
+
+  getTemplate(index: number) {
+    const currentTemplate = this.taskTemplates[index];
+    console.log(currentTemplate);
+    this.task.title = currentTemplate.title;
+    this.task.description = currentTemplate.description;
+    this.task.checklist = currentTemplate.checklist;
   }
 }

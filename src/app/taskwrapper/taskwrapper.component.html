@@ -4,8 +4,12 @@
         <app-memberlist></app-memberlist>
     </div>
     <h3 *ngIf="!globalservice.isSubtaskWrapper">Aufgabe erstellen</h3>
-    <h3 *ngIf="globalservice.isSubtaskWrapper">To Do erstellen</h3>
-    
+    <button (click)="loadTemplates()">Aus Vorlage</button>
+    <div >
+        <div *ngFor="let template of taskTemplates let index=index">
+            <p (click)="getTemplate(index)">{{template.title}}</p>
+        </div>
+    </div>
     <form #taskCreationFrom="ngForm" (ngSubmit)="createTask(taskCreationFrom)">
         <div class="inputCont">
             <div class="inputfield">
@@ -44,6 +48,8 @@
                 <p *ngIf="noMember">Bitte Aufgabe einem Mitarbeiter zuweisen</p>
             </div>
         </div>
+
+        <p *ngIf="task.checklist.length>0"> Aufgabenliste gespeichert</p>
         <div class="inputCont">
             <h4>Priorität</h4>
 
@@ -66,7 +72,7 @@
             <button type="button" (click)="resetTask(taskCreationFrom)">Abbrechen</button>
             <button type="submit">Speichern</button>
         </div>
-  
+
     </form>
 
 </section>

@@ -3,7 +3,11 @@ section {
     height: 100%;
     display: flex;
     flex-direction: column;
-    position: relative;
+
+}
+
+.placeholder {
+    height: 40px;
 }
 
 .taskHeader {
@@ -37,23 +41,25 @@ section {
     font-size: 24px;
 }
 
-textarea{
+textarea {
     max-width: unset;
+
 }
 
-.taskIcon {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--box);
-    padding: 12px;
-    border-radius: 100px;
-    >img {
-        width: 30px;
-    }
-}
+// .taskIcon {
+//     width: 60px;
+//     height: 60px;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     background-color: var(--box);
+//     padding: 12px;
+//     border-radius: 100px;
+
+//     >img {
+//         width: 30px;
+//     }
+// }
 
 .closeText {
     display: flex;
@@ -65,17 +71,17 @@ textarea{
     }
 }
 
-.typeCont {
-    background-color: var(--box);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 40px;
+// .typeCont {
+//     background-color: var(--box);
+//     color: white;
+//     padding: 12px 24px;
+//     border-radius: 40px;
 
-    >p {
-        font-size: 12px;
-    }
+//     >p {
+//         font-size: 12px;
+//     }
 
-}
+// }
 
 .taskMenu {
     display: flex;
@@ -106,7 +112,9 @@ textarea{
     width: 100%;
     height: 100%;
     display: flex;
-    margin-top: 50px;
+    gap: 32px;
+
+
 
 }
 
@@ -122,30 +130,30 @@ textarea{
 
 .progressLineCont {
     width: 100%;
-
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: relative;
 }
 
-.progressLine {
-    width: 100%;
-    min-height: 0.5px;
-    position: absolute;
-    left: 0;
-    background-color: var(--box);
-    z-index: -1;
-}
+// .progressLine {
+//     width: 100%;
+//     min-height: 0.5px;
+//     position: absolute;
+//     left: 0;
+//     background-color: var(--box);
+//     z-index: -1;
+// }
 
-.progressLineInner {
+// .progressLineInner {
 
-    min-height: 3px;
-    position: absolute;
-    left: 0;
-    background-color: var(--box);
-    z-index: -1;
-}
+//     min-height: 3px;
+//     position: absolute;
+//     left: 0;
+//     background-color: var(--box);
+//     z-index: -1;
+// }
 
 .progressDot {
     width: 100%;
@@ -169,13 +177,68 @@ textarea{
 
 }
 
-.lineDescription {
+// .lineDescription {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+// }
+
+
+.infoRow {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-top: 40px;
+    background-color: var(--box-light);
+    border-radius: 4px;
 
-    >p {}
+    .infoTab {
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        // background-color: var(--box-light);
+        padding: 12px;
+        border-radius: 4px;
+
+        .tabName {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+
 }
+
+.infoText {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.prioIconCont {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+
+    >img {
+        width: 24px;
+    }
+}
+
+.completedTodos {
+    display: flex;
+    justify-content: flex-start;
+    gap: 38px;
+}
+
+.count {
+    display: flex;
+    gap: 4px;
+}
+
+
+
 
 .taskInfos {
     width: 100%;
@@ -198,13 +261,11 @@ textarea{
 
 .changeDueDate {
     width: 100%;
-    max-width: 400px;
+    width: 300px;
     padding: 32px 64px;
     position: absolute;
-    top: 24px;
-    // right: 50%;
-    left: 24px;
-    // transform: translate(-50%, -50%);
+    top: 60px;
+    left: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -222,52 +283,54 @@ textarea{
         right: 16px;
         cursor: pointer;
     }
-}
-
-.prioCont {
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    gap: 16px;
 
 
-    >img {
-        width: 16px;
-        cursor: pointer;
+    input {
+        border-radius: 4px;
+        padding: 8px;
+        border: solid 0.5px var(--border);
     }
+
+
 }
 
-
-.prio {
-    display: flex;
-    align-items: center;
-    border-radius: 100px;
-
-    cursor: pointer;
-}
+// .prioCont {
+//     width: fit-content;
+//     display: flex;
+//     align-items: center;
+//     gap: 16px;
 
 
-.prioIcon {
-    >img {
-        width: 50px;
-    }
-}
+//     >img {
+//         width: 12px;
+//         cursor: pointer;
+//     }
+// }
+
+
+// .prio {
+//     display: flex;
+//     align-items: center;
+//     border-radius: 100px;
+
+//     cursor: pointer;
+// }
+
+
+
 
 .changePrio {
     width: 100%;
-    max-width: 400px;
-    padding: 32px 64px;
+    width: 320px;
+    padding: 32px 32px;
 
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-
+    justify-content: space-between;
+    gap: 4px;
     position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
-    padding: 32px 0;
+    top: 60px;
+    left: 12px;
     border: solid 0.5px var(--border);
     border-radius: 4px;
     background-color: white;
@@ -283,49 +346,112 @@ textarea{
         }
     }
 
-    >img {
-        width: 12px;
-        position: absolute;
-        right: 12px;
-        top: 12px;
+    .prioBtn {
+        width: 80px;
+        height: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        // border: solid;
+        border-radius: 4px;
+        background-color: var(--box-light);
+        padding: 4px;
         cursor: pointer;
+
+        >img {
+            width: 40px;
+
+            cursor: pointer;
+        }
+
+        &:hover {
+            background-color: var(--listrow-hover);
+        }
+
     }
-}
 
-.assigneeCont {
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    gap: 16px;
 
 }
+
+
+
+// .assigneeCont {
+//     width: fit-content;
+//     display: flex;
+//     align-items: center;
+//     gap: 16px;
+
+// }
 
 .changeAssignee {
-    width: 100%;
-    max-width: 400px;
-    padding: 32px 64px;
+    position: absolute;
+    top: 60px;
+    left: 12px;
+    width: 420px;
+    height: fit-content;
+    padding: 32px 32px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+
     gap: 16px;
 
     border: solid 0.5px var(--border);
     border-radius: 4px;
     background-color: white;
-    position: absolute;
-    top: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
+
+
+
 }
 
-.descriptionCont {
+.searchResults {
     width: 100%;
+    min-height: 100px;
+    position: absolute;
+    top: 42px;
+    left: 0;
     display: flex;
     flex-direction: column;
-    // justify-content: space-between;
-    gap: 32px;
-    align-items: flex-end;
+    gap: 8px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    background-color: white;
 }
+
+.searchResultsRow {
+    display: flex;
+    align-items: flex-start !important;
+    gap: 16px;
+    padding: 8px;
+
+    background-color: var(--box-light);
+    border-radius: 4px;
+    cursor: pointer;
+
+    >img {
+        width: 24px;
+    }
+
+    &:hover {
+        background-color: var(--listrow-hover);
+    }
+}
+
+.memberInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+// .descriptionCont {
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     // justify-content: space-between;
+//     gap: 32px;
+//     align-items: flex-end;
+// }
 
 .description {
     width: 100%;
@@ -334,28 +460,28 @@ textarea{
     gap: 8px;
 }
 
-.commentInputWrapper {
-    width: 500px;
-    height: 300px;
-    border: solid 0.5px var(--border);
-    border-radius: 4px;
-    background-color: white;
-    padding: 12px;
-    position: absolute;
-    top: 90px;
-    right: 0;
-    transition: transform 0.3s ease-in-out;
-    z-index: 2;
-    transform: translateX(100%);
+// .commentInputWrapper {
+//     width: 500px;
+//     height: 300px;
+//     border: solid 0.5px var(--border);
+//     border-radius: 4px;
+//     background-color: white;
+//     padding: 12px;
+//     position: absolute;
+//     top: 90px;
+//     right: 0;
+//     transition: transform 0.3s ease-in-out;
+//     z-index: 2;
+//     transform: translateX(100%);
 
-    >img {
-        width: 16px;
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        cursor: pointer;
-    }
-}
+//     >img {
+//         width: 16px;
+//         position: absolute;
+//         top: 16px;
+//         right: 16px;
+//         cursor: pointer;
+//     }
+// }
 
 .commentCont {
     width: 100%;
@@ -380,7 +506,7 @@ textarea{
 
 
 
-.subtasksCont {
+.taskSidebar {
     width: 100%;
     max-width: 500px;
 
@@ -465,82 +591,82 @@ textarea{
     border-radius: 4px;
 }
 
-.subtaskCard {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px;
-    border-radius: 4px;
-    background-color: var(--box-light);
-    position: relative;
-    cursor: pointer;
+// .subtaskCard {
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 8px;
+//     padding: 12px;
+//     border-radius: 4px;
+//     background-color: var(--box-light);
+//     position: relative;
+//     cursor: pointer;
 
-}
+// }
 
-.titleCont {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
+// .titleCont {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+// }
 
-.title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+// .title {
+//     display: flex;
+//     align-items: center;
+//     gap: 8px;
+// }
 
-.subtaskInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+// .subtaskInfo {
+//     display: flex;
+//     flex-direction: column;
+//     gap: 4px;
+// }
 
-.subtaskState {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+// .subtaskState {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
 
-}
+// }
 
-.priority {
-    width: 24px;
-    height: 24px;
-    border-radius: 100px;
-}
+// .priority {
+//     width: 24px;
+//     height: 24px;
+//     border-radius: 100px;
+// }
 
-.stateCont {
-    display: flex;
-    align-items: center;
-    gap: 16px;
+// .stateCont {
+//     display: flex;
+//     align-items: center;
+//     gap: 16px;
 
-    >img {
-        width: 24px;
+//     >img {
+//         width: 24px;
 
 
-    }
-}
+//     }
+// }
 
-.subtasksMonitor {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    border: solid 0.5px var(--border);
-    border-radius: 4px;
-    padding: 12px;
+// .subtasksMonitor {
+//     width: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 8px;
+//     border: solid 0.5px var(--border);
+//     border-radius: 4px;
+//     padding: 12px;
 
-    >div {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-}
+//     >div {
+//         width: 100%;
+//         display: flex;
+//         justify-content: space-between;
+//     }
+// }
 
-.commentSlide {
-    transform: translateX(0) !important;
-}
+// .commentSlide {
+//     transform: translateX(0) !important;
+// }
 
 .checklist {
     width: 100%;
@@ -550,7 +676,7 @@ textarea{
 
 }
 
-.checklistHead {
+.subheadline {
     width: 100%;
     height: 40px;
     display: flex;

@@ -198,7 +198,7 @@ form {
     width: 100%;
     display: flex;
     flex-direction: column;
-
+    position: relative;
 }
 
 .inputfield {
@@ -266,7 +266,7 @@ button {
         transform: scale(0.95);
     }
 
-    >img{
+    >img {
         width: 16px;
     }
 }
@@ -305,6 +305,7 @@ button {
     width: 16px !important;
     background-color: white;
     width: fit-content;
+    height: fit-content;
 
     >img {
         width: 16px;

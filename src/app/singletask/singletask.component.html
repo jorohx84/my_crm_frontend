@@ -3,11 +3,11 @@
     <div class="taskHeader">
         <div class="taskTitle">
 
-            <p *ngIf="queryType==='subtask'">{{task?.parent?.title}}</p>
-            <img *ngIf="queryType==='subtask'" src="./icons/back.svg" alt="">
+            <!-- <p *ngIf="queryType==='subtask'">{{task?.parent?.title}}</p> -->
+            <!-- <img *ngIf="queryType==='subtask'" src="./icons/back.svg" alt=""> -->
             <!-- <div class="prioDot"></div> -->
             <!-- <h2>{{task?.title}} </h2> -->
-             <!-- <div class="taskIcon">
+            <!-- <div class="taskIcon">
                 <img src="./icons/task_white.svg" alt="">
              </div> -->
             <input [disabled]="!checkPermissions('reviewer')" (change)="changeTitle('title')" class="title"
@@ -30,12 +30,13 @@
             <!-- <div class="addBtn"><img src="./icons/add.svg" alt="">Checkliste</div> -->
             <button *ngIf="task?.reviewer?.id===user?.id && task?.state==='done'"
                 (click)="releaseTask()">Freigeben</button>
+                <button (click)="saveTaskTemplate()">Als Vorlage speichern</button>
             <button *ngIf="task?.assignee?.id===user?.id && task?.state==='released'"
                 (click)="closeTask()">Abschließen</button>
-            <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
-                Do</div>
-            <div class="addBtn" (click)="changeSidebarContent('comments')"><img src="./icons/add.svg" alt="">Kommentar
-            </div>
+            <!-- <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
+                Do</div> -->
+            <!-- <div class="addBtn" (click)="changeSidebarContent('comments')"><img src="./icons/add.svg" alt="">Kommentar
+            </div> -->
             <div *ngIf="queryType==='task'" class="closeBtn">
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
@@ -51,7 +52,7 @@
 
         <div class="taskInfoCont">
 
-
+            <!-- StatusLins -->
             <div class="stateLine">
                 <!-- <h4>Status</h4> -->
 
@@ -74,64 +75,25 @@
                     <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='closed'}">
                         <p>Geschlossen</p>
                     </div>
-                    <div class="progressLineInner" [style.width.%]=linewidth></div>
-                    <div class="progressLine"></div>
+                    <!-- <div class="progressLineInner" [style.width.%]=linewidth></div>
+                    <div class="progressLine"></div> -->
                 </div>
 
             </div>
 
-            <div class="taskInfoSubCont">
-                <div class="taskInfos">
-                    <h4>Informationen</h4>
-                    <p>Erstellt am: {{task?.created_at | date: 'dd.MM.yyyy'}}</p>
-                    <div class="duedate">
-                        <p>Fällig am: {{task?.due_date | date: 'dd.MM.yyyy'}}</p>
-                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
-                            class="changeBtn"><img (click)="duedateChangeOpen=true" src="./icons/editx.svg"
-                                alt=""></button>
+            <!-- Infos -->
+            <div class="infoRow">
+                <div class="infoTab">
+                    <div class="tabName">
+                        <p>Zuständigkeiten</p>
+                        <button *ngIf="checkPermissions('reviewer')" class="changeBtn"
+                            (click)="assigneeChangeOpen=true"><img class="editBtn" src="./icons/editx.svg" alt="">
+                        </button>
+                        <!-- assignee -->
+                        <div *ngIf="assigneeChangeOpen" class="changeAssignee" (mouseleave)="closeAssigneeChanger()">
 
-                        <div *ngIf="duedateChangeOpen" class="changeDueDate">
-                            <h4>Fälligkeitsdatum ändern</h4>
-                            <div class="inputfield">
-                                <input (change)="updateDueDate('due_date', $event)" [(ngModel)]="newDueDate"
-                                    type="date">
-                            </div>
-                            <img (click)="duedateChangeOpen=false" src="./icons/close.svg" alt="">
-                        </div>
-                    </div>
-
-                    <div class="prioCont">
-                        <p>Priorität:</p>
-                        <div class="prio">
-                            <div class="prioIcon">
-                                <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
-                                <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
-                                <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
-                            </div>
-
-
-                        </div>
-                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
-                            class="changeBtn"><img (click)="priochangeOpen=!priochangeOpen" src="./icons/editx.svg"
-                                alt=""></button>
-
-                        <div *ngIf="priochangeOpen" class="changePrio">
-                            <img (click)="priochangeOpen=false" src="./icons/close.svg" alt="">
-                            <p (click)="changePrio('low', $event)">Niedrig</p>
-                            <p (click)="changePrio('mid', $event)">Mittel</p>
-                            <p (click)="changePrio('high', $event)">Hoch</p>
-                        </div>
-                    </div>
-                    <h4>Zuständigkeiten:</h4>
-                    <div class="assigneeCont">
-                        <p>Bearbeiter: {{task.assignee?.fullname}}</p>
-                        <button *ngIf="checkPermissions('reviewer')"
-                            class="changeBtn" (click)="assigneeChangeOpen=true"><img class="editBtn"
-                                src="./icons/editx.svg" alt=""></button>
-                        <div *ngIf="assigneeChangeOpen" class="changeAssignee">
-
-                            <p *ngIf="!newAssignee">Bearbeiter ändern:</p>
-                            <h3 *ngIf="newAssignee">{{newAssignee.fullname}}</h3>
+                            <p>Zuständigkeiten ändern:</p>
+                            <!-- <h3 *ngIf="newAssignee">{{newAssignee.fullname}}</h3>
                             <div *ngIf="!newAssignee" class="btnCont">
                                 <button (click)="assigneeChangeOpen=false">Abbrechen</button>
                                 <button (click)="memberListOpen=true">Auswählen</button>
@@ -139,94 +101,152 @@
                             <div *ngIf="newAssignee" class="btnCont">
                                 <button (click)="newAssignee=null">Abbrechen</button>
                                 <button (click)="updateAssignee()">speichern</button>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <p>Prüfer: {{task?.reviewer.fullname}}</p>
-
-                </div>
-
-                <div class="descriptionCont">
-                    <div class="description">
-                        <h4>Beschreibung</h4>
-                        <textarea (change)="updateTask({description:task.description},'description')"
-                            [disabled]="!checkPermissions('assignee')" name="" id=""
-                            [(ngModel)]="task.description"></textarea>
-                    </div>
-
-                    <!-- <div *ngIf="queryType==='task'" class="subtasksMonitor">
-                        <h3>To Do`s</h3>
-                        <div class="divider"></div>
-                        <div>
-                            <p>Gesamt:</p>
-                            <p>{{subtasks.length}}</p>
-                        </div>
-
-                        <div>
-                            <p>unbearbeitet:</p>
-                            <p>{{countCompletesSubtasks('undone')}}</p>
-                        </div>
-                        <div>
-                            <p>in Bearbeitung:</p>
-                            <p>{{countCompletesSubtasks('in_progress')}}</p>
-                        </div>
-                        <div>
-                            <p>in Prüfung:</p>
-                            <p>{{countCompletesSubtasks('under_review')}}</p>
-                        </div>
-                        <div>
-                            <p>Erledigt</p>
-                            <p>{{countCompletesSubtasks('done')}}</p>
-                        </div>
-
-
-                    </div> -->
-
-                    <!-- Hier kommte dann die checkliste hin -->
-                    <div class="checklist">
-                        <div class="checklistHead">
-                            <h3>Aufgabenliste</h3>
-                            <img (click)="addTodo()" src="./icons/add.svg" alt="">
-                        </div>
-                        <div *ngFor="let check of checkList, let index=index">
-                            <div class="checklistRow">
+                            </div> -->
+                            <div class="inputCont">
                                 <div class="inputfield">
-                                    <input (change)="saveTodo(index)" placeholder="Todo hinzufügen"
-                                        [(ngModel)]="checkList[index].text" type="text">
-                                    <div (click)="changeIsChecked(index)" class="checkbox">
-                                        <img *ngIf="check.isChecked===true" src="./icons/done.svg" alt="">
+                                    <input (change)="searchMember()" type="text" placeholder="Mitarbeiter suchen"
+                                        [(ngModel)]="searchValue">
+                                </div>
+                                <div class="searchResults" *ngIf="foundMembers.length > 0 && searchValue.length>0">
+                                    <div class="searchResultsRow" (click)="setNewAsssigne(index)"
+                                        *ngFor="let member of foundMembers let index=index">
+                                        <img src="./icons/profile.svg" alt="">
+                                        <div class="memberInfo">
+                                            <p>{{member.fullname}}</p>
+                                            <p>{{member.email}}</p>
+                                        </div>
+
                                     </div>
                                 </div>
-
-
                             </div>
 
                         </div>
 
-                        <!-- <div class="divider"></div> -->
-                        <div class="counter">
-                            <p>{{countCompletedTodos()}}</p> / <p>{{checkList.length}}</p>
-                        </div>
                     </div>
 
+                    <p class="infoText">{{task.assignee?.fullname}}</p>
+                </div>
+                <div class="infoTab">
+                    <div class="tabName">
+                        <p>Priorität:</p>
+                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
+                            class="changeBtn"><img (click)="priochangeOpen=!priochangeOpen" src="./icons/editx.svg"
+                                alt="">
+                        </button>
+                    </div>
+
+                    <div class="prioIconCont">
+                        <p class="infoText">{{prioLabels[task.priority]}}</p>
+                        <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+                        <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+                        <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
+                    </div>
+                    <!-- Prio -->
+                    <div *ngIf="priochangeOpen" class="changePrio" (mouseleave)="priochangeOpen=false">
+                        <!-- <img (click)="priochangeOpen=false" src="./icons/close.svg" alt=""> -->
+                        <div class="prioBtn" (click)="changePrio('low', $event)">
+                            <img src="./icons/low.svg" alt="">
+                            <p>Niedrig</p>
+                        </div>
+                        <div class="prioBtn" (click)="changePrio('mid', $event)">
+                            <img src="./icons/mid.svg" alt="">
+                            <p>Mittel</p>
+                        </div>
+                        <div class="prioBtn" (click)="changePrio('high', $event)">
+                            <img src="./icons/high.svg" alt="">
+                            <p>Hoch</p>
+                        </div>
+
+
+                        <!-- <p (click)="changePrio('low', $event)">Niedrig</p>
+                        <p (click)="changePrio('mid', $event)">Mittel</p>
+                        <p (click)="changePrio('high', $event)">Hoch</p> -->
+                    </div>
+                </div>
+                <div class="infoTab">
+                    <div class="tabName">
+                        <p>Fällig am</p>
+                        <button *ngIf="checkPermissions('reviewer')" [disabled]="checkPermissions('reviewer')"
+                            class="changeBtn"><img (click)="duedateChangeOpen=true" src="./icons/editx.svg"
+                                alt=""></button>
+                    </div>
+
+                    <p class="infoText">{{task.due_date | date: 'dd.MM.yyyy - HH:mm'}} Uhr</p>
+                    <!-- duedate -->
+                    <div *ngIf="duedateChangeOpen" class="changeDueDate">
+                        <h4>Fälligkeitsdatum ändern</h4>
+                        <input (change)="updateDueDate('due_date', $event)" [(ngModel)]="newDueDate"
+                            type="datetime-local">
+                        <img (click)="duedateChangeOpen=false" src="./icons/close.svg" alt="">
+                    </div>
                 </div>
 
+                <div class="infoTab">
+                    <p>Bearbeitungsstand:</p>
+                    <div class="completedTodos">
+                        Erledigt:
+                        <div class="count">
+                            <p class="infoText">{{countCompletedTodos()}}</p>
+                            <p class="infoText">/</p>
+                            <p class="infoText">{{task.checklist?.length}}</p>
+                        </div>
 
+                    </div>
+                </div>
             </div>
 
 
 
+
+
+
+            <div class="taskInfoSubCont">
+                <!-- TextField -->
+                <div class="description">
+                    <div class="subheadline">
+                        <h4>Beschreibung</h4>
+                    </div>
+
+                    <textarea (change)="updateTask({description:task.description},'description')"
+                        [disabled]="!checkPermissions('assignee')" name="" id=""
+                        [(ngModel)]="task.description"></textarea>
+                </div>
+
+                <!-- Checklist -->
+                <div class="checklist">
+                    <div class="subheadline">
+                        <h4>Aufgabenliste</h4>
+                        <img (click)="addTodo()" src="./icons/add.svg" alt="">
+                    </div>
+                    <div *ngFor="let check of checkList, let index=index">
+                        <div class="checklistRow">
+                            <div class="inputfield">
+                                <input (change)="saveTodo(index)" placeholder="Aufgabe hinzufügen"
+                                    [(ngModel)]="checkList[index].text" type="text">
+                                <div (click)="changeIsChecked(index)" class="checkbox" *ngIf="check.is_saved">
+                                    <img *ngIf="check.is_checked===true" src="./icons/done.svg" alt="">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="counter">
+                        <p>{{countCompletedTodos()}}</p> / <p>{{checkList.length}}</p>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="subtasksCont">
+        <div class="taskSidebar">
             <div class="sidabarNav">
-                <div *ngIf="queryType==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}"
+                <!-- <div *ngIf="queryType==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}"
                     (click)="changeSidebarContent('subtasks')">
                     <h4>To Do`s</h4>
-                </div>
+                </div> -->
                 <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
                     <h4>Kommentare</h4>
                 </div>
@@ -283,7 +303,7 @@
 
             </div>
 
-            <div *ngIf="sidebarKey==='subtasks' && queryType==='task'" class="sidebarList">
+            <!-- <div *ngIf="sidebarKey==='subtasks' && queryType==='task'" class="sidebarList">
 
                 <div *ngFor="let subtask of subtasks, let index=index">
                     <div (click)="openSubtask(index)" class="subtaskCard">
@@ -298,7 +318,7 @@
 
                         <div class="divider"></div>
                         <div class="subtaskInfo">
-                            <!-- <p>{{subtask.description}}</p> -->
+                       
                             <p> Bearbeiter: {{subtask.assignee.fullname}}</p>
                             <p> Prüfer: {{subtask.reviewer.fullname}}</p>
                         </div>
@@ -321,7 +341,7 @@
 
                 </div>
 
-            </div>
+            </div> -->
 
         </div>
     </div>

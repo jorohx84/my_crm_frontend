@@ -60,14 +60,24 @@ export class SingletaskComponent {
   assigneeChangeOpen: boolean = false;
   taskWrapperOpen: boolean = false;
   newDueDate: string = '';
-  subtasks: any[] = [];
-  subtask: any;
+  // subtasks: any[] = [];
+  // subtask: any;
   newAssignee: any;
   queryType: string | null = null;
   checkList: any[] = [];
   todotext: string = '';
   taskCompleted: boolean = false;
   logBook: any[] = [];
+  searchValue: string = '';
+
+  prioLabels: any = {
+    low: 'Niedrig',
+    mid: 'Mittel',
+    high: 'Hoch'
+
+  }
+  foundMembers: any[] = [];
+
   constructor() {
     this.globalservice.toggleSidebar(false);
 
@@ -90,7 +100,7 @@ export class SingletaskComponent {
       if (id) {
         this.taskId = id
         this.loadtask(id);
-        this.loadSubtasks(id);
+        // this.loadSubtasks(id);
       }
     });
   }
@@ -139,13 +149,7 @@ export class SingletaskComponent {
 
   }
 
-  updateAssignee() {
-    const data = {
-      assignee: this.newAssignee.id
-    }
-    this.updateTask(data, 'assignee');
-    this.assigneeChangeOpen = false;
-  }
+
 
 
   loadtask(id: string | null) {
@@ -170,21 +174,20 @@ export class SingletaskComponent {
     // this.logBook = task.log.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
     this.apiservice.getData(`task/logs/${task.id}`).subscribe({
       next: (response) => {
-        console.log(response);
         this.logBook = response.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
       }
     })
   }
 
-  loadSubtasks(id: string | null) {
-    this.apiservice.getData(`subtasks/${id}`).subscribe({
-      next: (response) => {
-        this.subtasks = response;
-        console.log(response);
+  // loadSubtasks(id: string | null) {
+  //   this.apiservice.getData(`subtasks/${id}`).subscribe({
+  //     next: (response) => {
+  //       this.subtasks = response;
+  //       console.log(response);
 
-      }
-    })
-  }
+  //     }
+  //   })
+  // }
 
   backToCustomer() {
     this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'], null);
@@ -280,8 +283,9 @@ export class SingletaskComponent {
           this.globalservice.saveLog(objKey, response, this.newAssignee);
         } else if (objKey === 'tododone' || objKey === 'todoundone') {
           this.globalservice.saveLog(objKey, response, this.todotext);
-        } else if (objKey === 'subtask') {
-          this.globalservice.saveLog(objKey, response, this.subtask);
+          // } 
+          // else if (objKey === 'subtask') {
+          //   this.globalservice.saveLog(objKey, response, this.subtask);
         } else {
           this.globalservice.saveLog(objKey, response);
         }
@@ -348,27 +352,27 @@ export class SingletaskComponent {
     })
   }
 
-  countCompletesSubtasks(state: string) {
-    let count = 0;
-    for (let index = 0; index < this.subtasks.length; index++) {
-      const subtask = this.subtasks[index];
-      if (subtask.state === state) {
-        count++
-      }
-    }
-    return count
-  }
+  // countCompletesSubtasks(state: string) {
+  //   let count = 0;
+  //   for (let index = 0; index < this.subtasks.length; index++) {
+  //     const subtask = this.subtasks[index];
+  //     if (subtask.state === state) {
+  //       count++
+  //     }
+  //   }
+  //   return count
+  // }
 
 
-  openSubtask(index: number) {
-    const currentSubtask = this.subtasks[index];
-    const id = currentSubtask.id
-    const customerId = currentSubtask.customer;
-    const queryParam = {
-      type: currentSubtask.type,
-    }
-    this.globalservice.navigateToPath(['main', 'singlecustomer', customerId, 'task', id], queryParam);
-  }
+  // openSubtask(index: number) {
+  //   const currentSubtask = this.subtasks[index];
+  //   const id = currentSubtask.id
+  //   const customerId = currentSubtask.customer;
+  //   const queryParam = {
+  //     type: currentSubtask.type,
+  //   }
+  //   this.globalservice.navigateToPath(['main', 'singlecustomer', customerId, 'task', id], queryParam);
+  // }
 
   navigateToMainTask() {
     const queryParam = {
@@ -380,12 +384,15 @@ export class SingletaskComponent {
   addTodo() {
     const listObj = {
       text: '',
-      isChecked: false,
+      is_checked: false,
+      is_saved: false,
     }
     this.checkList.push(listObj)
   }
 
   saveTodo(index: number) {
+    const currentTask = this.checkList[index];
+    currentTask.is_saved = true;
     const data = {
       checklist: this.checkList,
     }
@@ -394,7 +401,7 @@ export class SingletaskComponent {
 
   changeIsChecked(index: number) {
     const checkbox = this.checkList[index]
-    checkbox.isChecked = !checkbox.isChecked
+    checkbox.is_checked = !checkbox.is_checked
 
     const data = {
       checklist: this.checkList,
@@ -413,23 +420,23 @@ export class SingletaskComponent {
     let count = 0;
     for (let index = 0; index < this.checkList.length; index++) {
       const check = this.checkList[index];
-      if (check.isChecked === true) {
+      if (check.is_checked === true) {
         count++
       }
     }
     return count
   }
 
-  checkCompletion() {
-    let completion = true;
-    for (let index = 0; index < this.subtasks.length; index++) {
-      const subtasks = this.subtasks[index];
-      if (subtasks.state !== 'done') {
-        completion = false;
-      }
-    }
-    this.taskCompleted = completion;
-  }
+  // checkCompletion() {
+  //   let completion = true;
+  //   for (let index = 0; index < this.subtasks.length; index++) {
+  //     const subtasks = this.subtasks[index];
+  //     if (subtasks.state !== 'done') {
+  //       completion = false;
+  //     }
+  //   }
+  //   this.taskCompleted = completion;
+  // }
 
   releaseTask() {
     const data = {
@@ -453,4 +460,71 @@ export class SingletaskComponent {
     this.updateTask(data, 'close');
   }
 
+  searchMember() {
+
+    this.apiservice.getData(`profile/search/${this.searchValue}`).subscribe({
+      next: (response => {
+        console.log(response);
+
+        this.foundMembers = response.sort((a: any, b: any) => a.fullname.localeCompare(b.fullname))
+
+      })
+    })
+  }
+
+  setNewAsssigne(index: number) {
+    this.newAssignee = this.foundMembers[index];
+    this.updateAssignee()
+    this.foundMembers = []
+    this.searchValue = '';
+  }
+
+  updateAssignee() {
+    const data = {
+      assignee: this.newAssignee.id
+    }
+    console.log(data);
+
+    this.updateTask(data, 'assignee');
+    this.assigneeChangeOpen = false;
+  }
+
+  closeAssigneeChanger() {
+    this.assigneeChangeOpen = false;
+    this.foundMembers = [];
+    this.searchValue = '';
+  }
+
+  saveTaskTemplate() {
+    const checklist = this.saveChecklist();
+    console.log(checklist);
+    
+    const template = {
+      title: this.task.title,
+      description: this.task.description,
+      checklist: checklist,
+    }
+
+    console.log(template);
+
+    this.apiservice.postData('task/template/', template).subscribe({
+      next: (response) => {
+        console.log(response);
+
+      }
+    })
+
+  }
+
+  saveChecklist() {
+    const savedList = this.task.checklist;
+    for (let index = 0; index < savedList.length; index++) {
+      const obj = savedList[index];
+      obj.is_saved = true;
+      obj.is_checked = false;
+
+    }
+    console.log(savedList);
+    return savedList
+  }
 }
