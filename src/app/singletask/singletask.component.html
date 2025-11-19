@@ -25,18 +25,17 @@
 
         </div>
 
-        <!-- <h3>für {{task.customer.companyname}}</h3> -->
+
         <div class="taskMenu">
-            <!-- <div class="addBtn"><img src="./icons/add.svg" alt="">Checkliste</div> -->
+
             <button *ngIf="task?.reviewer?.id===user?.id && task?.state==='done'"
                 (click)="releaseTask()">Freigeben</button>
-                <button (click)="saveTaskTemplate()">Als Vorlage speichern</button>
+
             <button *ngIf="task?.assignee?.id===user?.id && task?.state==='released'"
                 (click)="closeTask()">Abschließen</button>
-            <!-- <div *ngIf="queryType==='task'" class="addBtn" (click)="addSubtask()"> <img src="./icons/add.svg" alt="">To
-                Do</div> -->
-            <!-- <div class="addBtn" (click)="changeSidebarContent('comments')"><img src="./icons/add.svg" alt="">Kommentar
-            </div> -->
+            <button (click)="globalservice.navigateToPath(['main', 'board'])">Board öffnen</button>
+            <button (click)="saveTaskTemplate()">Als Vorlage speichern</button>
+
             <div *ngIf="queryType==='task'" class="closeBtn">
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
@@ -218,6 +217,7 @@
                         <h4>Aufgabenliste</h4>
                         <img (click)="addTodo()" src="./icons/add.svg" alt="">
                     </div>
+                    <h4 *ngIf="task.checklist.length===0">- Keine Aufgaben gesepeichert -</h4>
                     <div *ngFor="let check of checkList, let index=index">
                         <div class="checklistRow">
                             <div class="inputfield">
@@ -243,10 +243,7 @@
 
         <div class="taskSidebar">
             <div class="sidabarNav">
-                <!-- <div *ngIf="queryType==='task'" [ngClass]="{'btnHlgt': sidebarKey==='subtasks'}"
-                    (click)="changeSidebarContent('subtasks')">
-                    <h4>To Do`s</h4>
-                </div> -->
+        
                 <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
                     <h4>Kommentare</h4>
                 </div>
@@ -275,8 +272,11 @@
                         <div class="divider"></div>
                         <textarea (change)="updateComment(index)" name="" [(ngModel)]="comment.text" id=""
                             [disabled]="comment.creator.id !== user.id "></textarea>
-                        <img (click)="deleteComment(index)" *ngIf="comment.creator.id===user.id" src="./icons/trash.svg"
-                            alt="">
+                        <div class="bottemLine">
+                            <img (click)="deleteComment(index)" *ngIf="comment.creator.id===user.id"
+                                src="./icons/trash.svg" alt="">
+                        </div>
+
                     </div>
                 </div>
 
@@ -349,8 +349,8 @@
     <!-- <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': taskWrapperOpen}">
         <app-taskwrapper></app-taskwrapper>
     </div> -->
-    <div class="memberListWrapper slideOut borderLeft" [ngClass]="{'slideIn': memberListOpen}">
+    <!-- <div class="memberListWrapper slideOut borderLeft" [ngClass]="{'slideIn': memberListOpen}">
         <app-memberlist></app-memberlist>
-    </div>
+    </div> -->
 
 </section>

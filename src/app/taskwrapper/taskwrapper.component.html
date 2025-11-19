@@ -5,11 +5,7 @@
     </div>
     <h3 *ngIf="!globalservice.isSubtaskWrapper">Aufgabe erstellen</h3>
     <button (click)="loadTemplates()">Aus Vorlage</button>
-    <div >
-        <div *ngFor="let template of taskTemplates let index=index">
-            <p (click)="getTemplate(index)">{{template.title}}</p>
-        </div>
-    </div>
+
     <form #taskCreationFrom="ngForm" (ngSubmit)="createTask(taskCreationFrom)">
         <div class="inputCont">
             <div class="inputfield">
@@ -26,53 +22,145 @@
                 <p *ngIf="title.invalid && (title.touched || taskCreationFrom.submitted)">*Pflichtfeld</p>
             </div>
         </div>
-
-        <div class="inputCont">
-            <h4>zu erledigen bis:</h4>
-            <div class="inputfield">
-                <input #date="ngModel" type="date" [(ngModel)]="task.due_date" name="date" placeholder="Titel" required>
+        <div class="doubleCont">
+            <div class="inputCont">
+                <h4>zu erledigen bis:</h4>
+                <div class="inputfield">
+                    <input #date="ngModel" type="datetime-local" [(ngModel)]="task.due_date" name="date"
+                        placeholder="Titel" required>
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+                </div>
             </div>
-            <div class="errorTxt">
-                <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+            <div class="prioCont">
+                <h4>Priorität</h4>
+                <div class="inputfield cp" (click)="priocontOpen=!priocontOpen">
+                    <div class="prioContInner">
+                        <div class="prioDot green" *ngIf="task.priority==='low'"></div>
+                        <div class="prioDot yellow" *ngIf="task.priority==='mid'"></div>
+                        <div class="prioDot red" *ngIf="task.priority==='high'"></div>
+                        <p> {{globalservice.interpretation['priority'][task.priority]}}</p>
+                    </div>
+
+
+                    <!-- <img [ngClass]="{'rotate': priocontOpen===true}" src="./icons/dropdown.svg" alt=""> -->
+                </div>
+
+                <div class="prioChoices" *ngIf="priocontOpen">
+                    <div>
+                        <div class="prioChoice cp" (click)="setPriority('low')">
+                            <div class="prioDot green"></div>
+                            <p>Niedrig</p>
+                        </div>
+                        <div class="prioChoice cp" (click)="setPriority('mid')">
+                            <div class="prioDot yellow"></div>
+                            <p>Mittel</p>
+                        </div>
+                        <div class="prioChoice cp" (click)="setPriority('high')">
+                            <div class="prioDot red"></div>
+                            <p>Hoch</p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
+
+
+
         <div class="inputCont">
 
-            <div class="assigneeCont">
+            <!-- <div class="assigneeCont">
                 <button type="button" (click)="globalservice.memberListOpen=true">Aufgabe zuweisen</button>
                 <p *ngIf="member">{{member.fullname}}</p>
-            </div>
+            </div> -->
+            <div class="inputfield cp" (click)="globalservice.memberListOpen=true">
+                <p>Aufgabe zuweisen</p>
 
+            </div>
+            <div class="assigneeCont" *ngIf="member">
+                <img src="./icons/profile.svg" alt="">
+                <p>{{member.fullname}}</p>
+            </div>
 
             <div class="errorTxt">
                 <p *ngIf="noMember">Bitte Aufgabe einem Mitarbeiter zuweisen</p>
             </div>
         </div>
 
-        <p *ngIf="task.checklist.length>0"> Aufgabenliste gespeichert</p>
-        <div class="inputCont">
-            <h4>Priorität</h4>
-
-            <div class="priority">
-                <button type="button" [ngClass]="{'prioActive': task.priority==='low'}" (click)="setPriority('low')"
-                    class="prioBtn green">
-                    <p>Niedrig</p>
-                </button>
-                <button type="button" [ngClass]="{'prioActive': task.priority==='mid'}" (click)="setPriority('mid')"
-                    class="prioBtn yellow">
-                    <p>Mittel</p>
-                </button>
-                <button type="button" [ngClass]="{'prioActive': task.priority==='high'}" (click)="setPriority('high')"
-                    class="prioBtn red">
-                    <p>Hoch</p>
-                </button>
-            </div>
+        <div class="checklistConfirm" *ngIf="task.checklist.length>0">
+            <img src="./icons/done.svg" alt="">
+            <p> Aufgabenliste geladen</p>
         </div>
+
+
+
+
+
         <div class="btnCont">
             <button type="button" (click)="resetTask(taskCreationFrom)">Abbrechen</button>
             <button type="submit">Speichern</button>
         </div>
 
     </form>
+    <div class="templates slideOut" [ngClass]="{'slideIn': templatesOpen===true}">
+        <h3>Vorlagen</h3>
+        <div class="divider"></div>
+        <div class="templatesList">
+            <div class="templatesListRow" *ngFor="let template of taskTemplates let index=index"
+                (click)="getTemplate(index)">
+                <div class="templateTitle">
+                    <img src="./icons/template.svg" alt="">
+                    <p>{{template.title}}</p>
+                </div>
+
+                <img class="edit" (click)="openSingleTemplate(index, $event)" src="./icons/editx.svg" alt="">
+
+            </div>
+
+        </div>
+        <div>
+
+        </div>
+        <div class="singleTemplates slideOut" [ngClass]="{'slideIn': singleTemplateOpen===true}">
+            <h4>Vorlage bearbeiten</h4>
+            <div class="divider"></div>
+            <div class="inputCont">
+                <h4>Titel</h4>
+                <div class="inputfield">
+                    <input type="text" [(ngModel)]="taskTemplate.title">
+                </div>
+            </div>
+            <div class="inputCont">
+                <h4>Beschreibung</h4>
+                <textarea name="" [(ngModel)]="taskTemplate.description" id=""></textarea>
+            </div>
+
+            <div class="checklistCont">
+                <div class="subheadline cp">
+                    <h4>Aufgabenliste</h4>
+                    <img src="./icons/add.svg" alt="" (click)="addChecklistTask()">
+                </div>
+                <!-- <div class="inputfield">
+                    <input [(ngModel)]="checklistTaskText" type="text" placeholder="Aufgabe hinzufügen">
+                    <img class="cp" (click)="addChecklistTask()" src="./icons/done.svg" alt="">
+                </div> -->
+                <div class="divider"></div>
+             <h4 *ngIf="taskTemplate?.checklist?.length===0">- Keine Aufgaben gespeichert -</h4>
+                <div *ngFor="let task of taskTemplate.checklist let index=index">
+                    <div class="inputfield">
+                        <input type="text" placeholder="Aufgabe hinzufügen" [(ngModel)]="task.text">
+                        <img (click)="deleteChecklistTask(index)" src="./icons/trash.svg" alt="">
+                    </div>
+
+                </div>
+            </div>
+            <div class="btnCont">
+                <button (click)="closeTemplate()">Abbrechen</button>
+                <button (click)="saveTaskTemplateChanges()">Speichern</button>
+            </div>
+        </div>
+    </div>
 
 </section>

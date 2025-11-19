@@ -3,7 +3,7 @@ section {
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 56px;
+    gap: 24px;
     position: relative;
     padding: 24px;
 }
@@ -13,7 +13,11 @@ section {
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 8px;
+margin-top: 12px;
+    >img {
+        width: 24px;
+    }
 }
 
 .priority {
@@ -27,8 +31,8 @@ section {
 
 
 .prioBtn {
-    width: 100%;
-    max-width: unset;
+    width: 40px !important;
+
     height: 40px;
     display: flex;
     justify-content: center;
@@ -41,3 +45,176 @@ section {
     box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.3) !important;
 }
 
+.templates {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 24px;
+    gap: 24px;
+
+}
+
+.templatesList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.templatesListRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    background-color: var(--box-light);
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+
+   
+
+    &:hover {
+        background-color: var(--listrow-hover);
+    }
+}
+
+.templateTitle{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+ >img {
+        width: 24px;
+    }
+}
+
+
+.singleTemplates{
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+
+}
+
+.doubleCont {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+}
+
+.prioCont {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.prioContInner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prioChoices {
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    background-color: white;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    padding: 24px 0;
+    z-index: 1;
+
+    >div {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+    }
+}
+
+.prioChoice {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+
+
+    &:hover {
+        border-radius: 4px;
+        background-color: var(--listrow-hover);
+    }
+}
+
+.prioDot {
+    min-width: 12px;
+    max-width: 12px;
+    max-height: 12px;
+    min-height: 12px;
+    border-radius: 100%;
+}
+
+.spbtw {
+    justify-content: space-between !important;
+}
+
+.cp {
+    cursor: pointer;
+}
+
+.rotate {
+    transform: rotate(90deg);
+}
+
+.checklistConfirm{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    >img{
+        width: 24px;
+    }
+}
+
+.edit{
+    width: 16px !important;
+}
+
+.checklistCont{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.subheadline{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    >img{
+        width: 16px;
+    }
+}

@@ -104,9 +104,7 @@ export class BoardComponent {
 
     if (taskKey !== 'releases') {
       this.loadBoard(taskKey);
-    } else {
-      this.getSubtaskCount(this.tasks[taskKey])
-    }
+    } 
   }
 
   loadBoard(taskKey: string) {
@@ -115,7 +113,6 @@ export class BoardComponent {
     console.log(tasks);
 
     console.log(tasks);
-    this.getSubtaskCount(tasks)
     this.stateKeys.forEach(key => {
       this.board[key] = tasks.filter((task: any) => task.state === key).sort((a: any, b: any) => a.board_position - b.board_position);
       console.log(this.board[key]);
@@ -124,19 +121,7 @@ export class BoardComponent {
 
   }
 
-  getSubtaskCount(tasks: any[]) {
-    for (let index = 0; index < tasks.length; index++) {
-      const task = tasks[index];
-
-      this.apiservice.getData(`subtasks/count/${task.id}`).subscribe({
-        next: (response) => {
-          task.counts = response
-          this.countsLoaded = true;
-        }
-      })
-    }
-
-  }
+  
 
   getCountLinePercentage(index: number, array: any) {
 
@@ -220,7 +205,7 @@ export class BoardComponent {
       next: (response) => {
         console.log(response);
         this.releases = response
-        this.getSubtaskCount(this.releases);
+       
       }
     })
   }
@@ -248,11 +233,12 @@ export class BoardComponent {
 
   countChecklistDone(index: number, tasksList: any[], countKey: string) {
     const tasks = tasksList;
+    
     const task = tasks[index]
     let count = 0;
     for (let index = 0; index < task.checklist.length; index++) {
       const check = task.checklist[index];
-      if (check.isChecked) {
+      if (check.is_checked) {
         count++;
       }
     }

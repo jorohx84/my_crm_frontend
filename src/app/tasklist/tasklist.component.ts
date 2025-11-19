@@ -53,20 +53,6 @@ export class TasklistComponent {
 
   }
 
-  getSubtaskCount() {
-    for (let index = 0; index < this.tasks.length; index++) {
-      const task = this.tasks[index];
-
-      this.apiservice.getData(`subtasks/count/${task.id}`).subscribe({
-        next: (response) => {
-          task.counts = response
-          this.countsLoaded = true;
-        }
-      })
-    }
-    console.log(this.tasks);
-
-  }
 
   loadTasks(id: string | number | null = null, filter:string) {
     console.log(id);
@@ -74,7 +60,6 @@ export class TasklistComponent {
     this.apiservice.getData(`tasks/${id}/${filter}`).subscribe({
       next: (response) => {
         this.tasks = response;
-        this.getSubtaskCount()
         // this.filterTasks('undone')
       }
     })

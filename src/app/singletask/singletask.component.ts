@@ -15,7 +15,7 @@ import { MessageService } from '../services/message.service';
 
 @Component({
   selector: 'app-singletask',
-  imports: [CommonModule, FormsModule, MemberlistComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './singletask.component.html',
   styleUrl: './singletask.component.scss'
 })
@@ -352,27 +352,7 @@ export class SingletaskComponent {
     })
   }
 
-  // countCompletesSubtasks(state: string) {
-  //   let count = 0;
-  //   for (let index = 0; index < this.subtasks.length; index++) {
-  //     const subtask = this.subtasks[index];
-  //     if (subtask.state === state) {
-  //       count++
-  //     }
-  //   }
-  //   return count
-  // }
 
-
-  // openSubtask(index: number) {
-  //   const currentSubtask = this.subtasks[index];
-  //   const id = currentSubtask.id
-  //   const customerId = currentSubtask.customer;
-  //   const queryParam = {
-  //     type: currentSubtask.type,
-  //   }
-  //   this.globalservice.navigateToPath(['main', 'singlecustomer', customerId, 'task', id], queryParam);
-  // }
 
   navigateToMainTask() {
     const queryParam = {

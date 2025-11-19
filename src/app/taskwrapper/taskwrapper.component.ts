@@ -5,7 +5,7 @@ import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs';
+import { flatMap, take } from 'rxjs';
 import { APIService } from '../services/api.service';
 import { response } from 'express';
 import { User } from '../models/user.model';
@@ -25,8 +25,12 @@ export class TaskwrapperComponent {
   messageservice = inject(MessageService);
   route = inject(ActivatedRoute);
   member: any;
+  templatesOpen: boolean = false;
+  singleTemplateOpen: boolean = false;
+  priocontOpen: boolean = false;
   noMember: boolean = false;
   customerID: number | string | null = null;
+  checklistTaskText: string = '';
   user: any;
   task: any = {
     title: '',
@@ -42,10 +46,15 @@ export class TaskwrapperComponent {
     reviewer: '',
     completed_at: '',
     log: [],
-    checklist:[],
+    checklist: [],
   };
   mainTask: any | null = null;
   taskTemplates: any[] = [];
+  taskTemplate: any = {
+    title: '',
+    description: '',
+    checkliste: [],
+  };
   ngOnInit() {
     this.loadUser()
     this.loadMember();
@@ -91,9 +100,8 @@ export class TaskwrapperComponent {
   loadTemplates() {
     this.apiservice.getData('task/template/').subscribe({
       next: (response) => {
-        console.log(response);
         this.taskTemplates = response;
-
+        this.templatesOpen = true
       }
     })
   }
@@ -106,32 +114,20 @@ export class TaskwrapperComponent {
       return;
     }
     this.task.customer = this.customerID;
-    // this.createLogElement()
     this.saveTask();
     this.globalservice.taskWrapperOpen = false;
-    this.globalservice.isSubtaskWrapper = false;
+
     this.resetTask(form)
   }
 
   createLogElement(task: any) {
-    // this.task.log.push({
-    //   logged_at: new Date().toISOString(),
-    //   updated_by: {
-    //     id: this.user.id,
-    //     fullname: this.user.fullname,
-    //   },
-    //   log: 'Aufgabe wurde erstellt',
-    //   newState: '',
-    // });
     return {
       task: task.id,
       log: 'Aufgabe wurde erstellt',
-      // updated_by: this.user.id,
       new_state: 'Neue Aufgabe',
     }
   }
   createTaskObject() {
-    console.log(this.mainTask);
 
     return {
       parent: null,
@@ -143,55 +139,24 @@ export class TaskwrapperComponent {
       priority: this.task.priority,
       due_date: this.task.due_date,
       log: [],
-      type: this.globalservice.isSubtaskWrapper ? 'subtask' : 'task',
+
       checklist: this.task.checklist,
     }
   }
 
   saveTask() {
     const requestData = this.createTaskObject();
-    if (this.globalservice.isSubtaskWrapper) {
-      requestData.parent = this.mainTask.id
-    }
-  
-
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
         this.openNewTask(response);
-        // this.sendSystemMessage(response)
-        if (response.type === 'subtask') {
-          this.globalservice.saveLog('subtask', this.mainTask, response);
-        }
-        this.globalservice.saveLog('create', response);
-
+        const newTask = response;
+        this.globalservice.saveLog('create', newTask);
+        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', newTask.id])
 
       },
       error: (err) => console.log(err)
     })
   }
-
-
-  // saveLog(task: any) {
-  //   const data = this.createLogElement(task);
-  //   console.log(data);
-  //   this.apiservice.postData('task/logs/', data).subscribe({
-  //     next: (response) => {
-  //       console.log(response);
-
-  //     }
-  //   })
-
-  // }
-  // sendSystemMessage(task: any) {
-  //   console.log(task);
-
-  //   const text = 'Neue Aufgabe wurde Ihrem Board hinzugefügt';
-  //   const urlStr = ['main', 'singlecustomer', this.customerID, 'task', task.id]
-  //   const param = { type: task.type }
-  //   console.log(param);
-
-  //   // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee, urlStr, text, param);
-  // }
 
   openNewTask(task: any) {
     const taskID = task.id
@@ -208,7 +173,7 @@ export class TaskwrapperComponent {
 
   resetTask(form: NgForm) {
     this.task.priority = 'low';
-    this.member = {};
+    this.member = null;
     this.noMember = false;
     this.globalservice.isSubtaskWrapper = false;
     form.resetForm();
@@ -217,13 +182,70 @@ export class TaskwrapperComponent {
 
   setPriority(prio: string) {
     this.task.priority = prio;
+    this.priocontOpen = false;
   }
 
   getTemplate(index: number) {
     const currentTemplate = this.taskTemplates[index];
+
     console.log(currentTemplate);
     this.task.title = currentTemplate.title;
     this.task.description = currentTemplate.description;
     this.task.checklist = currentTemplate.checklist;
+    this.templatesOpen = false;
+
+  }
+
+  openSingleTemplate(index: number, event: Event) {
+    this.taskTemplate = this.taskTemplates[index];
+    this.singleTemplateOpen = true;
+    event.stopPropagation();
+  }
+
+  deleteChecklistTask(index: number) {
+    console.log(index);
+
+    const checklist = this.taskTemplate.checklist
+    console.log(checklist);
+
+    checklist.splice(index, 1)
+    console.log(checklist);
+    console.log(this.taskTemplate);
+
+  }
+
+  addChecklistTask() {
+    const task = {
+      text: '',
+      is_checked: false,
+      is_saved: true,
+    }
+    this.taskTemplate.checklist.push(task);
+    console.log(this.taskTemplate.checklist);
+    this.checklistTaskText = '';
+  }
+
+
+  saveTaskTemplateChanges() {
+    const id = this.taskTemplate.id;
+    console.log(this.taskTemplate.checklist);
+
+    const data = {
+      title: this.taskTemplate.title,
+      description: this.taskTemplate.description,
+      checklist: this.taskTemplate.checklist,
+    }
+    console.log(data);
+
+    this.apiservice.patchData(`task/template/${id}/`, data).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.closeTemplate();
+      }
+    })
+  }
+
+  closeTemplate() {
+    this.singleTemplateOpen = false
   }
 }
