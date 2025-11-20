@@ -25,7 +25,7 @@ export class TasklistComponent {
   route = inject(ActivatedRoute);
   counts: any[] = [];
   countsLoaded: boolean = false;
-  
+
   filteredTaskList: any[] = [];
   constructor() {
     this.globalservice.toggleSidebar(true)
@@ -46,7 +46,7 @@ export class TasklistComponent {
 
     this.observerservice.taskTriggerSubject$.subscribe((data) => {
       if (this.customerID) {
-        this.loadTasks(this.customerID,'open');
+        this.loadTasks(this.customerID, 'open');
       }
 
     })
@@ -54,29 +54,16 @@ export class TasklistComponent {
   }
 
 
-  loadTasks(id: string | number | null = null, filter:string) {
+  loadTasks(id: string | number | null = null, filter: string) {
     console.log(id);
 
     this.apiservice.getData(`tasks/${id}/${filter}`).subscribe({
       next: (response) => {
         this.tasks = response;
-        // this.filterTasks('undone')
       }
     })
   }
-  // filterTasks(filter: string) {
-  //   console.log(filter);
-  //   if (filter === 'done') {
-  //     const filteredTasks = this.tasks.filter(task => task.state === 'done');
-  //     this.filteredTaskList = filteredTasks
-  //   } else if (filter === 'undone') {
-  //     const filteredTasks = this.tasks.filter(task => task.state !== 'done');
-  //     this.filteredTaskList = filteredTasks
-  //   }
 
-  //   console.log(this.filteredTaskList);
-
-  // }
 
   openTask(index: number) {
     const currentTask = this.tasks[index];
@@ -85,24 +72,35 @@ export class TasklistComponent {
       type: currentTask.type,
       sidebarOpen: false,
     }
-    // this.globalservice.toggleSidebar(false);
     this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', taskId], queryParam);
-    //  this.globalservice.navigateToPath(['main', 'task', taskId]);
-
   }
 
 
-
-  getCountLinePercentage(index: number) {
-
-    if (this.countsLoaded) {
-      const task = this.tasks[index];
-      const completedTasks = task.counts?.completed_count;
-      const totalTasks = task.counts?.total_count;
-      const percentage = (completedTasks / totalTasks) * 100 || 0;
-      return percentage
+  countSubtasksDone(index: number, countKey: string) {
+    const task = this.tasks[index];
+    const subtasks = task.subtasks
+    let count = 0;
+    for (let index = 0; index < subtasks.length; index++) {
+      const subtask = subtasks[index];
+      if (subtask.is_checked===true) {
+        count++
+      }
     }
-    return 0
 
+
+
+    return
   }
+  // getCountLinePercentage(index: number) {
+
+  //   if (this.countsLoaded) {
+  //     const task = this.tasks[index];
+  //     const completedTasks = task.counts?.completed_count;
+  //     const totalTasks = task.counts?.total_count;
+  //     const percentage = (completedTasks / totalTasks) * 100 || 0;
+  //     return percentage
+  //   }
+  //   return 0
+
+  // }
 }

@@ -4,7 +4,7 @@ section {
     display: flex;
     flex-direction: column;
     padding: 24px;
-    gap: 24px;
+    gap: 56px;
     height: calc(100vh - 229px);
     position: relative;
 }
@@ -33,15 +33,28 @@ section {
     flex-direction: column;
     gap: 8px;
     overflow-y: scroll;
+    
+.tasklistHeadline{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px ;
+    >p{
+        width: 100%;
+    }
 }
-
+}
 .taskRow {
     // width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px;
+    background-color: var(--box-light);
     cursor: pointer;
+   >p{
+        width: 100%;
+    }
 
     &:hover {
         border-color: white;
@@ -58,6 +71,7 @@ section {
 
     >p {
         font-size: 20px;
+     
     }
 }
 
@@ -80,6 +94,7 @@ section {
 }
 
 .prioIcon {
+    width: 100%;
     >img {
         width: 30px;
         cursor: pointer;
@@ -107,7 +122,7 @@ section {
 }
 
 .countLine {
-    width: 100%;
+    width: 80px;
     height: 6px;
     max-width: 300px;
     border: solid 0.5px var(--border);
@@ -119,4 +134,18 @@ section {
     height: 100%;
     background-color: var(--border);
 
+}
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px var(--border);
+  border-radius: 4px;
+
+  >img {
+    width: 16px;
+  }
 }

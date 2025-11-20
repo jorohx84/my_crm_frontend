@@ -5,10 +5,10 @@ import { APIService } from '../services/api.service';
 import { ObservableService } from '../services/observable.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-contacts',
-  imports: [CommonModule, FormsModule, RouterOutlet],
+  imports: [CommonModule, FormsModule],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss'
 })

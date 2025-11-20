@@ -220,7 +220,7 @@ export class BoardComponent {
     console.log(queryParams);
 
 
-    this.globalservice.navigateToPath(['main', 'singlecustomer', task.customer, 'task', task.id], queryParams)
+    this.globalservice.navigateToPath(['main', 'singlecustomer', task.customer.id, 'task', task.id], queryParams)
   }
 
   changeList(list: string) {
@@ -231,24 +231,24 @@ export class BoardComponent {
     this.dataservice.saveDataToLocalStorage('releases', false)
   }
 
-  countChecklistDone(index: number, tasksList: any[], countKey: string) {
-    const tasks = tasksList;
+  // countSubtasksDone(index: number, tasksList: any[], countKey: string) {
+  //   const tasks = tasksList;
     
-    const task = tasks[index]
-    let count = 0;
-    for (let index = 0; index < task.checklist.length; index++) {
-      const check = task.checklist[index];
-      if (check.is_checked) {
-        count++;
-      }
-    }
-    const percentage = (count / task.checklist.length) * 100
-    if (countKey === 'percentage') {
-      return percentage
-    } else {
-      return count
-    }
+  //   const task = tasks[index]
+  //   let count = 0;
+  //   for (let index = 0; index < task.subtasks.length; index++) {
+  //     const check = task.subtasks[index];
+  //     if (check.is_checked) {
+  //       count++;
+  //     }
+  //   }
+  //   const percentage = (count / task.subtasks.length) * 100
+  //   if (countKey === 'percentage') {
+  //     return percentage
+  //   } else {
+  //     return count
+  //   }
 
 
-  }
+  // }
 }

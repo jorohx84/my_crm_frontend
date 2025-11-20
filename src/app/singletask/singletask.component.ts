@@ -64,8 +64,8 @@ export class SingletaskComponent {
   // subtask: any;
   newAssignee: any;
   queryType: string | null = null;
-  checkList: any[] = [];
-  todotext: string = '';
+  subtasks: any[] = [];
+  subtaskText: string = '';
   taskCompleted: boolean = false;
   logBook: any[] = [];
   searchValue: string = '';
@@ -162,7 +162,7 @@ export class SingletaskComponent {
           this.getProgressState();
           this.sortComments();
 
-          this.checkList = response.checklist
+          this.subtasks = response.subtasks
         },
       })
 
@@ -282,7 +282,7 @@ export class SingletaskComponent {
         if (objKey === 'assignee') {
           this.globalservice.saveLog(objKey, response, this.newAssignee);
         } else if (objKey === 'tododone' || objKey === 'todoundone') {
-          this.globalservice.saveLog(objKey, response, this.todotext);
+          this.globalservice.saveLog(objKey, response, this.subtaskText);
           // } 
           // else if (objKey === 'subtask') {
           //   this.globalservice.saveLog(objKey, response, this.subtask);
@@ -297,12 +297,12 @@ export class SingletaskComponent {
   }
 
 
-  addSubtask() {
-    this.globalservice.isSubtaskWrapper = true;
-    this.globalservice.taskWrapperOpen = true;
-    this.observerservice.sendTask(this.task);
+  // addSubtask() {
+  //   this.globalservice.isSubtaskWrapper = true;
+  //   this.globalservice.taskWrapperOpen = true;
+  //   this.observerservice.sendTask(this.task);
 
-  }
+  // }
 
 
   createComment() {
@@ -361,45 +361,59 @@ export class SingletaskComponent {
     this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'task', this.task.parent.id], queryParam);
   }
 
-  addTodo() {
+  addSubtask() {
     const listObj = {
       text: '',
       is_checked: false,
       is_saved: false,
     }
-    this.checkList.push(listObj)
+    this.subtasks.push(listObj)
   }
 
-  saveTodo(index: number) {
-    const currentTask = this.checkList[index];
+  saveSubtask(index: number) {
+    const currentTask = this.subtasks[index];
     currentTask.is_saved = true;
+    this.removeEmptySubtasks();
     const data = {
-      checklist: this.checkList,
+      subtasks: this.subtasks,
     }
     this.updateTask(data, 'checklist');
   }
 
+
+  removeEmptySubtasks(){
+    const subtasks = this.subtasks
+    console.log(subtasks);
+   
+    for (let index = 0; index < subtasks.length; index++) {
+      const subtask = subtasks[index];
+      if (subtask.text ==='') {
+        subtasks.splice(index, 1);
+      }
+    }
+  }
+
   changeIsChecked(index: number) {
-    const checkbox = this.checkList[index]
+    const checkbox = this.subtasks[index]
     checkbox.is_checked = !checkbox.is_checked
 
     const data = {
-      checklist: this.checkList,
+      subtasks: this.subtasks,
     }
 
     console.log(checkbox.text);
-    this.todotext = checkbox.text
-    const log = checkbox.isChecked ? 'tododone' : 'todoundone';
+    this.subtaskText = checkbox.text
+    const log = checkbox.is_checked ? 'tododone' : 'todoundone';
     console.log(log);
 
 
     this.updateTask(data, log)
   }
 
-  countCompletedTodos() {
+  countCompletedSubtasks() {
     let count = 0;
-    for (let index = 0; index < this.checkList.length; index++) {
-      const check = this.checkList[index];
+    for (let index = 0; index < this.subtasks.length; index++) {
+      const check = this.subtasks[index];
       if (check.is_checked === true) {
         count++
       }
@@ -476,13 +490,13 @@ export class SingletaskComponent {
   }
 
   saveTaskTemplate() {
-    const checklist = this.saveChecklist();
-    console.log(checklist);
+    const subtasks = this.saveSubtasks();
+    console.log(subtasks);
     
     const template = {
       title: this.task.title,
       description: this.task.description,
-      checklist: checklist,
+      subtasks: subtasks,
     }
 
     console.log(template);
@@ -496,8 +510,8 @@ export class SingletaskComponent {
 
   }
 
-  saveChecklist() {
-    const savedList = this.task.checklist;
+  saveSubtasks() {
+    const savedList = this.task.subtasks;
     for (let index = 0; index < savedList.length; index++) {
       const obj = savedList[index];
       obj.is_saved = true;

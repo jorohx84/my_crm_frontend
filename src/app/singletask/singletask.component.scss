@@ -321,8 +321,8 @@ textarea {
 
 .changePrio {
     width: 100%;
-    width: 320px;
-    padding: 32px 32px;
+    width: 340px;
+    padding: 48px 48px;
 
     display: flex;
     align-items: center;
@@ -570,7 +570,7 @@ textarea {
 }
 
 
-.checklist {
+.subtasks {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -591,7 +591,7 @@ textarea {
     }
 }
 
-.checklistRow {
+.subtaskRow {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -612,3 +612,4 @@ textarea {
         margin: 0;
     }
 }
+

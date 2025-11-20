@@ -3,58 +3,64 @@
         <h2>Aufgaben</h2>
         <div class="listBtns">
             <button (click)="loadTasks(customerID,'open')">Offen</button>
-              <button (click)="loadTasks(customerID,'released')">Freigegeben</button>
+            <button (click)="loadTasks(customerID,'released')">Freigegeben</button>
             <button (click)="loadTasks(customerID, 'closed')">Abgschlossen</button>
         </div>
     </div>
 
-    <div class="divider"></div>
+    <!-- <div class="divider"></div> -->
     <div class="taskList">
 
+        <div class="tasklistHeadline">
+            <p>Titel</p>
+            <p>Status</p>
+            <p>Zuständigkeiten</p>
+            <p>Aufgabenliste</p>
+            <p>Fälligkeitsdatum</p>
+            <p>Priorität</p>
+        </div>
+        <div class="divider"></div>
+        <div (click)="openTask(index)" class="taskRow" *ngFor="let task of tasks, let index=index">
 
-        <div (click)="openTask(index)" class="taskRow border" *ngFor="let task of tasks, let index=index">
-            <div class="taskRowleft">
-                <div class="titlePrio">
-                    <p> {{task.title}}</p>
 
-                </div>
-                <p>Ersteller: {{task.reviewer.fullname}}</p>
-            </div>
+            <p> {{task.title}}</p>
+            <p>{{globalservice.interpretation['state'][task.state]}}</p>
+
+            <p>{{task.assignee.fullname}}</p>
+
             <div class="subtaskCountCont">
-                <p>Todo`s</p>
+                <div class="checkbox">
+                    <img src="./icons/done.svg" alt="">
+                </div>
                 <div class="countLine">
-                    <div class="countLineInner" [style.width.%]="getCountLinePercentage(index)"></div>
+                    <div class="countLineInner"
+                        [style.width.%]="globalservice.countSubtasksDone(index, tasks,'percentage')"></div>
                 </div>
                 <div class="subtaskCount">
 
-                    <p>{{task.counts?.completed_count}}</p>
+                    <p>{{globalservice.countSubtasksDone(index, tasks, '')}}</p>
                     <p>/</p>
-                    <p>{{task.counts?.total_count}}</p>
+                    <p>{{task.subtasks.length}}</p>
                 </div>
 
             </div>
 
-            <!-- <span>erstellt am: {{task.created_at | date: 'dd.MM.yyyy'}}</span> -->
-            <!-- <span>Fällig am: {{task.due_date | date: 'dd.MM.yyyy'}}</span> -->
-            <!-- <span *ngIf="task.state ==='undone'">Satus: unbearbeitet</span> -->
-            <!-- <span *ngIf="task.state ==='in_progress'">Satus: in Bearbeitung</span>
-                <span *ngIf="task.state ==='under_review'">Satus: in Prüfung</span>
-                <span *ngIf="task.state ==='done'">Satus: Erledigt</span> -->
 
-            <div class="taskRowRight">
-                <div class="prioIcon">
-                    <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
-                    <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
-                    <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
-                </div>
 
-                <span>Fällig am: {{task.due_date | date: 'dd.MM.yyyy'}}</span>
-
-                <!-- <span>zu erledigen von: {{task.assignee.fullname}}</span> -->
+            <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
+            <div class="prioIcon">
+                <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+                <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+                <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
             </div>
+
+
+
+            <!-- <span>zu erledigen von: {{task.assignee.fullname}}</span> -->
+
 
 
         </div>
     </div>
-  
+
 </section>

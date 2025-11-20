@@ -121,7 +121,7 @@ export class CustomersComponent {
         this.customers = response;
         this.allCustomers = response;
         this.isloading = false;
-        console.log('Kunden aus DB geladen!');
+        console.log('Kunden aus DB geladen!', response);
         this.sortList();
       },
       error: (err) => {

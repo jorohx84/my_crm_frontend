@@ -89,9 +89,12 @@
                             (click)="assigneeChangeOpen=true"><img class="editBtn" src="./icons/editx.svg" alt="">
                         </button>
                         <!-- assignee -->
-                        <div *ngIf="assigneeChangeOpen" class="changeAssignee" (mouseleave)="closeAssigneeChanger()">
-
+                        <div *ngIf="assigneeChangeOpen" class="changeAssignee">
+                            <img class="close" src="./icons/close.svg" alt="" (click)="closeAssigneeChanger()">
                             <p>Zuständigkeiten ändern:</p>
+
+
+
                             <!-- <h3 *ngIf="newAssignee">{{newAssignee.fullname}}</h3>
                             <div *ngIf="!newAssignee" class="btnCont">
                                 <button (click)="assigneeChangeOpen=false">Abbrechen</button>
@@ -141,8 +144,9 @@
                         <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
                     </div>
                     <!-- Prio -->
-                    <div *ngIf="priochangeOpen" class="changePrio" (mouseleave)="priochangeOpen=false">
-                        <!-- <img (click)="priochangeOpen=false" src="./icons/close.svg" alt=""> -->
+                    <div *ngIf="priochangeOpen" class="changePrio">
+                        <img class="close" (click)="priochangeOpen=false" src="./icons/close.svg" alt="">
+                        
                         <div class="prioBtn" (click)="changePrio('low', $event)">
                             <img src="./icons/low.svg" alt="">
                             <p>Niedrig</p>
@@ -185,9 +189,9 @@
                     <div class="completedTodos">
                         Erledigt:
                         <div class="count">
-                            <p class="infoText">{{countCompletedTodos()}}</p>
+                            <p class="infoText">{{countCompletedSubtasks()}}</p>
                             <p class="infoText">/</p>
-                            <p class="infoText">{{task.checklist?.length}}</p>
+                            <p class="infoText">{{task.subtasks?.length}}</p>
                         </div>
 
                     </div>
@@ -212,17 +216,17 @@
                 </div>
 
                 <!-- Checklist -->
-                <div class="checklist">
+                <div class="subtasks">
                     <div class="subheadline">
                         <h4>Aufgabenliste</h4>
-                        <img (click)="addTodo()" src="./icons/add.svg" alt="">
+                        <img (click)="addSubtask()" src="./icons/add.svg" alt="">
                     </div>
-                    <h4 *ngIf="task.checklist.length===0">- Keine Aufgaben gesepeichert -</h4>
-                    <div *ngFor="let check of checkList, let index=index">
-                        <div class="checklistRow">
+                    <h4 *ngIf="task?.subtasks?.length===0">- Keine Aufgaben gesepeichert -</h4>
+                    <div *ngFor="let check of subtasks, let index=index">
+                        <div class="subtaskRow">
                             <div class="inputfield">
-                                <input (change)="saveTodo(index)" placeholder="Aufgabe hinzufügen"
-                                    [(ngModel)]="checkList[index].text" type="text">
+                                <input (change)="saveSubtask(index)" placeholder="Aufgabe hinzufügen"
+                                    [(ngModel)]="subtasks[index].text" type="text">
                                 <div (click)="changeIsChecked(index)" class="checkbox" *ngIf="check.is_saved">
                                     <img *ngIf="check.is_checked===true" src="./icons/done.svg" alt="">
                                 </div>
@@ -233,7 +237,7 @@
 
                     </div>
                     <div class="counter">
-                        <p>{{countCompletedTodos()}}</p> / <p>{{checkList.length}}</p>
+                        <p>{{countCompletedSubtasks()}}</p> / <p>{{subtasks.length}}</p>
                     </div>
                 </div>
 
@@ -243,7 +247,7 @@
 
         <div class="taskSidebar">
             <div class="sidabarNav">
-        
+
                 <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
                     <h4>Kommentare</h4>
                 </div>

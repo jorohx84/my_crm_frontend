@@ -369,9 +369,10 @@ button {
 
 .close {
     position: absolute;
-    width: 16px;
+    width: 12px;
     top: 16px;
     right: 16px;
+    cursor: pointer;
 }
 
 .flexheight {
@@ -421,3 +422,15 @@ button {
         width: 16px;
     }
 }
+
+// .headlineWidthCloseBtn{
+// width: 100%;
+// display: flex;
+// justify-content: space-between;
+// align-items: center;
+// >img{
+//     width: 12px;
+//     cursor: pointer;
+// }
+// }
+

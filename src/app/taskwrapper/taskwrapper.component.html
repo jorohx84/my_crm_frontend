@@ -89,7 +89,7 @@
             </div>
         </div>
 
-        <div class="checklistConfirm" *ngIf="task.checklist.length>0">
+        <div class="subtasksConfirm" *ngIf="task.subtasks.length>0">
             <img src="./icons/done.svg" alt="">
             <p> Aufgabenliste geladen</p>
         </div>
@@ -105,7 +105,11 @@
 
     </form>
     <div class="templates slideOut" [ngClass]="{'slideIn': templatesOpen===true}">
-        <h3>Vorlagen</h3>
+        <div class="subheadline">
+            <h3>Vorlagen</h3>
+            <img class="cp" src="./icons/close.svg" alt="" (click)="templatesOpen=false">
+        </div>
+
         <div class="divider"></div>
         <div class="templatesList">
             <div class="templatesListRow" *ngFor="let template of taskTemplates let index=index"
@@ -137,21 +141,17 @@
                 <textarea name="" [(ngModel)]="taskTemplate.description" id=""></textarea>
             </div>
 
-            <div class="checklistCont">
+            <div class="subtasksCont">
                 <div class="subheadline cp">
                     <h4>Aufgabenliste</h4>
-                    <img src="./icons/add.svg" alt="" (click)="addChecklistTask()">
+                    <img src="./icons/add.svg" alt="" (click)="addSubtask()">
                 </div>
-                <!-- <div class="inputfield">
-                    <input [(ngModel)]="checklistTaskText" type="text" placeholder="Aufgabe hinzufügen">
-                    <img class="cp" (click)="addChecklistTask()" src="./icons/done.svg" alt="">
-                </div> -->
                 <div class="divider"></div>
-             <h4 *ngIf="taskTemplate?.checklist?.length===0">- Keine Aufgaben gespeichert -</h4>
-                <div *ngFor="let task of taskTemplate.checklist let index=index">
+                <h4 *ngIf="taskTemplate?.subtasks?.length===0">- Keine Aufgaben gespeichert -</h4>
+                <div *ngFor="let task of taskTemplate.subtasks let index=index">
                     <div class="inputfield">
                         <input type="text" placeholder="Aufgabe hinzufügen" [(ngModel)]="task.text">
-                        <img (click)="deleteChecklistTask(index)" src="./icons/trash.svg" alt="">
+                        <img (click)="deleteSubtask(index)" src="./icons/trash.svg" alt="">
                     </div>
 
                 </div>

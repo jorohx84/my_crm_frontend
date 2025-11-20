@@ -34,9 +34,9 @@ export class GlobalService {
         due_date: 'Fälligkeit wurde geändert',
         subtask: 'neue Subtask wurde erstellt',
         assignee: 'Bearbeiter wurde geändert',
-        checklist: 'Checkliste wurde bearbeitet',
-        tododone: 'Checkliste: Todo abgeschlossen',
-        todoundone: 'Checkliste: Todo auf unbearbeitet geändert',
+        checklist: 'Subtasks wurden bearbeitet',
+        tododone: 'Aufgabe abgeschlossen',
+        todoundone: 'Aufgabe auf unbearbeitet geändert',
         release: 'Aufgabe wurde freigegeben',
         close: 'Aufgabe wurde geschlossen',
         create: 'Aufgabe wurde erstellt'
@@ -50,7 +50,7 @@ export class GlobalService {
             high: 'Hoch',
         },
         state: {
-            undone: 'unbearbeitet',
+            undone: 'offen',
             in_progress: 'in Bearbeitung',
             under_review: 'in Prüfung',
             done: 'Erledigt',
@@ -139,4 +139,26 @@ export class GlobalService {
             return 'Neue Aufgabe'
         }
     }
+
+
+    countSubtasksDone(index: number, tasksList: any[], countKey: string) {
+    const tasks = tasksList;
+    
+    const task = tasks[index]
+    let count = 0;
+    for (let index = 0; index < task.subtasks.length; index++) {
+      const check = task.subtasks[index];
+      if (check.is_checked) {
+        count++;
+      }
+    }
+    const percentage = (count / task.subtasks.length) * 100
+    if (countKey === 'percentage') {
+      return percentage
+    } else {
+      return count
+    }
+
+
+  }
 }

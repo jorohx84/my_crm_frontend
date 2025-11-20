@@ -11,9 +11,10 @@ import { response } from 'express';
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { MessageService } from '../services/message.service';
+import { CdkVirtualScrollableElement } from "@angular/cdk/scrolling";
 @Component({
   selector: 'app-taskwrapper',
-  imports: [CommonModule, FormsModule, MemberlistComponent],
+  imports: [CommonModule, FormsModule, MemberlistComponent, CdkVirtualScrollableElement],
   templateUrl: './taskwrapper.component.html',
   styleUrl: './taskwrapper.component.scss'
 })
@@ -30,7 +31,7 @@ export class TaskwrapperComponent {
   priocontOpen: boolean = false;
   noMember: boolean = false;
   customerID: number | string | null = null;
-  checklistTaskText: string = '';
+  subtaskText: string = '';
   user: any;
   task: any = {
     title: '',
@@ -46,14 +47,14 @@ export class TaskwrapperComponent {
     reviewer: '',
     completed_at: '',
     log: [],
-    checklist: [],
+    subtasks: [],
   };
   mainTask: any | null = null;
   taskTemplates: any[] = [];
   taskTemplate: any = {
     title: '',
     description: '',
-    checkliste: [],
+    subtasks: [],
   };
   ngOnInit() {
     this.loadUser()
@@ -139,8 +140,7 @@ export class TaskwrapperComponent {
       priority: this.task.priority,
       due_date: this.task.due_date,
       log: [],
-
-      checklist: this.task.checklist,
+      subtasks: this.task.subtasks,
     }
   }
 
@@ -191,7 +191,7 @@ export class TaskwrapperComponent {
     console.log(currentTemplate);
     this.task.title = currentTemplate.title;
     this.task.description = currentTemplate.description;
-    this.task.checklist = currentTemplate.checklist;
+    this.task.subtasks = currentTemplate.subtasks;
     this.templatesOpen = false;
 
   }
@@ -202,38 +202,38 @@ export class TaskwrapperComponent {
     event.stopPropagation();
   }
 
-  deleteChecklistTask(index: number) {
+  deleteSubtask(index: number) {
     console.log(index);
 
-    const checklist = this.taskTemplate.checklist
-    console.log(checklist);
+    const subtasks = this.taskTemplate.subtasks
+    console.log(subtasks);
 
-    checklist.splice(index, 1)
-    console.log(checklist);
+    subtasks.splice(index, 1)
+    console.log(subtasks);
     console.log(this.taskTemplate);
 
   }
 
-  addChecklistTask() {
+  addSubtask() {
     const task = {
       text: '',
       is_checked: false,
       is_saved: true,
     }
-    this.taskTemplate.checklist.push(task);
-    console.log(this.taskTemplate.checklist);
-    this.checklistTaskText = '';
+    this.taskTemplate.subtasks.push(task);
+    console.log(this.taskTemplate.subtasks);
+    this.subtaskText = '';
   }
 
 
   saveTaskTemplateChanges() {
     const id = this.taskTemplate.id;
-    console.log(this.taskTemplate.checklist);
+    console.log(this.taskTemplate.subtasks);
 
     const data = {
       title: this.taskTemplate.title,
       description: this.taskTemplate.description,
-      checklist: this.taskTemplate.checklist,
+      subtasks: this.taskTemplate.subtasks,
     }
     console.log(data);
 

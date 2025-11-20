@@ -47,6 +47,7 @@ section {
   transition: background-color 0.3s ease-in-out;
   overflow-y: scroll;
   border-left: solid 0.5px var(--border);
+   border-right: solid 0.5px var(--border);
   // background-color: rgba(187, 229, 251, 0.05);
   // &:hover{
   //   background-color: var(--box-light);
@@ -60,7 +61,8 @@ section {
   width: 100%;
   z-index: 1;
   // margin-bottom: 16px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 300;
   text-align: center;
   background-color: var(--box);
   color: white;
@@ -80,7 +82,7 @@ section {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 16px;
   background-color: white;
   cursor: move;
@@ -101,6 +103,12 @@ section {
   >h4 {
     font-size: 16px;
   }
+}
+
+.midLine{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .prioIcon {
@@ -130,7 +138,7 @@ section {
   }
 }
 
-.reviewer {
+.company {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -145,22 +153,35 @@ section {
   }
 
 }
-
-.subtaskCountCont {
-  width: 100%;
-  max-width: 600px;
+.companyIcon{
+  min-width: 24px;
+  min-height: 24px;
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 16px;
-
-  >img {
-    width: 24px;
-  }
-
-  >p {
-    font-size: 16px;
-  }
+  background-color: var(--box);
+  
+  border-radius: 100px;
+>img{
+  width: 12px;
 }
+}
+
+// .subtaskCountCont {
+//   width: 100%;
+//   max-width: 600px;
+//   display: flex;
+//   align-items: center;
+//   gap: 16px;
+
+//   >img {
+//     width: 24px;
+//   }
+
+//   >p {
+//     font-size: 16px;
+//   }
+// }
 
 .subtaskCount {
   display: flex;
@@ -170,7 +191,7 @@ section {
   }
 }
 
-.CheckListCount {
+.subtaskCountCont {
   width: 100%;
   max-width: 600px;
   display: flex;
@@ -201,7 +222,7 @@ section {
 }
 
 .countLine {
-  width: 100%;
+  width: 100px;
   height: 6px;
   max-width: 300px;
   border: solid 0.5px var(--border);

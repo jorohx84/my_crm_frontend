@@ -14,7 +14,8 @@ section {
     display: flex;
     align-items: center;
     gap: 8px;
-margin-top: 12px;
+    margin-top: 12px;
+
     >img {
         width: 24px;
     }
@@ -77,25 +78,25 @@ margin-top: 12px;
     border-radius: 4px;
     cursor: pointer;
 
-   
+
 
     &:hover {
         background-color: var(--listrow-hover);
     }
 }
 
-.templateTitle{
+.templateTitle {
     display: flex;
     align-items: center;
     gap: 12px;
-    
- >img {
+
+    >img {
         width: 24px;
     }
 }
 
 
-.singleTemplates{
+.singleTemplates {
     position: absolute;
     top: 0;
     right: 0;
@@ -190,31 +191,34 @@ margin-top: 12px;
     transform: rotate(90deg);
 }
 
-.checklistConfirm{
+.subtasksConfirm {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 8px;
-    >img{
+
+    >img {
         width: 24px;
     }
 }
 
-.edit{
+.edit {
     width: 16px !important;
 }
 
-.checklistCont{
+.subtasksCont {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.subheadline{
+.subheadline {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    >img{
+    align-items: center;
+
+    >img {
         width: 16px;
     }
 }

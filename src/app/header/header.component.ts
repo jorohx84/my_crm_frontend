@@ -51,6 +51,8 @@ export class HeaderComponent {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
         this.user = user;
+        console.log(user);
+        
         this.loadCount()
       }
 

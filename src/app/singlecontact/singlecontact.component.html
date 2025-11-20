@@ -89,8 +89,8 @@
             <div class="listrow" *ngFor="let activity of activities let index=index">
 
                 <div class="typeCont">
-                    <img [src]="types[activity.type]?.path" alt="">
-                    <p>{{types[activity.type]?.label}}</p>
+                    <img [src]="types[activity.type].path" alt="">
+                    <p>{{types[activity.type].label}}</p>
                 </div>
                 <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
 
