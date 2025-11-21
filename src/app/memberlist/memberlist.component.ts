@@ -29,6 +29,8 @@ export class MemberlistComponent {
       next: (response) => {
         this.members = response;
         this.allMembers = response;
+        console.log(response);
+        
       },
       error: (err) => console.log(err),
 
@@ -36,8 +38,10 @@ export class MemberlistComponent {
   }
 
   sendUserdata(index: number) {
-    const foundUser = this.members[index];
-    this.observerservice.sendMember(foundUser);
+    const foundMember = this.members[index];
+    console.log(foundMember);
+    
+    this.observerservice.sendMember(foundMember);
     this.globalservice.memberListOpen = false;
   }
 

@@ -381,13 +381,13 @@ export class SingletaskComponent {
   }
 
 
-  removeEmptySubtasks(){
+  removeEmptySubtasks() {
     const subtasks = this.subtasks
     console.log(subtasks);
-   
+
     for (let index = 0; index < subtasks.length; index++) {
       const subtask = subtasks[index];
-      if (subtask.text ==='') {
+      if (subtask.text === '') {
         subtasks.splice(index, 1);
       }
     }
@@ -474,11 +474,13 @@ export class SingletaskComponent {
   }
 
   updateAssignee() {
+  
+    const id = this.newAssignee.user
     const data = {
-      assignee: this.newAssignee.id
+      assignee: id
     }
-    console.log(data);
 
+ 
     this.updateTask(data, 'assignee');
     this.assigneeChangeOpen = false;
   }
@@ -492,7 +494,7 @@ export class SingletaskComponent {
   saveTaskTemplate() {
     const subtasks = this.saveSubtasks();
     console.log(subtasks);
-    
+
     const template = {
       title: this.task.title,
       description: this.task.description,

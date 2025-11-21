@@ -27,7 +27,7 @@ export class LoginComponent {
 
 
   onSubmit(data: any) {
-    this.apiservice.postData('login/', this.loginData).subscribe({
+    this.apiservice.postData('login/', this.loginData, false).subscribe({
       next: (response) => {
         console.log('user login was successful', response)
         Object.entries({

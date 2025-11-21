@@ -16,7 +16,7 @@ import { AdminpanelComponent } from './adminpanel/adminpanel.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
-    { path: 'registration', component: RegistrationComponent },
+    // { path: 'registration', component: RegistrationComponent },
     { path: 'set-password/:uidb64/:token', component: SetpasswordComponent },
     {
         path: 'main', component: MainComponent, children: [

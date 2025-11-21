@@ -40,7 +40,7 @@ export class AdminpanelComponent {
   }
 
   sendResetEmail() {
-    const uid = this.currentMember.user
+    const uid = this.currentMember.id
     const requestData = {
       user_id: uid
     }

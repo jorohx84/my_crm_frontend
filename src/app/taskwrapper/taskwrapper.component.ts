@@ -75,7 +75,11 @@ export class TaskwrapperComponent {
     this.observerservice.memberSubject$.subscribe((member) => {
       if (member) {
         this.member = member;
-        this.task.assignee = member.id
+        const id = member.user 
+        this.task.assignee = id
+        console.log(member);
+        console.log(id);
+        
         this.noMember = false
       }
     });

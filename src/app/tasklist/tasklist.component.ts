@@ -60,6 +60,8 @@ export class TasklistComponent {
     this.apiservice.getData(`tasks/${id}/${filter}`).subscribe({
       next: (response) => {
         this.tasks = response;
+        console.log(response);
+        
       }
     })
   }
