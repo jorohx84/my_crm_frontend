@@ -11,13 +11,16 @@ import { SingletaskComponent } from './singletask/singletask.component';
 import { BoardComponent } from './board/board.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { SinglecontactComponent } from './singlecontact/singlecontact.component';
+import { SetpasswordComponent } from './setpassword/setpassword.component';
+import { AdminpanelComponent } from './adminpanel/adminpanel.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
     { path: 'registration', component: RegistrationComponent },
-
+    { path: 'set-password/:uidb64/:token', component: SetpasswordComponent },
     {
         path: 'main', component: MainComponent, children: [
+            {path:'admin', component:AdminpanelComponent},
             { path: 'dashboard', component: DashboardComponent },
             { path: 'customers', component: CustomersComponent },
             {

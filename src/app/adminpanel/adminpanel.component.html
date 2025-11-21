@@ -1,0 +1,33 @@
+<section>
+
+    <div class="regCont">
+        <app-registration></app-registration>
+    </div>
+    <div class="resetPw">
+        <h3>Passwort zurücksetzen</h3>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input type="text" [(ngModel)]="email" placeholder="E-Mail-Adresse eingeben" (change)="findeMember()">
+
+            </div>
+
+            <div *ngIf="isfound===true" class="foundMembers">
+                <div class="foundMembersRow" *ngFor="let member of foundMembers let index=index"
+                    (click)="setCurrentMember(index)">
+                    <img src="./icons/profile.svg" alt="">
+                    <p>{{member.fullname}}</p>
+
+                </div>
+            </div>
+        </div>
+        <div class="confirmCont" *ngIf="currentMember">
+            <p>Passwort für <span>{{currentMember?.fullname}}</span> zurücksetzen?</p>
+            <div class="btnCont">
+                <button (click)="sendResetEmail()">zurücksetzen</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

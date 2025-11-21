@@ -16,7 +16,7 @@ import { UserService } from '../services/user.service';
 export class RegistrationComponent {
   apiservice = inject(APIService);
   dataservice = inject(DataService);
-  userservice=inject(UserService);
+  userservice = inject(UserService);
   router = inject(Router);
   user = new User();
   isSend: boolean = false;
@@ -38,13 +38,12 @@ export class RegistrationComponent {
   onSubmit(data: any) {
     this.isSend = true
     console.log(this.user.tenant);
-    
+
     const registrationData = {
       first_name: this.user.firstname,
       last_name: this.user.lastname,
       email: this.user.email,
-      password: this.user.password,
-      repeated_password: this.user.repeated_password,
+      phone: this.user.phone
     }
 
     console.log(registrationData);
@@ -62,7 +61,7 @@ export class RegistrationComponent {
         // });
         // this.isValid = true
         // this.isSend = false;
-        this.router.navigate(['main', 'dashboard']);
+        // this.router.navigate(['main', 'dashboard']);
       },
       error: (err) => {
         console.error('Error:', err)

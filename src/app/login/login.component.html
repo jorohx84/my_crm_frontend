@@ -5,7 +5,7 @@
     </div>
    
     <div class="loginRegCont">
-        <h2>Anmelden</h2>
+        <h3>Anmelden</h3>
         <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
             <div class="inputCont">
                 <div class="inputfield">
@@ -31,6 +31,7 @@
             <div class="errorTxt">
                 <p *ngIf="!isValid && isSend">E-Mail oder Passwort ungültig</p>
             </div>
+
             <div class="btnCont">
                 <button type="submit" [disabled]="loginForm.invalid">Anmelden</button>
             </div>
