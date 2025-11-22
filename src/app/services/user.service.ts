@@ -56,7 +56,7 @@ export class UserService {
     loadUserData(ID: number) {
 
 
-        this.apiservice.getData(`profile/${ID}/`, false).subscribe({
+        this.apiservice.getData(`users/${ID}/`, false).subscribe({
             next: (response) => {
                 const user = response;
                 this.observservice.observeUser(user);

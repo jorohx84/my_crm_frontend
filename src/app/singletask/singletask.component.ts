@@ -456,7 +456,7 @@ export class SingletaskComponent {
 
   searchMember() {
 
-    this.apiservice.getData(`profile/search/${this.searchValue}`).subscribe({
+    this.apiservice.getData(`users/search/${this.searchValue}`).subscribe({
       next: (response => {
         console.log(response);
 
@@ -468,6 +468,8 @@ export class SingletaskComponent {
 
   setNewAsssigne(index: number) {
     this.newAssignee = this.foundMembers[index];
+    console.log(this.newAssignee);
+    
     this.updateAssignee()
     this.foundMembers = []
     this.searchValue = '';
@@ -475,7 +477,7 @@ export class SingletaskComponent {
 
   updateAssignee() {
   
-    const id = this.newAssignee.user
+    const id = this.newAssignee.id
     const data = {
       assignee: id
     }

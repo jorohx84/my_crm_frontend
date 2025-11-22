@@ -83,6 +83,7 @@ export class SinglecustomerComponent {
     this.apiservice.getData(`customers/${id}/`).subscribe({
       next: (response) => {
         this.customer = response;
+console.log(response);
 
       }
     })

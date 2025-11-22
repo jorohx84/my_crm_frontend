@@ -25,7 +25,7 @@ export class MemberlistComponent {
   }
 
   loadUsers() {
-    this.apiservice.getData('profile/').subscribe({
+    this.apiservice.getData('users/').subscribe({
       next: (response) => {
         this.members = response;
         this.allMembers = response;

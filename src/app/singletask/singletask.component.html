@@ -126,7 +126,7 @@
 
                     </div>
 
-                    <p class="infoText">{{task.assignee?.fullname}}</p>
+                    <p class="infoText">{{task.assignee?.profile.fullname}}</p>
                 </div>
                 <div class="infoTab">
                     <div class="tabName">
@@ -256,6 +256,8 @@
                 </div>
 
             </div>
+
+            <!-- comments -->
             <div *ngIf="sidebarKey==='comments'" class="commentCont">
 
                 <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
@@ -267,7 +269,7 @@
                 <div class="" *ngFor="let comment of sortedComments, let index=index">
                     <div class="commentsRow">
                         <div class="commentInfo">
-                            <h4>{{comment.creator.fullname}}</h4>
+                            <h4>{{comment.creator.profile.fullname}}</h4>
                             <p *ngIf="globalservice.isToday(comment.created_at); else showDate">{{comment.created_at |
                                 date: 'HH:mm'}} Uhr</p>
                             <ng-template #showDate>{{comment.created_at | date: 'dd.MM.yy : HH:mm'}} Uhr</ng-template>
@@ -288,6 +290,8 @@
 
             </div>
 
+            <!-- history -->
+
             <div *ngIf="sidebarKey==='logs'" class="sidebarList">
 
                 <div *ngFor="let log of logBook">
@@ -296,7 +300,7 @@
                         <div class="divider"></div>
                         <h4>{{log.log}}</h4>
                         <p>{{log.new_state}}</p>
-                        <p>Änderung durch: {{log.updated_by.fullname}}</p>
+                        <p>Änderung durch: {{log.updated_by.profile.fullname}}</p>
                     </div>
 
 

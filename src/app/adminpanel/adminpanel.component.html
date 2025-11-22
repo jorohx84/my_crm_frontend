@@ -15,13 +15,13 @@
                 <div class="foundMembersRow" *ngFor="let member of foundMembers let index=index"
                     (click)="setCurrentMember(index)">
                     <img src="./icons/profile.svg" alt="">
-                    <p>{{member.fullname}}</p>
+                    <p>{{member.profile.fullname}}</p>
 
                 </div>
             </div>
         </div>
         <div class="confirmCont" *ngIf="currentMember">
-            <p>Passwort für <span>{{currentMember?.fullname}}</span> zurücksetzen?</p>
+            <p>Passwort für <span>{{currentMember?.profile.fullname}}</span> zurücksetzen?</p>
             <div class="btnCont">
                 <button (click)="sendResetEmail()">zurücksetzen</button>
             </div>

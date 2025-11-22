@@ -21,7 +21,7 @@ export class AdminpanelComponent {
   isfound: boolean = false;
   findeMember() {
     console.log(this.email);
-    this.apiservice.getData(`email-check/${this.email}`).subscribe({
+    this.apiservice.getData(`users/email-check/${this.email}`).subscribe({
       next: (response) => {
         console.log(response);
         this.foundMembers = response;
@@ -33,6 +33,7 @@ export class AdminpanelComponent {
   setCurrentMember(index: number) {
     const member = this.foundMembers[index];
     this.currentMember = member;
+console.log(this.currentMember);
 
 
 
