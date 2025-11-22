@@ -24,6 +24,7 @@ section {
     border: solid 0.5px var(--border);
     border-radius: 4px;
     padding: 32px;
+
 }
 
 .foundMembers {
@@ -69,4 +70,14 @@ section {
             color: var(--border);
         }
     }
+}
+
+.updateFields{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.gap{
+    gap: 16px;
 }

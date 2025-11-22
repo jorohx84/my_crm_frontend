@@ -1,6 +1,6 @@
 <section>
     <div class="infocont">
-        <div class="contactHeader">
+        <!-- <div class="contactHeader">
 
             <div class="ContactTitleCont">
                 <div class="contactTitle">
@@ -9,7 +9,7 @@
                     <input type="text" [(ngModel)]="contact.position" (change)="updateContact('position')">
 
                 </div>
-           
+
             </div>
 
 
@@ -18,89 +18,104 @@
 
 
             <div class="menubar">
-                <div class="tabs">
-                    <div class="tab" (click)="changeTab('infos')" [ngClass]="{'tabActive': tabKey==='infos'}">
-                        <p>Information</p>
-                    </div>
-                    <div class="tab" (click)="changeTab('activities')" [ngClass]="{'tabActive': tabKey==='activities'}">
-                        <p>Aktivitäten</p>
-                    </div>
+
+                <div class="actionBtns">
+                    <a href=""><img src="./icons/phone.svg" alt=""></a>
+                    <a href=""><img src="./icons/mail.svg" alt=""></a>
                 </div>
 
                 <div (click)="openActivityForm()" class="addBtn"><img src="./icons/add.svg" alt="">Aktivität</div>
-           
-                    
+
+
                 <div class="closeBtn" (click)="backToContactList()">
                     <img src="./icons/back.svg" alt="">
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 
     <div class="divider"></div>
-
-    <!-- Infos -->
-    <div class="contactInfos" *ngIf="tabKey==='infos'">
+    <div class="contactCont">
 
 
-        <div class="infocont">
-            <h4>Abteilung</h4>
-            <input type="text" [(ngModel)]="contact.department" (change)="updateContact('department')">
-        </div>
+        <!-- Infos -->
+        <div class="contactInfos">
+            <div class="contactTitle">
+                <input class="title" name="name" type="text" [(ngModel)]="contact.name"
+                    (change)="updateContact('name')">
+                <input type="text" [(ngModel)]="contact.position" (change)="updateContact('position')">
 
-
-        <div class="infocont">
-            <h4>Funktion</h4>
-            <input type="text" [(ngModel)]="contact.function" (change)="updateContact('function')">
-        </div>
-
-        <div class="infocont">
-            <h4>Kontaktdaten</h4>
-
-            <div class="contact">
-                <img src="./icons/mail.svg" alt="">
-                <input type="text" [(ngModel)]="contact.email" (change)="updateContact('email')">
+            </div>
+            <div class="actionBtns">
+                <a href=""><img src="./icons/phone.svg" alt=""></a>
+                <a href=""><img src="./icons/mail.svg" alt=""></a>
             </div>
 
-            <div class="contact">
-                <img src="./icons/phone.svg" alt="">
-                <input type="text" [(ngModel)]="contact.phone" (change)="updateContact('phone')">
+            <div class="infocont">
+                <h4>Abteilung</h4>
+                <input type="text" [(ngModel)]="contact.department" (change)="updateContact('department')">
             </div>
 
-        </div>
-        <div class="newsletter">
-            <div class="checkbox" (click)="updateContact('newsletter_opt_in')">
-                <img *ngIf="contact.newsletter_opt_in" src="./icons/done.svg" alt="">
-            </div>
-            <p>Newsletter</p>
-        </div>
-        <textarea name="" id="" placeholder="Notizen" [(ngModel)]="contact.notes"
-            (change)="updateContact('notes')"></textarea>
-        <p>Erstellt von: {{contact?.created_by.profile.fullname}}</p>
-    </div>
-    <!-- Activities -->
-    <div class="activityListCont" *ngIf="tabKey==='activities'">
-        <div class="activityListHeadline">
-            <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
-        </div>
-        <div class="divider"></div>
-        <div class="activityList">
-            <div class="listrow" *ngFor="let activity of activities let index=index">
 
-                <div class="typeCont">
-                    <img [src]="types[activity.type].path" alt="">
-                    <p>{{types[activity.type].label}}</p>
+            <div class="infocont">
+                <h4>Funktion</h4>
+                <input type="text" [(ngModel)]="contact.function" (change)="updateContact('function')">
+            </div>
+
+            <div class="infocont">
+                <h4>Kontaktdaten</h4>
+
+                <div class="contact">
+                    <img src="./icons/mail.svg" alt="">
+                    <input type="text" [(ngModel)]="contact.email" (change)="updateContact('email')">
                 </div>
-                <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
 
-                <p>{{activity?.description}}</p>
-                <p>{{activity?.user.profile.fullname}}</p>
+                <div class="contact">
+                    <img src="./icons/phone.svg" alt="">
+                    <input type="text" [(ngModel)]="contact.phone" (change)="updateContact('phone')">
+                </div>
 
+            </div>
+            <div class="newsletter">
+                <div class="checkbox" (click)="updateContact('newsletter_opt_in')">
+                    <img *ngIf="contact.newsletter_opt_in" src="./icons/done.svg" alt="">
+                </div>
+                <p>Newsletter</p>
+            </div>
+            <textarea name="" id="" placeholder="Notizen" [(ngModel)]="contact.notes"
+                (change)="updateContact('notes')"></textarea>
+            <p>Erstellt von: {{contact?.created_by?.profile?.fullname}}</p>
+        </div>
+        <!-- Activities -->
+        <div class="activityListCont">
+
+
+            <div class="menubar">
+                <h3>Aktivitäten</h3>
+                <img (click)="openActivityForm()" src="./icons/add.svg" alt="">
+            </div>
+            <div class="divider"></div>
+            <div class="activityListHeadline">
+                <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
+            </div>
+            <div class="divider"></div>
+            <div class="activityList">
+                <div class="listrow" *ngFor="let activity of activities let index=index">
+
+                    <div class="typeCont">
+                        <img [src]="types[activity.type].path" alt="">
+                        <p>{{types[activity.type].label}}</p>
+                    </div>
+                    <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
+
+                    <p>{{activity?.description}}</p>
+                    <p>{{activity?.user?.profile.fullname}}</p>
+
+                </div>
             </div>
         </div>
     </div>
-
     <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen===true}">
         <app-activitywrapper></app-activitywrapper>
     </div>
