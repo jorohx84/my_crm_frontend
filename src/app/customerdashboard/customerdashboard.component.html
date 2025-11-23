@@ -1,0 +1,52 @@
+
+<section>
+
+    <div class="customerProfile ">
+
+        <div class="customeInfos">
+
+            <div class="adressCont">
+                <h4>Postanschrift</h4>
+                <input (change)="updateCustomer()" name="street" placeholder="Straße" [(ngModel)]="customer.street"
+                    type="text">
+                <div class="cityCont">
+                    <input (change)="updateCustomer()" name="areacode" [(ngModel)]="customer.areacode" type="text">
+                    <input (change)="updateCustomer()" name="city" [(ngModel)]="customer.city" type="text">
+                </div>
+            </div>
+            <div class="contactCont">
+                <h4>Kontaktdaten</h4>
+                <div class="contactData">
+                    <img src="./icons/mail.svg" alt="">
+                    <input (change)="updateCustomer()" name="email" [(ngModel)]="customer.email" type="text">
+
+                </div>
+                <div class="contactData">
+                    <img src="./icons/phone.svg" alt="">
+                    <input (change)="updateCustomer()" name="phone" [(ngModel)]="customer.phone" type="text">
+
+                </div>
+
+            </div>
+            <div class="textFieldCont">
+                <h4>Beschreibung</h4>
+                <textarea (change)="updateCustomer()" [(ngModel)]="customer.description" name="" id=""></textarea>
+            </div>
+            <div class="textFieldCont">
+                <h4>Notizen</h4>
+                <textarea (change)="updateCustomer()" [(ngModel)]="customer.notes" name="" id=""></textarea>
+            </div>
+            <div class="informationCont">
+                <h4>Information:</h4>
+                <p>erstellt von: {{customer?.creator}} am {{customer?.created_at | date: 'dd.MM.yyyy : HH:mm'}}
+                    Uhr
+                </p>
+                <p *ngIf="customer.editor">zuletzt geändert durch {{customer?.editor}} am {{customer?.updated_at
+                    |
+                    date: 'dd.MM.yyyy: HH:mm'}} Uhr </p>
+            </div>
+
+        </div>
+    </div>
+
+</section>

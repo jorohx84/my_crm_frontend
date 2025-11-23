@@ -168,12 +168,20 @@ section {
     }
 }
 
+.contactBoard{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  padding: 24px;
+}
+
 .activityListCont {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 24px;
+  
 }
 
 .activityListHeadline {
@@ -195,7 +203,7 @@ section {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
 }
 
 

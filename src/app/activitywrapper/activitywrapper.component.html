@@ -25,6 +25,14 @@
             </div>
 
         </div>
+        <div *ngIf="!globalservice.isSingleContact" class="contactChoice">
+            <button (click)="openContactList()">Kontakt wählen</button>
+            <div *ngIf="contact" class="currentContact">
+                <img src="./icons/contactprofile.svg" alt="">
+                <p>{{contact?.name}}</p>
+            </div>
+        </div>
+
 
         <form #createActivityForm="ngForm" (ngSubmit)="createActivity(createActivityForm)">
 
@@ -53,5 +61,25 @@
                 <button type="submit">Speichern</button>
             </div>
         </form>
+    </div>
+
+    <div class="contactListWrapper slideOut" [ngClass]="{'slideIn': contactListOpen===true}">
+        <h3>Kontaktliste</h3>
+        <div class="divider"></div>
+        <div class="inputfield">
+            <input type="text" placeholder="Name oder E-Mail-Adresse">
+            <img src="./icons/search.svg" alt="">
+        </div>
+        <div class="contactList">
+            <div class="contactListRow" *ngFor="let contact of contacts, let index=index" (click)="setContact(index)">
+                <img src="./icons/contactprofile.svg" alt="">
+                <div class="contactInfos">
+                    <p>{{contact.name}}</p>
+                    <p>{{contact.email}}</p>
+                </div>
+
+            </div>
+
+        </div>
     </div>
 </section>

@@ -1,0 +1,56 @@
+section{
+    height: calc(100vh - 190px);
+}
+.customerProfile {
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    display: flex;
+    gap: 32px;
+    padding: 32px;
+    border-right: solid 0.5px var(--border);
+    input {
+        width: 300px;
+        border: solid 0.5px white;
+        &:focus {
+            border: solid 0.5px var(--border);
+            border-radius: 4px;
+
+        }
+        &:hover {
+            border: solid 0.5px var(--border);
+            border-radius: 4px;
+        }
+    }
+
+}
+
+.customeInfos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 32px;
+}
+
+.contactCont {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contactData {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    >img {
+        width: 20px;
+    }
+}
+
+.adressCont {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}

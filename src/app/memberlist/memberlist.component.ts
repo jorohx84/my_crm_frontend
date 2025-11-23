@@ -28,9 +28,7 @@ export class MemberlistComponent {
     this.apiservice.getData('users/').subscribe({
       next: (response) => {
         this.members = response;
-        this.allMembers = response;
-        console.log(response);
-        
+        this.allMembers = response;  
       },
       error: (err) => console.log(err),
 
@@ -38,9 +36,7 @@ export class MemberlistComponent {
   }
 
   sendUserdata(index: number) {
-    const foundMember = this.members[index];
-    console.log(foundMember);
-    
+    const foundMember = this.members[index];    
     this.observerservice.sendMember(foundMember);
     this.globalservice.memberListOpen = false;
   }
@@ -50,7 +46,6 @@ export class MemberlistComponent {
   searchUser() {
     if (this.searchValue.length > 0) {
       this.isSearch = true;
-
       const searchedUsers: any[] = [];
       for (let index = 0; index < this.allMembers.length; index++) {
         const user = this.allMembers[index];

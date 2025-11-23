@@ -50,23 +50,17 @@ export class HeaderComponent {
   loadUser() {
     this.userservice.getUser().subscribe((user) => {
       if (user) {
-        this.user = user;
-        console.log(user);
-        
+        this.user = user;    
         this.loadCount()
       }
 
     });
   }
 
-
-
-
+  
   globalSearch() {
     this.apiservice.getData(`search/${this.searchInput}`).subscribe({
       next: (response) => {
-        console.log(response);
-        
         this.searchInput = '';
         this.observservice.sendSearch(response);
         this.globalservice.searchWrapperOpen = true;

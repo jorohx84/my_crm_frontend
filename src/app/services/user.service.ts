@@ -14,28 +14,7 @@ export class UserService {
     dataservice = inject(DataService);
     observservice = inject(ObservableService);
     router = inject(Router);
-    emptyCustomer: any = {
-        companyname: '',
-        street: '',
-        areacode: '',
-        city: '',
-        country: '',
-        email: '',
-        phone: '',
-        website: '',
-        branch: '',
-        isActiv: false,
-        created_at: '',
-        lastContact: '',
-        assignedTo: 0,
-        notes: '',
-        revenue: 0,
-        paymentTerms: '',
-        insideSales: null,
-        outsideSales: null,
-        created_by: null,
-        updated_at: ''
-    }
+
 
 
     /**

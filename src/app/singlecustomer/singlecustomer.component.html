@@ -15,10 +15,10 @@
         </div>
 
         <div class="navBtns">
-            <div (click)="changeFolder('orders')">
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'dashboard'])">
                 <h4>Dashboard</h4>
             </div>
-            <div (click)="changeFolder('activities')">
+            <div>
                 <h4>Aktivitäten</h4>
             </div>
             <div
@@ -33,26 +33,30 @@
 
                 <h4>Aufgaben</h4>
             </div>
-            <div (click)="changeFolder('orders')">
+            <div>
                 <h4>Aufträge</h4>
             </div>
         </div>
         <div class="actionBtns">
-            <div *ngIf="!isEdit" class="menuBtn"
-                (click)="globalservice.taskWrapperOpen=true; globalservice.isSubtaskWrapper=false;">
+            <div *ngIf="!isEdit" class="menuBtn" (click)="globalservice.taskWrapperOpen=true;">
                 <img src=" ./icons/tasks.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn">
-                <img (click)="globalservice.contactWrapperOpen=!globalservice.contactWrapperOpen" src=" ./icons/contact.svg" alt="">
+                <img (click)="globalservice.contactWrapperOpen=!globalservice.contactWrapperOpen"
+                    src=" ./icons/contact.svg" alt="">
             </div>
-           
+            <div *ngIf="!isEdit" class="menuBtn">
+                <img (click)="openActivityForm()"
+                    src=" ./icons/activity.svg" alt="">
+            </div>
+
         </div>
     </div>
     <div class="divider"></div>
     <div class="customerFile">
 
         <!-- CUSTOMER -->
-        <div class="customerProfile">
+        <div class="customerProfile ">
 
             <div class="customeInfos">
 
@@ -99,7 +103,7 @@
 
             </div>
         </div>
-        <!-- <div class="verticaldivider"></div> -->
+
 
         <!-- BOARD -->
         <div class="customerBoard">
@@ -107,13 +111,17 @@
             <router-outlet></router-outlet>
 
 
-    <div class="formWrapper slideOut " [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
-        <app-taskwrapper></app-taskwrapper>
-    </div>
+            <div class="formWrapper slideOut " [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
+                <app-taskwrapper></app-taskwrapper>
+            </div>
 
-    <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
-        <app-contactwrapper></app-contactwrapper>
-    </div>
+            <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
+                <app-contactwrapper></app-contactwrapper>
+            </div>
+            <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen}">
+             <app-activitywrapper></app-activitywrapper>
+            </div>
+
         </div>
 
 

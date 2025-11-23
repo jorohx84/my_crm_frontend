@@ -23,7 +23,7 @@ export class CustomersComponent {
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
   isOpen: boolean = false;
-  customer = this.userservice.emptyCustomer;
+  customer = this.dataservice.emptyCustomer;
   user: any;
   customers: any[] = [];
   allCustomers: any[] = [];
@@ -181,7 +181,7 @@ export class CustomersComponent {
 
   openCustomerFile(index: number) {
     const customer = this.customers[index];
-    this.globalservice.navigateToPath(['main', 'singlecustomer', customer.id], { sidebarOpen: true })
+    this.globalservice.navigateToPath(['main', 'singlecustomer', customer.id, 'dashboard'])
 
   }
 }

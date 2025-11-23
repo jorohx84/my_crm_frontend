@@ -84,9 +84,6 @@ export class SinglecontactComponent {
   subscribeActivity() {
     this.observerservice.activtySubject$.subscribe((activityData) => {
       if (activityData) {
-        console.log('Hallo');
-        console.log(this.contact.id);
-
         this.loadActivities(this.contact.id)
       }
 
@@ -105,8 +102,6 @@ export class SinglecontactComponent {
       const id = param.get('contact_id')
       if (id) {
         this.contactID = id
-        console.log(id);
-
         this.loadContact(id);
         // this.tabKey = 'infos';
       }
@@ -117,7 +112,6 @@ export class SinglecontactComponent {
   loadContact(id: string) {
     this.apiservice.getData(`contact/${id}`).subscribe({
       next: (response) => {
-        console.log(response);
         this.contact = response;
         this.loadActivities(response.id)
       }
@@ -127,7 +121,6 @@ export class SinglecontactComponent {
   loadActivities(id: string) {
     this.apiservice.getData(`activities/${id}`).subscribe({
       next: (response) => {
-        console.log(response);
         this.activities = response.sort((a:any, b:any)=> new Date(b.date).getTime() - new Date(a.date).getTime());
       }
     })
@@ -143,7 +136,6 @@ export class SinglecontactComponent {
     }
     this.apiservice.patchData(`contact/${this.contactID}/`, data).subscribe({
       next: (response) => {
-        console.log(response);
         this.observerservice.sendContact(response); // entfernen falls die Kontaktliste separierte wird
       }
     });
@@ -157,13 +149,11 @@ export class SinglecontactComponent {
 
 
   openActivityForm() {
-    console.log(this.contact);
     this.observerservice.sendContact(this.contact);
     this.globalservice.activityWrapperOpen = true
   }
 
   backToContactList() {
-    console.log(this.contact.customer);
     const customerID = this.contact.customer;
     this.globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'contacts']);
   }

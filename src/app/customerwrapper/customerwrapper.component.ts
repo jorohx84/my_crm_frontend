@@ -19,7 +19,7 @@ export class CustomerwrapperComponent {
   dataservice = inject(DataService);
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
-  customer = this.userservice.emptyCustomer;
+  customer = this.dataservice.emptyCustomer;
   isValid: boolean = false;
   isSend: boolean = false;
 

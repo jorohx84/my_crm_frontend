@@ -52,10 +52,10 @@
         <div class="taskInfoCont">
 
             <!-- StatusLins -->
-            <div class="stateLine">
-                <!-- <h4>Status</h4> -->
 
-                <div class="progressLineCont">
+            <!-- <div class="stateLine">
+
+                 <div class="progressLineCont">
                     <div class="progressDot activeDot" [ngClass]="{'activeDot': task?.state ==='undone'}">
                         <p>unbearbeitet</p>
                     </div>
@@ -74,11 +74,10 @@
                     <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='closed'}">
                         <p>Geschlossen</p>
                     </div>
-                    <!-- <div class="progressLineInner" [style.width.%]=linewidth></div>
-                    <div class="progressLine"></div> -->
-                </div>
+              
+                </div> 
 
-            </div>
+            </div> -->
 
             <!-- Infos -->
             <div class="infoRow">
@@ -195,6 +194,10 @@
                         </div>
 
                     </div>
+                </div>
+                    <div class="infoTab">
+                    <p>Status:</p>
+               <p>{{globalservice.interpretation['state'][task.state]}}</p>
                 </div>
             </div>
 

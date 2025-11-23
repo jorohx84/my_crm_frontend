@@ -35,7 +35,7 @@
 
     </div>
 
-    <div class="divider"></div>
+    <!-- <div class="divider"></div> -->
     <div class="contactCont">
 
 
@@ -88,35 +88,37 @@
             <p>Erstellt von: {{contact?.created_by?.profile?.fullname}}</p>
         </div>
         <!-- Activities -->
-        <div class="activityListCont">
+
+        <div class="contactBoard">
+
+            <h3>Aktivitäten</h3>
+
+            <!-- <div class="divider"></div> -->
+            <div class="activityListCont">
 
 
-            <div class="menubar">
-                <h3>Aktivitäten</h3>
-                <img (click)="openActivityForm()" src="./icons/add.svg" alt="">
-            </div>
-            <div class="divider"></div>
-            <div class="activityListHeadline">
-                <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
-            </div>
-            <div class="divider"></div>
-            <div class="activityList">
-                <div class="listrow" *ngFor="let activity of activities let index=index">
+                <div class="activityListHeadline">
+                    <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
+                </div>
+                <div class="divider"></div>
+                <div class="activityList">
+                    <div class="listrow" *ngFor="let activity of activities let index=index">
 
-                    <div class="typeCont">
-                        <img [src]="types[activity.type].path" alt="">
-                        <p>{{types[activity.type].label}}</p>
+                        <div class="typeCont">
+                            <img [src]="types[activity.type].path" alt="">
+                            <p>{{types[activity.type].label}}</p>
+                        </div>
+                        <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
+
+                        <p>{{activity?.description}}</p>
+                        <p>{{activity?.user?.profile.fullname}}</p>
+
                     </div>
-                    <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
-
-                    <p>{{activity?.description}}</p>
-                    <p>{{activity?.user?.profile.fullname}}</p>
-
                 </div>
             </div>
         </div>
     </div>
-    <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen===true}">
+    <!-- <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen===true}">
         <app-activitywrapper></app-activitywrapper>
-    </div>
+    </div> -->
 </section>

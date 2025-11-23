@@ -23,6 +23,7 @@ export class GlobalService {
     searchWrapperOpen: boolean = false;
     contactWrapperOpen: boolean = false;
     activityWrapperOpen: boolean = false;
+    isSingleContact: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
@@ -61,15 +62,11 @@ export class GlobalService {
 
     constructor() {
         this.sidebarOpen = this.dataservice.getDataFromLocalStorage('sidebarOpen')
-        console.log(this.sidebarOpen);
-
     }
 
 
     toggleSidebar(state: boolean) {
         this.sidebarOpen = state;
-        console.log(state);
-
         this.dataservice.saveDataToLocalStorage('sidebarOpen', state);
     }
 
@@ -93,14 +90,9 @@ export class GlobalService {
 
 
     saveLog(objKey: string, task: any, variableObj: any = null) {
-        console.log(objKey);
         const logData = this.createLog(objKey, task, variableObj);
-        console.log(logData);
-
         this.apiservice.postData('task/logs/', logData).subscribe({
             next: (response) => {
-                console.log(response);
-
             }
         })
     }
@@ -142,23 +134,34 @@ export class GlobalService {
 
 
     countSubtasksDone(index: number, tasksList: any[], countKey: string) {
-    const tasks = tasksList;
-    
-    const task = tasks[index]
-    let count = 0;
-    for (let index = 0; index < task.subtasks.length; index++) {
-      const check = task.subtasks[index];
-      if (check.is_checked) {
-        count++;
-      }
-    }
-    const percentage = (count / task.subtasks.length) * 100
-    if (countKey === 'percentage') {
-      return percentage
-    } else {
-      return count
+        const tasks = tasksList;
+
+        const task = tasks[index]
+        let count = 0;
+        for (let index = 0; index < task.subtasks.length; index++) {
+            const check = task.subtasks[index];
+            if (check.is_checked) {
+                count++;
+            }
+        }
+        const percentage = (count / task.subtasks.length) * 100
+        if (countKey === 'percentage') {
+            return percentage
+        } else {
+            return count
+        }
+
+
     }
 
 
-  }
+    checkURL() {
+        if (this.router.url.includes('singlecontact')) {
+            this.isSingleContact = true;
+
+        } else {
+            this.isSingleContact = false;
+
+        }
+    }
 }

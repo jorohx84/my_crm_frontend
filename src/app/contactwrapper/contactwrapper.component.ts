@@ -58,8 +58,10 @@ export class ContactwrapperComponent {
     this.apiservice.postData('contacts/', data).subscribe({
       next: (response) => {
         console.log(response);
+        const contactId=response.id
         this.observerservice.sendContact(response);
         this.resetFrom(form)
+        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerId, 'singlecontact', contactId])
       }
     })
 
