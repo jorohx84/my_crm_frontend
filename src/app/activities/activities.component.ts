@@ -112,37 +112,37 @@ export class ActivitiesComponent {
 
 
 
-  loadCustomerActivities(id: string) {
-    console.log('Kunde');
+  // loadCustomerActivities(id: string) {
+  //   console.log('Kunde');
 
-    this.apiservice.getData(`activities/customer/${id}/`).subscribe({
-      next: (response) => {
-        console.log(response);
-        const list = this.sortList(response);
-        this.activities = list;
-        this.allActivities = list;
-      }
-    })
+  //   this.apiservice.getData(`activities/customer/${id}/`).subscribe({
+  //     next: (response) => {
+  //       console.log(response);
+  //       const list = this.sortList(response);
+  //       this.activities = list;
+  //       this.allActivities = list;
+  //     }
+  //   })
 
-  }
+  // }
 
   sortList(list: any[]) {
     return list.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
-  loadContactActivities(id: string) {
-    console.log('Kontakt');
+  // loadContactActivities(id: string) {
+  //   console.log('Kontakt');
 
-    this.apiservice.getData(`activities/contact/${id}/`).subscribe({
-      next: (response) => {
-        console.log(response);
-        const list = this.sortList(response);
-        this.activities = list;
-        this.allActivities = list;
-      }
-    })
+  //   this.apiservice.getData(`activities/contact/${id}/`).subscribe({
+  //     next: (response) => {
+  //       console.log(response);
+  //       const list = this.sortList(response);
+  //       this.activities = list;
+  //       this.allActivities = list;
+  //     }
+  //   })
 
-  }
+  // }
 
 
   searchInActivities() {
