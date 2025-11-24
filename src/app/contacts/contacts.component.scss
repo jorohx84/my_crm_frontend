@@ -1,68 +1,67 @@
-section {
-    width: 100%;
-    height: calc(100vh - 178px);
-    display: flex;
-    flex-direction: column;
-    // gap: 24px;
-    // padding: 24px;
-}
+// section {
+//     width: 100%;
+//     height: calc(100vh - 178px);
+//     display: flex;
+//     flex-direction: column;
+//     // gap: 24px;
+//     // padding: 24px;
+// }
 
 
-.contactsHeader {
-    width: 100%;
-    height: 100px;
-    display: flex;
-    justify-content: space-between;
-    padding: 32px 24px;
-}
+// .contactsHeader {
+//     width: 100%;
+//     height: 100px;
+//     display: flex;
+//     justify-content: space-between;
+//     padding: 32px 24px;
+// }
 
-.menubar {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 24px;
+// .menubar {
+//     width: 100%;
+//     display: flex;
+//     justify-content: flex-end;
+//     align-items: center;
+//     gap: 24px;
 
-    >img {
-        width: 24px;
-    }
+//     >img {
+//         width: 24px;
+//     }
 
-    .inputfield {
-        min-height: unset;
-        height: 30px;
-        max-width: 400px;
-    }
-}
+//     .inputfield {
+//         min-height: unset;
+//         height: 30px;
+//         max-width: 400px;
+//     }
+// }
 
-.contactCont {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    // gap: 24px;
-}
-
-
-
-.contactList {
-    width: 100%;
-    // max-width: 500px;
-    height: calc(100vh - 290px);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding: 24px;
+// .contactCont {
+//     width: 100%;
+//     height: 100%;
+//     display: flex;
+//     // gap: 24px;
+// }
 
 
-}
 
-.listCont {
-    width: 100%;
+// .contactList {
+//     width: 100%;
+//     height: calc(100vh - 290px);
+//     display: flex;
+//     flex-direction: column;
+//     gap: 12px;
+//     padding: 24px;
 
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow-y: scroll;
-}
+
+// }
+
+// .listCont {
+//     width: 100%;
+
+//     display: flex;
+//     flex-direction: column;
+//     gap: 8px;
+//     overflow-y: scroll;
+// }
 
 // .contactCard {
 //     display: flex;
@@ -128,46 +127,42 @@ section {
 //     }
 // }
 
-.listHeadline {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 16px;
+// .listHeadline {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+//     padding: 0 16px;
 
-    >p {
-        width: 100%;
-    }
-}
+//     >p {
+//         width: 100%;
+//     }
+// }
 
-.contactListRow {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--box-light);
-    padding: 16px;
-    border-radius: 4px;
-    cursor: pointer;
+// .contactListRow {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+//     background-color: var(--box-light);
+//     padding: 16px;
+//     border-radius: 4px;
+//     cursor: pointer;
 
-    >p {
-        width: 100%;
-    }
+//     >p {
+//         width: 100%;
+//     }
 
-    &:hover {
-        background-color: var(--listrow-hover);
+//     &:hover {
+//         background-color: var(--listrow-hover);
 
-    }
-}
-
-.singleContactCont {
-    width: 100%;
-    height: 100%;
-
-}
+//     }
+// }
 
 
 
-@media(max-width: 1600px) {
-    .contactList {
-        max-width: 380px;
-    }
-}
+
+
+// @media(max-width: 1600px) {
+//     .contactList {
+//         max-width: 380px;
+//     }
+// }

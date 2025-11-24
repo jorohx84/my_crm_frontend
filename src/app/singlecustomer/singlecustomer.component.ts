@@ -4,17 +4,14 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { APIService } from '../services/api.service';
 import { FormsModule } from '@angular/forms';
-import { Customer } from '../models/customer.models';
 import { UserService } from '../services/user.service';
-import { response } from 'express';
 import { ObservableService } from '../services/observable.service';
-import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 import { DataService } from '../services/data.service';
-import { TasklistComponent } from '../tasklist/tasklist.component';
 import { RouterOutlet } from '@angular/router';
 import { ContactwrapperComponent } from '../contactwrapper/contactwrapper.component';
 import { ActivitywrapperComponent } from '../activitywrapper/activitywrapper.component';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-singlecustomer',
   imports: [CommonModule, FormsModule, TaskwrapperComponent, ContactwrapperComponent, ActivitywrapperComponent, RouterOutlet],
@@ -38,23 +35,33 @@ export class SinglecustomerComponent {
   user: any;
   member: any;
   noMember: boolean = false;
-
+  private destroy$ = new Subject<void>();
   folder: string = '';
 
   ngOnInit() {
     this.globalservice.toggleSidebar(true);
+    this.loadCustomerFromURL();
+  }
 
-    this.route.paramMap.subscribe(params => {
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadCustomerFromURL() {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('customer_id');
       this.customerID = id
       if (id) {
         this.loadCustomer(id)
-      
+
       }
 
     });
 
   }
+
+
 
   toggleEditMode() {
     this.isEdit = !this.isEdit
@@ -119,15 +126,12 @@ export class SinglecustomerComponent {
 
 
   openActivityForm() {
-    this.globalservice.checkURL();
-    if (this.globalservice.isSingleContact) {
-      this.getContactId();
-    }
+    this.getContactId();
     this.globalservice.activityWrapperOpen = !this.globalservice.activityWrapperOpen
   }
 
   getContactId() {
-    this.route.firstChild?.paramMap.subscribe((param) => {
+    this.route.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('contact_id');
       this.observerservice.sendContact(id);
     })

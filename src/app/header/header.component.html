@@ -15,7 +15,7 @@
 
                 <p>Aufgaben</p>
             </div>
-               <div class="navlink" (click)="globalservice.navigateToPath(['main', 'admin'])">
+            <div *ngIf="user?.is_staff===true" class="navlink" (click)="globalservice.navigateToPath(['main', 'admin'])">
 
                 <p>Adminbereich</p>
             </div>
@@ -34,12 +34,12 @@
         </div>
 
         <p>{{user?.profile.fullname}}</p>
-       
+
         <div class="date">
             <p>{{date | date: 'HH:mm'}} Uhr</p>
             <!-- <p>{{date | date: 'dd.MM.yyyy'}}</p> -->
         </div>
- <img (click)="logoutUser()" src="./icons/logout.svg" alt="">
+        <img (click)="logoutUser()" src="./icons/logout.svg" alt="">
     </div>
     <div class="messageWrapper slideOut" [ngClass]="{'slideIn': globalservice.messageWrapperOpen}">
         <app-messagewrapper></app-messagewrapper>

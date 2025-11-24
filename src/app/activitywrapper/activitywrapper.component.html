@@ -25,16 +25,20 @@
             </div>
 
         </div>
-        <div *ngIf="!globalservice.isSingleContact" class="contactChoice">
+        <div *ngIf="isSingleContact===false" class="contactChoice">
             <button (click)="openContactList()">Kontakt wählen</button>
             <div *ngIf="contact" class="currentContact">
                 <img src="./icons/contactprofile.svg" alt="">
                 <p>{{contact?.name}}</p>
+                
+            </div>
+            <div *ngIf="noContact===true" class="errorTxt">
+                <p>*Kontakt wählen</p>
             </div>
         </div>
 
 
-        <form #createActivityForm="ngForm" (ngSubmit)="createActivity(createActivityForm)">
+        <form #createActivityForm="ngForm" (ngSubmit)="checkValidation(createActivityForm)">
 
 
             <div class="inputCont">

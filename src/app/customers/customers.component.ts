@@ -9,6 +9,7 @@ import { response } from 'express';
 import { DataService } from '../services/data.service';
 import { CustomerwrapperComponent } from '../customerwrapper/customerwrapper.component';
 import { ObservableService } from '../services/observable.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-customers',
@@ -22,6 +23,7 @@ export class CustomersComponent {
   dataservice = inject(DataService);
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
+  private destroy$ = new Subject<void>();
   isOpen: boolean = false;
   customer = this.dataservice.emptyCustomer;
   user: any;
@@ -102,18 +104,24 @@ export class CustomersComponent {
 
 
   ngOnInit() {
-   
-    this.userservice.getUser().subscribe((user) => {
+
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
         this.user = user;
       }
     })
-    this.observerservice.customerTriggersubject$.subscribe(() => {
+    this.observerservice.customerTriggersubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadCustomers();
     })
 
     this.loadCustomers()
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
 
   loadCustomers() {
     this.apiservice.getData('customers/').subscribe({

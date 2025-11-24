@@ -1,66 +1,66 @@
-section {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 24px;
-    gap: 56px;
-    height: calc(100vh - 229px);
-    position: relative;
-}
+// section {
+//     width: 100%;
+//     height: 100%;
+//     display: flex;
+//     flex-direction: column;
+//     padding: 24px;
+//     gap: 56px;
+//     height: calc(100vh - 229px);
+//     position: relative;
+// }
 
-.taskListHeader {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
+// .taskListHeader {
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+// }
 
-.listBtns {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    gap: 16px;
-}
+// .listBtns {
+//     width: 100%;
+//     display: flex;
+//     justify-content: flex-end;
+//     gap: 16px;
+// }
 
 // .divider {
 //     min-height: 2px;
 // }
 
-.taskList {
-    width: 100%;
+// .taskList {
+//     width: 100%;
 
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow-y: scroll;
+//     display: flex;
+//     flex-direction: column;
+//     gap: 8px;
+//     overflow-y: scroll;
     
-.tasklistHeadline{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 12px ;
-    >p{
-        width: 100%;
-    }
-}
-}
-.taskRow {
-    // width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px;
-    background-color: var(--box-light);
-    cursor: pointer;
-   >p{
-        width: 100%;
-    }
+// .tasklistHeadline{
+//     width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+//     padding: 0 12px ;
+//     >p{
+//         width: 100%;
+//     }
+// }
+// }
+// .taskRow {
+//     // width: 100%;
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     padding: 12px;
+//     background-color: var(--box-light);
+//     cursor: pointer;
+//    >p{
+//         width: 100%;
+//     }
 
-    &:hover {
-        border-color: white;
-        background-color: var(--listrow-hover);
-    }
-}
+//     &:hover {
+//         border-color: white;
+//         background-color: var(--listrow-hover);
+//     }
+// }
 
 .titlePrio {
     min-width: fit-content;

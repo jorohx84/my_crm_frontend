@@ -5,8 +5,7 @@ import { APIService } from '../services/api.service';
 import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
 import { UserService } from '../services/user.service';
-import { subscribeOn } from 'rxjs';
-import { response } from 'express';
+import { Subject, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -21,30 +20,47 @@ export class MessagewrapperComponent {
   userservice = inject(UserService);
   observservice = inject(ObservableService);
   globalservice = inject(GlobalService);
+  private destroy$ = new Subject<void>();
   user: any;
   notifications: any[] = [];
+
+
   ngOnInit() {
-    this.userservice.getUser().subscribe((user) => {
+    this.loadUser();
+    this.subscribeNotifications();
+
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadUser() {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
         this.user = user;
         this.loadNotifications(user.id)
       }
-
     });
+  }
 
-    this.observservice.notificationSubject$.subscribe(() => {
+  subscribeNotifications() {
+    this.observservice.notificationSubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.user) {
         this.loadNotifications(this.user.id)
       }
-
-    })
+    });
   }
+
+
+
 
   loadNotifications(id: number) {
     this.apiservice.getData(`notifications/user/${id}`).subscribe({
       next: (response) => {
         this.notifications = response.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-);
+        );
 
       }
     })

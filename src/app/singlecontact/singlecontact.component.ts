@@ -4,15 +4,15 @@ import { APIService } from '../services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { DataService } from '../services/data.service';
-import { subscribeOn } from 'rxjs';
 import { ObservableService } from '../services/observable.service';
-import { response } from 'express';
 import { ActivitywrapperComponent } from '../activitywrapper/activitywrapper.component';
 import { GlobalService } from '../services/global.service';
+import { Subject, takeUntil } from 'rxjs';
+import { ActivitiesComponent } from '../activities/activities.component';
 
 @Component({
   selector: 'app-singlecontact',
-  imports: [CommonModule, FormsModule, ActivitywrapperComponent],
+  imports: [CommonModule, FormsModule, ActivitiesComponent],
   templateUrl: './singlecontact.component.html',
   styleUrl: './singlecontact.component.scss'
 })
@@ -22,6 +22,7 @@ export class SinglecontactComponent {
   dataservice = inject(DataService);
   observerservice = inject(ObservableService);
   globalservice = inject(GlobalService);
+  private destroy$ = new Subject<void>();
   activities: any[] = [];
   contact: any = {
     name: '',
@@ -81,8 +82,13 @@ export class SinglecontactComponent {
     this.dataservice.saveDataToLocalStorage('sidebarOpen', false);
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   subscribeActivity() {
-    this.observerservice.activtySubject$.subscribe((activityData) => {
+    this.observerservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((activityData) => {
       if (activityData) {
         this.loadActivities(this.contact.id)
       }
@@ -98,7 +104,7 @@ export class SinglecontactComponent {
 
 
   loadIDFromURL() {
-    this.route.paramMap.subscribe((param) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('contact_id')
       if (id) {
         this.contactID = id
@@ -119,9 +125,9 @@ export class SinglecontactComponent {
   }
 
   loadActivities(id: string) {
-    this.apiservice.getData(`activities/${id}`).subscribe({
+    this.apiservice.getData(`activities/contact/${id}/`).subscribe({
       next: (response) => {
-        this.activities = response.sort((a:any, b:any)=> new Date(b.date).getTime() - new Date(a.date).getTime());
+        this.activities = response.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
       }
     })
   }

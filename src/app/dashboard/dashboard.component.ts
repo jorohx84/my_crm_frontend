@@ -2,15 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { APIService } from '../services/api.service';
-
-
 import { Router } from '@angular/router';
 import { GlobalService } from '../services/global.service';
 import { DataService } from '../services/data.service';
 import { UserService } from '../services/user.service';
 import { ObservableService } from '../services/observable.service';
-import { response } from 'express';
-
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,11 +21,12 @@ export class DashboardComponent {
   userservice = inject(UserService);
   observservice = inject(ObservableService);
   globalservice = inject(GlobalService);
+  private destroy$ = new Subject<void>();
   router = inject(Router);
   user: any;
   systemMessages: any[] = [];
   ngOnInit() {
-    this.userservice.getUser().subscribe((user) => {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
         this.user = user;
         console.log(user);
@@ -36,6 +34,11 @@ export class DashboardComponent {
       }
     })
 
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   loadDasboard(id: number) {
@@ -53,5 +56,5 @@ export class DashboardComponent {
   }
 
 
-  
+
 }

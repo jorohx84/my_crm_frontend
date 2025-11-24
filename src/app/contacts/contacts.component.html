@@ -1,62 +1,34 @@
-<section>
-    <div class="contactsHeader">
+<section class="listSection">
+    <div class="listHeader">
         <h2>Kontakte</h2>
         <div class="menubar">
             <div class="inputfield">
                 <input type="text" [(ngModel)]="searchValue"
                     placeholder="Kontakt suchen ( Name, E-Mail oder Abteilung )" (input)="searchContact()">
+                 
             </div>
-            <!-- <img src="./icons/contact.svg" alt=""> -->
+          
         </div>
     </div>
-    <!-- <div class="divider"></div> -->
-    <div class="contactCont">
-        <div class="contactList">
+  
+    <div class="listMainCont">
+        <div class="listContainer">
             <div class="listHeadline">
                 <p *ngFor="let headline of contactFields">{{headline.label}}</p>
             </div>
-            <!-- <div class="inputfield">
-                <input type="text" [(ngModel)]="searchValue"
-                    placeholder="Kontakt suchen ( Name, E-Mail oder Abteilung )" (input)="searchContact()">
-            </div> -->
+  
 
             <div class="divider"></div>
-            <div class="listCont">
+            <div class="list">
                 <h4 *ngIf="contacts.length===0">keine Kontakte gefunden</h4>
-                <!-- <div class="contactCard" *ngFor="let contact of contacts let index=index" (click)="openContact(index)">
-                    <img src="./icons/profile.svg" alt="">
-                    <div class="infos">
-                        <p>{{contact?.name}}</p>
-                        <div class="divider"></div>
-                        <p>{{contact?.department}}</p>
-
-                        <div class="contact">
-                            <img src="./icons/mail.svg" alt="">
-                            <p>{{contact?.email}}</p>
-                        </div>
-
-                        <div class="contact">
-                            <img src="./icons/phone.svg" alt="">
-                            <p>{{contact?.phone}}</p>
-                        </div>
-                    </div>
-
-
-
-                </div> -->
-                <div class="contactListRow" *ngFor="let contact of contacts let index=index"
+ 
+                <div class="listRow" *ngFor="let contact of contacts let index=index"
                     (click)="openContact(index)">
                     <p *ngFor="let key of contactFields">{{contact?.[key.field]}}</p>
                 </div>
             </div>
 
         </div>
-        <!-- <div class="verticaldivider"></div>
 
-
-        <div class="singleContactCont">
-            <router-outlet></router-outlet>
-
-        </div> -->
     </div>
 </section>

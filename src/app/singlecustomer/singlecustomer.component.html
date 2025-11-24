@@ -18,7 +18,7 @@
             <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'dashboard'])">
                 <h4>Dashboard</h4>
             </div>
-            <div>
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'activities'], {sidebarOpen:true})">
                 <h4>Aktivitäten</h4>
             </div>
             <div
@@ -118,7 +118,7 @@
             <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
                 <app-contactwrapper></app-contactwrapper>
             </div>
-            <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen}">
+            <div  class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen}">
              <app-activitywrapper></app-activitywrapper>
             </div>
 

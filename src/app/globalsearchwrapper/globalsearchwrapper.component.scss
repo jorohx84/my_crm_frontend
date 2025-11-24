@@ -6,7 +6,15 @@ section {
     flex-direction: column;
     gap: 16px;
 }
-
+.headline{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    >img{
+        width: 16px;
+    }
+}
 .searchList {
     width: 100%;
     height: calc(100vh - 194px);

@@ -6,6 +6,7 @@ import { APIService } from '../services/api.service';
 import { response } from 'express';
 import { ObservableService } from '../services/observable.service';
 import { GlobalService } from '../services/global.service';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-contactwrapper',
   imports: [CommonModule, FormsModule],
@@ -18,6 +19,7 @@ export class ContactwrapperComponent {
   globalservice = inject(GlobalService);
   route = inject(ActivatedRoute);
   customerId: string | null = null;
+  private destroy$ = new Subject<void>();
   contact: any = {
     name: '',
     position: '',
@@ -37,10 +39,15 @@ export class ContactwrapperComponent {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((param) => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('customer_id');
       this.customerId = id;
     })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
@@ -58,7 +65,7 @@ export class ContactwrapperComponent {
     this.apiservice.postData('contacts/', data).subscribe({
       next: (response) => {
         console.log(response);
-        const contactId=response.id
+        const contactId = response.id
         this.observerservice.sendContact(response);
         this.resetFrom(form)
         this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerId, 'singlecontact', contactId])

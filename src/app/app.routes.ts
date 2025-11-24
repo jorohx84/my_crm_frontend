@@ -14,6 +14,7 @@ import { SinglecontactComponent } from './singlecontact/singlecontact.component'
 import { SetpasswordComponent } from './setpassword/setpassword.component';
 import { AdminpanelComponent } from './adminpanel/adminpanel.component';
 import { CustomerdashboardComponent } from './customerdashboard/customerdashboard.component';
+import { ActivitiesComponent } from './activities/activities.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -27,6 +28,7 @@ export const routes: Routes = [
             {
                 path: 'singlecustomer/:customer_id', component: SinglecustomerComponent, children: [
                     { path: 'dashboard', component: CustomerdashboardComponent },
+                    { path: 'activities', component: ActivitiesComponent },
                     { path: 'tasklist', component: TasklistComponent },
                     { path: 'task/:task_id', component: SingletaskComponent },
                     { path: 'contacts', component: ContactsComponent },

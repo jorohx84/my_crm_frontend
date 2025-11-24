@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ObservableService } from '../services/observable.service';
 import { APIService } from '../services/api.service';
 import { GlobalService } from '../services/global.service';
-import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
+import { Subject, takeUntil } from 'rxjs';
 
 
 
@@ -20,6 +20,7 @@ export class TasklistComponent {
   globalservice = inject(GlobalService);
   apiservice = inject(APIService);
   dataservice = inject(DataService);
+  private destroy$ = new Subject<void>();
   tasks: any[] = [];
   customerID: number | string | null = null;
   route = inject(ActivatedRoute);
@@ -30,28 +31,36 @@ export class TasklistComponent {
   constructor() {
     this.globalservice.toggleSidebar(true)
   }
-  ngOnInit() {
 
-    // this.route.queryParams.subscribe(params => {
-    //   this.globalservice.sidebarOpen = params['sidebarOpen']; // Wert auslesen
-    // });
-    // this.globalservice.sidebarOpen=this.dataservice.getDataFromLocalStorage('sidebarOpen')
-    this.route.parent?.paramMap.subscribe(params => {
+  ngOnInit() {
+    this.loadCustomerFromURL();
+    this.subscribeCustomer();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadCustomerFromURL() {
+    this.route.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('customer_id');
       this.customerID = id;
       if (id) {
         this.loadTasks(id, 'open');
       }
     });
+  }
 
-    this.observerservice.taskTriggerSubject$.subscribe((data) => {
+  subscribeCustomer() {
+    this.observerservice.taskTriggerSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (this.customerID) {
         this.loadTasks(this.customerID, 'open');
       }
-
     })
-
   }
+
+
 
 
   loadTasks(id: string | number | null = null, filter: string) {
@@ -61,7 +70,7 @@ export class TasklistComponent {
       next: (response) => {
         this.tasks = response;
         console.log(response);
-        
+
       }
     })
   }
@@ -84,7 +93,7 @@ export class TasklistComponent {
     let count = 0;
     for (let index = 0; index < subtasks.length; index++) {
       const subtask = subtasks[index];
-      if (subtask.is_checked===true) {
+      if (subtask.is_checked === true) {
         count++
       }
     }

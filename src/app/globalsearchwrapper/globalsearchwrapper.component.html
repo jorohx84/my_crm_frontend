@@ -1,8 +1,9 @@
 <section>
-    <div (click)="globalservice.searchWrapperOpen=false;" class="closeBtn">
-        <img class="imgSize" src="./icons/close.svg" alt="">
+    <div class="headline">
+        <h1>Suchergebnisse</h1>
+        <img (click)="globalservice.searchWrapperOpen=false;" class="imgSize" src="./icons/close.svg" alt="">
     </div>
-    <h1>Suchergebnisse</h1>
+
     <div class="searchList">
         <div class="listrow" *ngFor="let member of members">
             <img src="./icons/profile.svg" alt="">
@@ -47,13 +48,13 @@
         </div>
         <div class="listrow" *ngFor="let contact of contacts"
             (click)="openCard(['main', 'singlecustomer', contact.customer, 'singlecontact', contact.id])">
-          
-                <img src="./icons/profile.svg" alt="">
-         
+
+            <img src="./icons/profile.svg" alt="">
+
             <div class="infos">
                 <p>{{contact.name}} </p>
                 <div class="divider"></div>
-                 <p>{{contact.department}}</p>
+                <p>{{contact.department}}</p>
                 <p>{{contact.city}}</p>
 
                 <div class="contact">

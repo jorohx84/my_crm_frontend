@@ -7,7 +7,7 @@ import { APIService } from '../services/api.service';
 import { UserService } from '../services/user.service';
 import { ObservableService } from '../services/observable.service';
 import { ActivatedRoute } from '@angular/router';
-import { response } from 'express';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-customerdashboard',
@@ -24,12 +24,21 @@ export class CustomerdashboardComponent {
   route = inject(ActivatedRoute);
   customer = this.dataservice.emptyCustomer;
   customerID: string = '';
+  private destroy$ = new Subject<void>();
+
   ngOnInit() {
 
     this.loadTemaplate();
   }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+
   loadTemaplate() {
-    this.route.parent?.paramMap.subscribe((param) => {
+    this.route.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('customer_id');
       if (id) {
         this.loadCustomer(id);

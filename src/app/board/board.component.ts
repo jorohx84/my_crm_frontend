@@ -7,8 +7,8 @@ import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { filter, subscribeOn } from 'rxjs';
-import { TasklistComponent } from '../tasklist/tasklist.component';
+import { Subject, takeUntil } from 'rxjs';
+
 @Component({
   selector: 'app-board',
   imports: [CommonModule, DragDropModule],
@@ -24,8 +24,8 @@ export class BoardComponent {
   user: any;
   countsLoaded: boolean = false;
   releasesWrapperOpen: boolean = false;
-  // assignedTasks: any[] = [];
-  // reviewedTasks: any[] = [];
+  private destroy$ = new Subject<void>();
+
   boardKey: string = '';
   tasks: any = {
     assigned: [],
@@ -66,13 +66,18 @@ export class BoardComponent {
     this.loadUser()
     // this.connectedBoards = Object.values(this.board);
   }
+  
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   connectedLists(currentId: string) {
     return this.columns.filter(col => col.id !== currentId).map(col => col.id);
   }
 
   loadUser() {
-    this.userservice.getUser().subscribe((userData) => {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((userData) => {
       if (userData) {
         this.user = userData
         console.log(userData);
@@ -104,7 +109,7 @@ export class BoardComponent {
 
     if (taskKey !== 'releases') {
       this.loadBoard(taskKey);
-    } 
+    }
   }
 
   loadBoard(taskKey: string) {
@@ -121,7 +126,7 @@ export class BoardComponent {
 
   }
 
-  
+
 
   getCountLinePercentage(index: number, array: any) {
 
@@ -181,7 +186,7 @@ export class BoardComponent {
       this.apiservice.patchData(`task/${task.id}/`, data).subscribe({
         next: (response) => {
           console.log(response);
-          
+
           this.globalservice.saveLog('state', response)
         }
       })
@@ -205,7 +210,7 @@ export class BoardComponent {
       next: (response) => {
         console.log(response);
         this.releases = response
-       
+
       }
     })
   }
@@ -233,7 +238,7 @@ export class BoardComponent {
 
   // countSubtasksDone(index: number, tasksList: any[], countKey: string) {
   //   const tasks = tasksList;
-    
+
   //   const task = tasks[index]
   //   let count = 0;
   //   for (let index = 0; index < task.subtasks.length; index++) {

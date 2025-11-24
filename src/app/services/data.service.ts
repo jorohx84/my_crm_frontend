@@ -31,6 +31,27 @@ export class DataService {
         updated_at: ''
     }
 
+    activityTypes: { [key: string]: { path: string; label: string; } } = {
+        call: {
+            path: './icons/phone.svg',
+            label: 'Anruf'
+        },
+        invite: {
+            path: './icons/invite.svg',
+            label: 'Besuch'
+        },
+        video: {
+            path: './icons/phone.svg',
+            label: 'Video Call'
+        },
+        email: {
+            path: './icons/mail.svg',
+            label: 'E-Mail'
+        },
+    };
+
+
+
 
     getDataFromLocalStorage(data: any) {
         const storedData = localStorage.getItem(data);

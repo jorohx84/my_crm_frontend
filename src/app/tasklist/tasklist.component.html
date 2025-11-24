@@ -1,7 +1,7 @@
-<section>
-    <div class="taskListHeader">
+<section class="listSection">
+    <div class="listHeader">
         <h2>Aufgaben</h2>
-        <div class="listBtns">
+        <div class="menubar">
             <button (click)="loadTasks(customerID,'open')">Offen</button>
             <button (click)="loadTasks(customerID,'released')">Freigegeben</button>
             <button (click)="loadTasks(customerID, 'closed')">Abgschlossen</button>
@@ -9,58 +9,57 @@
     </div>
 
     <!-- <div class="divider"></div> -->
-    <div class="taskList">
-
-        <div class="tasklistHeadline">
-            <p>Titel</p>
-            <p>Status</p>
-            <p>Zuständigkeiten</p>
-            <p>Aufgabenliste</p>
-            <p>Fälligkeitsdatum</p>
-            <p>Priorität</p>
-        </div>
-        <div class="divider"></div>
-        <div (click)="openTask(index)" class="taskRow" *ngFor="let task of tasks, let index=index">
-
-
-            <p> {{task.title}}</p>
-            <p>{{globalservice.interpretation['state'][task.state]}}</p>
-
-            <p>{{task.assignee.profile.fullname}}</p>
-
-            <div class="subtaskCountCont">
-                <div class="checkbox">
-                    <img src="./icons/done.svg" alt="">
-                </div>
-                <div class="countLine">
-                    <div class="countLineInner"
-                        [style.width.%]="globalservice.countSubtasksDone(index, tasks,'percentage')"></div>
-                </div>
-                <div class="subtaskCount">
-
-                    <p>{{globalservice.countSubtasksDone(index, tasks, '')}}</p>
-                    <p>/</p>
-                    <p>{{task.subtasks.length}}</p>
-                </div>
-
+    <div class="listMainCont">
+        <div class="listContainer">
+            <div class="listHeadline">
+                <p>Titel</p>
+                <p>Status</p>
+                <p>Zuständigkeiten</p>
+                <p>Aufgabenliste</p>
+                <p>Fälligkeitsdatum</p>
+                <p>Priorität</p>
             </div>
+            <div class="divider"></div>
+            <div class="list">
+                <h4 *ngIf="tasks.length===0">keine Aufgaben gefunden</h4>
+                <div (click)="openTask(index)" class="listRow" *ngFor="let task of tasks, let index=index">
+                    <p> {{task.title}}</p>
+                    <p>{{globalservice.interpretation['state'][task.state]}}</p>
+
+                    <p>{{task.assignee.profile.fullname}}</p>
+                    <p *ngIf="task.subtasks.length===0">leer</p>
+                    <div *ngIf="task.subtasks.length!==0" class="subtaskCountCont">
+                        <div class="checkbox">
+                            <img src="./icons/done.svg" alt="">
+                        </div>
+                        <div class="countLine">
+                            <div class="countLineInner"
+                                [style.width.%]="globalservice.countSubtasksDone(index, tasks,'percentage')"></div>
+                        </div>
+                        <div class="subtaskCount">
+
+                            <p>{{globalservice.countSubtasksDone(index, tasks, '')}}</p>
+                            <p>/</p>
+                            <p>{{task.subtasks.length}}</p>
+                        </div>
+
+                    </div>
+
+                    <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
+                    <div class="prioIcon">
+                        <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
+                        <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
+                        <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
+                    </div>
 
 
 
-            <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
-            <div class="prioIcon">
-                <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
-                <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
-                <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
+                    <!-- <span>zu erledigen von: {{task.assignee.fullname}}</span> -->
+
+
+
+                </div>
             </div>
-
-
-
-            <!-- <span>zu erledigen von: {{task.assignee.fullname}}</span> -->
-
-
-
         </div>
     </div>
-
 </section>

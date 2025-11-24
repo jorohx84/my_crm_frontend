@@ -24,8 +24,8 @@ export class ObservableService {
     public globalsearchSubject$ = this.globalsearchSubject.asObservable();
     private contactSubject = new BehaviorSubject<any>(null);
     public contactSubject$ = this.contactSubject.asObservable();
-    private activtySubject = new BehaviorSubject<any>(null);
-    public activtySubject$ = this.activtySubject.asObservable();
+    private activitySubject = new BehaviorSubject<any>(null);
+    public activitySubject$ = this.activitySubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -59,6 +59,6 @@ export class ObservableService {
     }
 
     sendActivity(activity: any) {
-        this.activtySubject.next(activity);
+        this.activitySubject.next(activity);
     }
 }

@@ -1,0 +1,73 @@
+<section>
+    <div class="listHeader">
+        <h2>Aktivitäten</h2>
+        <div class="menubar">
+            <div class="timeFilter">
+                <div class="errorTxt">
+                    <p *ngIf="globalservice.wrongTime">Startdatum muss vor Enddatum liegen</p>
+                </div>
+               
+                <button *ngIf="isfiltered===true" (click)="resetTimeFilter()">Filter löschen</button>
+                <div class="inputCont">
+                    <h4>Start</h4>
+                    <div class="inputfield">
+                        <input (change)="filterActivitiesToDate()" type="date" [(ngModel)]="startTime">
+                    </div>
+                </div>
+
+                <div class="inputCont">
+                    <h4>Ende</h4>
+                    <div class="inputfield">
+                        <input (change)="filterActivitiesToDate()" type="date" [(ngModel)]="endTime">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="inputfield">
+                <input (input)="searchInActivities()" type="text" [(ngModel)]="searchValue"
+                    placeholder="Suchen ( Beschreibung, Kontakt, Mitarbeiter oder Typ )">
+
+            </div>
+        </div>
+    </div>
+    <div class="listMainCont">
+        <div class="listContainer">
+            <div class="listHeadline">
+                <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
+            </div>
+
+
+            <div class="divider"></div>
+            <div class="list">
+                <h4 *ngIf="activities.length===0">- keine Aktivitäten gefunden -</h4>
+
+
+                <div class="listRow" *ngFor="let activity of activities let index=index">
+
+                    <div class="typeCont">
+                        <img [src]="dataservice.activityTypes[activity.type].path" alt="">
+                        <p>{{dataservice.activityTypes[activity.type].label}}</p>
+                    </div>
+
+                    <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
+
+                    <p>{{activity?.description}}</p>
+                    <p>{{activity?.user?.profile.fullname}}</p>
+                    <p>{{activity?.customer.companyname}}</p>
+                    <p>{{activity?.contact.name}}</p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+</section>

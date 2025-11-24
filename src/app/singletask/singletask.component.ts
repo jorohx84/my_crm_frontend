@@ -5,13 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { APIService } from '../services/api.service';
 import { UserService } from '../services/user.service';
 import { FormsModule } from '@angular/forms';
-import { response, text } from 'express';
 import { DataService } from '../services/data.service';
-import { identity, retry } from 'rxjs';
-import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
 import { ObservableService } from '../services/observable.service';
-import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { MessageService } from '../services/message.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-singletask',
@@ -27,6 +24,7 @@ export class SingletaskComponent {
   userservice = inject(UserService);
   dataservice = inject(DataService);
   messageservice = inject(MessageService);
+  private destroy$ = new Subject<void>();
   taskId: string | null = null;
   sidebarKey: string = 'comments';
   task: any = {
@@ -90,12 +88,16 @@ export class SingletaskComponent {
 
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   loadTemplate() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       this.queryType = params['type'];
     });
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('task_id');
       if (id) {
         this.taskId = id
@@ -107,7 +109,7 @@ export class SingletaskComponent {
 
 
   subscribeUser() {
-    this.userservice.getUser().subscribe((user) => {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
         this.user = user;
       }
@@ -115,7 +117,7 @@ export class SingletaskComponent {
   }
 
   subscribeSubtasks() {
-    this.observerservice.taskTriggerSubject$.subscribe((subtaskData) => {
+    this.observerservice.taskTriggerSubject$.pipe(takeUntil(this.destroy$)).subscribe((subtaskData) => {
       if (subtaskData) {
         if (subtaskData.type === 'task') {
           return
@@ -130,7 +132,7 @@ export class SingletaskComponent {
   }
 
   subscribeMember() {
-    this.observerservice.memberSubject$.subscribe((memberData) => {
+    this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((memberData) => {
       if (memberData) {
         this.memberListOpen = false;
         this.newAssignee = memberData;
@@ -469,20 +471,20 @@ export class SingletaskComponent {
   setNewAsssigne(index: number) {
     this.newAssignee = this.foundMembers[index];
     console.log(this.newAssignee);
-    
+
     this.updateAssignee()
     this.foundMembers = []
     this.searchValue = '';
   }
 
   updateAssignee() {
-  
+
     const id = this.newAssignee.id
     const data = {
       assignee: id
     }
 
- 
+
     this.updateTask(data, 'assignee');
     this.assigneeChangeOpen = false;
   }

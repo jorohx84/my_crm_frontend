@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ObservableService } from '../services/observable.service';
 import { CommonModule } from '@angular/common';
 import { GlobalService } from '../services/global.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-globalsearchwrapper',
@@ -12,26 +13,33 @@ import { GlobalService } from '../services/global.service';
 export class GlobalsearchwrapperComponent {
   observerservice = inject(ObservableService);
   globalservice = inject(GlobalService);
+  private destroy$ = new Subject<void>();
   members: any;
   tasks: any;
   customers: any;
-  contacts:any;
+  contacts: any;
+  
   ngOnInit() {
-    this.observerservice.globalsearchSubject$.subscribe((data) => {
+    this.observerservice.globalsearchSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
         this.members = data.members;
         this.tasks = data.tasks;
         this.customers = data.customers
-        this.contacts=data.contacts
+        this.contacts = data.contacts
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
   openCard(path: any[], param: any = null) {
     this.globalservice.searchWrapperOpen = false
     console.log(path);
-    
+
     this.globalservice.navigateToPath(path, param)
 
   }

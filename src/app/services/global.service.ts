@@ -23,7 +23,7 @@ export class GlobalService {
     searchWrapperOpen: boolean = false;
     contactWrapperOpen: boolean = false;
     activityWrapperOpen: boolean = false;
-    isSingleContact: boolean = false;
+    wrongTime: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
@@ -155,13 +155,38 @@ export class GlobalService {
     }
 
 
-    checkURL() {
-        if (this.router.url.includes('singlecontact')) {
-            this.isSingleContact = true;
-
-        } else {
-            this.isSingleContact = false;
-
-        }
+    checkURL(key: string) {
+        return this.router.url.includes(key);
     }
+
+
+    filterToDate(list: any[], startTime: string, endTime: string) {
+
+
+        const start = startTime ? new Date(startTime).getTime() : null;
+        const end = endTime ? new Date(endTime).getTime() : null;
+        if (start && end && start > end) {
+            this.wrongTime = true
+            return
+        }
+        this.wrongTime = false
+        const foundActivities = list.filter(a => {
+            const activityDate = new Date(a.date).getTime();
+
+            if (start && end) {
+                return activityDate >= start && activityDate <= end;
+            } else if (start) {
+                return activityDate >= start;
+            } else if (end) {
+                return activityDate <= end;
+            } else {
+                return true; // keine Filterung
+            }
+
+        });
+
+        return foundActivities;
+    }
+
+
 }

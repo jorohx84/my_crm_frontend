@@ -19,6 +19,7 @@ export class AdminpanelComponent {
   foundMembers: any[] = [];
   currentMember: any;
   isfound: boolean = false;
+  
   findeMember() {
     console.log(this.email);
     this.apiservice.getData(`users/email-check/${this.email}`).subscribe({
@@ -33,7 +34,7 @@ export class AdminpanelComponent {
   setCurrentMember(index: number) {
     const member = this.foundMembers[index];
     this.currentMember = member;
-console.log(this.currentMember);
+    console.log(this.currentMember);
 
 
 
@@ -46,9 +47,9 @@ console.log(this.currentMember);
       user_id: uid
     }
     this.apiservice.postData('admin-reset-password/', requestData).subscribe({
-      next:(response)=>{
+      next: (response) => {
         console.log(response);
-        
+
       }
     })
   }

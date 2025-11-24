@@ -89,33 +89,40 @@
         </div>
         <!-- Activities -->
 
-        <div class="contactBoard">
+        <!-- <div class="listSection">
+            <div class="listHeader">
+                <h2>Aktivitäten</h2>
+            </div>
 
-            <h3>Aktivitäten</h3>
+            <div class="listMainCont">
+           
+                <div class="listContainer">
 
-            <!-- <div class="divider"></div> -->
-            <div class="activityListCont">
 
+                    <div class="listHeadline">
+                        <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="list">
+                        <div class="listRow" *ngFor="let activity of activities let index=index">
 
-                <div class="activityListHeadline">
-                    <p *ngFor="let headline of activityFields">{{headline.displayName}}</p>
-                </div>
-                <div class="divider"></div>
-                <div class="activityList">
-                    <div class="listrow" *ngFor="let activity of activities let index=index">
+                            <div class="typeCont">
+                                <img [src]="types[activity.type].path" alt="">
+                                <p>{{types[activity.type].label}}</p>
+                            </div>
+                            <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
 
-                        <div class="typeCont">
-                            <img [src]="types[activity.type].path" alt="">
-                            <p>{{types[activity.type].label}}</p>
+                            <p>{{activity?.description}}</p>
+                            <p>{{activity?.user?.profile.fullname}}</p>
+
                         </div>
-                        <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
-
-                        <p>{{activity?.description}}</p>
-                        <p>{{activity?.user?.profile.fullname}}</p>
-
                     </div>
                 </div>
             </div>
+        </div> -->
+
+        <div class="activities">
+            <app-activities [isContactActivityList]="true"></app-activities>
         </div>
     </div>
     <!-- <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen===true}">

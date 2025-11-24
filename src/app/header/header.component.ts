@@ -6,11 +6,9 @@ import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { TimeInterval } from 'rxjs/internal/operators/timeInterval';
 import { MessagewrapperComponent } from '../messagewrapper/messagewrapper.component';
-import { response } from 'express';
 import { FormsModule } from '@angular/forms';
-import { subscribeOn } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +23,7 @@ export class HeaderComponent {
   userservice = inject(UserService);
   globalservice = inject(GlobalService);
   router = inject(Router);
+  private destroy$ = new Subject<void>();
   user: any;
   component: string = '';
   intervalId: any;
@@ -42,22 +41,27 @@ export class HeaderComponent {
     this.loadUser()
     this.setTime();
 
-    this.observservice.notificationSubject$.subscribe(() => {
+    this.observservice.notificationSubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadCount();
     })
   }
 
+    ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadUser() {
-    this.userservice.getUser().subscribe((user) => {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
-        this.user = user;    
+        this.user = user;
         this.loadCount()
       }
 
     });
   }
 
-  
+
   globalSearch() {
     this.apiservice.getData(`search/${this.searchInput}`).subscribe({
       next: (response) => {

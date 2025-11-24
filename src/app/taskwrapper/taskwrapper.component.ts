@@ -5,13 +5,12 @@ import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { ActivatedRoute } from '@angular/router';
-import { flatMap, take } from 'rxjs';
 import { APIService } from '../services/api.service';
-import { response } from 'express';
-import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { MessageService } from '../services/message.service';
 import { CdkVirtualScrollableElement } from "@angular/cdk/scrolling";
+import { Subject, takeUntil } from 'rxjs';
+
 @Component({
   selector: 'app-taskwrapper',
   imports: [CommonModule, FormsModule, MemberlistComponent, CdkVirtualScrollableElement],
@@ -25,6 +24,7 @@ export class TaskwrapperComponent {
   userservice = inject(UserService);
   messageservice = inject(MessageService);
   route = inject(ActivatedRoute);
+  private destroy$ = new Subject<void>();
   member: any;
   templatesOpen: boolean = false;
   singleTemplateOpen: boolean = false;
@@ -63,37 +63,41 @@ export class TaskwrapperComponent {
     this.loadTask();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   loadUser() {
-    this.userservice.getUser().subscribe((user) => {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
         this.user = user;
       }
     })
   }
   loadMember() {
-    this.observerservice.memberSubject$.subscribe((member) => {
+    this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((member) => {
       if (member) {
         this.member = member;
-        
+
         this.task.assignee = member.id
         console.log(member.id);
-      
-        
+
+
         this.noMember = false
       }
     });
   }
 
   loadTemplate() {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('customer_id');
       this.customerID = id
     });
   }
 
   loadTask() {
-    this.observerservice.taskSubject$.subscribe((taskObj) => {
+    this.observerservice.taskSubject$.pipe(takeUntil(this.destroy$)).subscribe((taskObj) => {
       if (taskObj) {
         console.log(taskObj);
 

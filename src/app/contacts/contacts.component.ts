@@ -5,7 +5,7 @@ import { APIService } from '../services/api.service';
 import { ObservableService } from '../services/observable.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-contacts',
   imports: [CommonModule, FormsModule],
@@ -21,7 +21,7 @@ export class ContactsComponent {
   contacts: any[] = [];
   allContacts: any[] = [];
   searchValue: string = '';
-
+  private destroy$ = new Subject<void>();
   contactFields = [
     { field: 'name', label: 'Name' },
     { field: 'position', label: 'Position' },
@@ -41,8 +41,13 @@ export class ContactsComponent {
     this.searchValue = '';
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadDataUrl() {
-    this.route.parent?.paramMap.subscribe(params => {
+    this.route.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('customer_id');
       this.customerID = id;
       if (id) {
@@ -54,7 +59,7 @@ export class ContactsComponent {
   }
 
   subscribeContact() {
-    this.observerservice.contactSubject$.subscribe((contact) => {
+    this.observerservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((contact) => {
       if (contact) {
         console.log(contact.customer);
         const customerId = contact.customer
