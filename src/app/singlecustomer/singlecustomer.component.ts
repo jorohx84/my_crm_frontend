@@ -38,8 +38,12 @@ export class SinglecustomerComponent {
   private destroy$ = new Subject<void>();
   folder: string = '';
 
+
+  constructor() {
+    this.globalservice.setCustomerSidebarState();
+  }
   ngOnInit() {
-    this.globalservice.toggleSidebar(true);
+    // this.globalservice.toggleSidebar(true);
     this.loadCustomerFromURL();
   }
 

@@ -53,6 +53,11 @@ export class ActivitiesComponent {
     { fieldName: 'contact', displayName: 'Kontakt' },
 
   ];
+
+ constructor() {
+    this.globalservice.setCustomerSidebarState();
+  }
+
   ngOnInit() {
     // this.loadCustomer();
     // this.loadContact();
@@ -79,7 +84,7 @@ export class ActivitiesComponent {
 
     });
 
-    this.activityListType === 'contact' ? this.loadContact() : this.activityListType === 'customer' ? this.loadCustomer() : '';
+    this.activityListType === 'contact' ? this.loadContact() : this.loadCustomer();
   }
 
   loadCustomer() {
@@ -96,7 +101,7 @@ export class ActivitiesComponent {
     this.router.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('contact_id');
       console.log(id);
-      
+
       if (id && this.activityListType === 'contact') {
         this.contactID = id
         this.loadActivities(id, 'contact');
@@ -119,8 +124,8 @@ export class ActivitiesComponent {
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        const id = this.activityListType === 'contact' ? this.contactID : this.activityListType === 'costumer' ? this.customerID : '';
-        const key = this.activityListType === 'contact' ? 'contact' : this.activityListType === 'customer' ? 'customer' : '';
+        const id = this.activityListType === 'contact' ? this.contactID : this.customerID;
+        const key = this.activityListType === 'contact' ? 'contact' : 'customer';
         this.loadActivities(id, key);
       }
     })

@@ -76,11 +76,17 @@ export class SinglecontactComponent {
 
   ];
 
+ constructor() {
+    this.globalservice.setCustomerSidebarState();
+  }
+
+
   ngOnInit() {
+
     this.loadTemplate();
     this.loadIDFromURL();
     this.subscribeActivity();
-    this.dataservice.saveDataToLocalStorage('sidebarOpen', false);
+   
   }
 
   ngOnDestroy() {
@@ -99,6 +105,7 @@ export class SinglecontactComponent {
 
 
   loadTemplate() {
+    this.globalservice.toggleSidebar(false);
     this.loadIDFromURL();
     this.tabKey = this.dataservice.getDataFromLocalStorage('contactTab');
   }

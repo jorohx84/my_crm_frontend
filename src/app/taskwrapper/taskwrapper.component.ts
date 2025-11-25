@@ -159,7 +159,7 @@ export class TaskwrapperComponent {
         this.openNewTask(response);
         const newTask = response;
         this.globalservice.saveLog('create', newTask);
-        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', newTask.id])
+        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singletask', newTask.id])
         this.observerservice.sendConfirmation('Aufgabe wurde erstellt');
       },
       error: (err) => console.log(err)

@@ -26,6 +26,10 @@ export class CustomerdashboardComponent {
   customerID: string = '';
   private destroy$ = new Subject<void>();
 
+ constructor() {
+    this.globalservice.setCustomerSidebarState();
+  }
+
   ngOnInit() {
 
     this.loadTemaplate();

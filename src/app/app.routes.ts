@@ -30,7 +30,7 @@ export const routes: Routes = [
                     { path: 'dashboard', component: CustomerdashboardComponent },
                     { path: 'activities', component: ActivitiesComponent },
                     { path: 'tasklist', component: TasklistComponent },
-                    { path: 'task/:task_id', component: SingletaskComponent },
+                    { path: 'singletask/:task_id', component: SingletaskComponent },
                     { path: 'contacts', component: ContactsComponent },
                     { path: 'singlecontact/:contact_id', component: SinglecontactComponent, children:[
                         {path:'activities', component: ActivitiesComponent},

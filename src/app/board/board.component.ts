@@ -225,7 +225,7 @@ export class BoardComponent {
     console.log(queryParams);
 
 
-    this.globalservice.navigateToPath(['main', 'singlecustomer', task.customer.id, 'task', task.id], queryParams)
+    this.globalservice.navigateToPath(['main', 'singlecustomer', task.customer.id, 'singletask', task.id], queryParams)
   }
 
   changeList(list: string) {

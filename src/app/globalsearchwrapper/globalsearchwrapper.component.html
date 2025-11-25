@@ -70,7 +70,7 @@
 
         </div>
         <div class="listrow" *ngFor="let task of tasks"
-            (click)="openCard(['main', 'singlecustomer', task.customer, 'task', task.id], {type: task.type})">
+            (click)="openCard(['main', 'singlecustomer', task.customer, 'singletask', task.id], {type: task.type})">
             <div class="icon">
                 <img src="./icons/task_white.svg" alt="">
             </div>

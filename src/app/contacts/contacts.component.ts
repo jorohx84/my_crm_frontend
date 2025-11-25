@@ -31,8 +31,8 @@ export class ContactsComponent {
     { field: 'phone', label: 'Telefon' },
   ];
 
-  constructor() {
-    this.globalservice.toggleSidebar(false)
+ constructor() {
+    this.globalservice.setCustomerSidebarState();
   }
 
   ngOnInit() {

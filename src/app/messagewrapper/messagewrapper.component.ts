@@ -68,7 +68,7 @@ export class MessagewrapperComponent {
 
 
   openMessage(message: any) {
-    this.globalservice.navigateToPath(message.url, message.param);
+    this.globalservice.navigateToPath(message.url);
     this.globalservice.messageWrapperOpen = false;
     this.updateMessageState(message.id);
   }

@@ -77,9 +77,9 @@ export class SingletaskComponent {
   foundMembers: any[] = [];
 
   constructor() {
-    this.globalservice.toggleSidebar(false);
-
+    this.globalservice.setCustomerSidebarState();
   }
+
   ngOnInit() {
     this.loadTemplate();
     this.subscribeUser();

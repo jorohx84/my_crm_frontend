@@ -2,6 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { Router, Route, ActivatedRoute } from "@angular/router";
 import { DataService } from "./data.service";
 import { APIService } from "./api.service";
+import { Subject, takeUntil } from "rxjs";
 
 
 
@@ -11,14 +12,15 @@ import { APIService } from "./api.service";
 
 export class GlobalService {
     router = inject(Router);
+    route = inject(ActivatedRoute);
     dataservice = inject(DataService);
     apiservice = inject(APIService);
-   
+
     number: number | null = null;
     memberListOpen: boolean = false;
     taskWrapperOpen: boolean = false;
     isSubtaskWrapper: boolean = false;
-    sidebarOpen: boolean = false;
+    sidebarOpen: boolean = true;
     customerWrapperOpen: boolean = false;
     messageWrapperOpen: boolean = false;
     isNewSystemMessage: boolean = false;
@@ -29,6 +31,7 @@ export class GlobalService {
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
+    private destroy$ = new Subject<void>();
     taskLogs: Record<string, string> = {
         title: 'Titel wurde geändert',
         description: 'Beschreibung wurde geändert',
@@ -62,14 +65,20 @@ export class GlobalService {
     }
 
 
-    constructor() {
-        this.sidebarOpen = this.dataservice.getDataFromLocalStorage('sidebarOpen')
+    constructor() {}
+
+    setCustomerSidebarState() {
+        if (this.checkURL('singlecontact')) {
+            this.sidebarOpen = false;
+        } else {
+            this.sidebarOpen = true;
+        }
     }
 
 
     toggleSidebar(state: boolean) {
         this.sidebarOpen = state;
-        this.dataservice.saveDataToLocalStorage('sidebarOpen', state);
+        // this.dataservice.saveDataToLocalStorage('sidebarOpen', state);
     }
 
     navigateToPath(segments: any[], queryParam?: any) {
@@ -194,6 +203,6 @@ export class GlobalService {
         return list.sort((a: any, b: any) => new Date(b[key]).getTime() - new Date(a[key]).getTime());
     }
 
- 
+
 
 }

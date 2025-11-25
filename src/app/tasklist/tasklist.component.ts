@@ -28,8 +28,8 @@ export class TasklistComponent {
   countsLoaded: boolean = false;
 
   filteredTaskList: any[] = [];
-  constructor() {
-    this.globalservice.toggleSidebar(true)
+ constructor() {
+    this.globalservice.setCustomerSidebarState();
   }
 
   ngOnInit() {
@@ -79,11 +79,8 @@ export class TasklistComponent {
   openTask(index: number) {
     const currentTask = this.tasks[index];
     const taskId = currentTask.id;
-    const queryParam = {
-      type: currentTask.type,
-      sidebarOpen: false,
-    }
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'task', taskId], queryParam);
+
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singletask', taskId]);
   }
 
 
