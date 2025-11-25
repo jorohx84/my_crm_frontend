@@ -4,6 +4,7 @@ import { DataService } from "./data.service";
 import { APIService } from "./api.service";
 
 
+
 @Injectable({
     providedIn: 'root'
 })
@@ -12,6 +13,7 @@ export class GlobalService {
     router = inject(Router);
     dataservice = inject(DataService);
     apiservice = inject(APIService);
+   
     number: number | null = null;
     memberListOpen: boolean = false;
     taskWrapperOpen: boolean = false;
@@ -188,5 +190,10 @@ export class GlobalService {
         return foundActivities;
     }
 
+    sortListbyTime(list: any[], key: string) {
+        return list.sort((a: any, b: any) => new Date(b[key]).getTime() - new Date(a[key]).getTime());
+    }
+
+ 
 
 }

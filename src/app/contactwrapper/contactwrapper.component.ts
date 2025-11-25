@@ -67,8 +67,9 @@ export class ContactwrapperComponent {
         console.log(response);
         const contactId = response.id
         this.observerservice.sendContact(response);
+        this.observerservice.sendConfirmation('Kontakt wurde erfolgreich angelegt');
         this.resetFrom(form)
-        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerId, 'singlecontact', contactId])
+        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerId, 'singlecontact', contactId, 'activities'], { actlist: 'contact' })
       }
     })
 

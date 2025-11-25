@@ -26,6 +26,8 @@ export class ObservableService {
     public contactSubject$ = this.contactSubject.asObservable();
     private activitySubject = new BehaviorSubject<any>(null);
     public activitySubject$ = this.activitySubject.asObservable();
+    private confirmSubject = new BehaviorSubject<any>(null);
+    public confirmSubject$ = this.confirmSubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -60,5 +62,9 @@ export class ObservableService {
 
     sendActivity(activity: any) {
         this.activitySubject.next(activity);
+    }
+
+    sendConfirmation(confirm: any) {
+        this.confirmSubject.next(confirm);
     }
 }

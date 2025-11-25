@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './activities.component.scss'
 })
 export class ActivitiesComponent {
-  @Input() isContactActivityList: boolean = false;
+  activityListType: string | null = '';
   dataservice = inject(DataService);
   apiservice = inject(APIService);
   observservice = inject(ObservableService);
@@ -34,8 +34,17 @@ export class ActivitiesComponent {
   startTime: string = '';
   endTime: string = '';
   isfiltered: boolean = false;
-
-  ; activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
+  activityOpen: boolean = false;
+  editInvalid: boolean = false;
+  currentActivity: any = {
+    title: '',
+    description: '',
+    type: '',
+    contact: null,
+    customer: null,
+    date: '',
+  }
+  activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
     { fieldName: 'type', displayName: 'Typ' },
     { fieldName: 'date', displayName: 'Datum' },
     { fieldName: 'description', displayName: 'Beschreibung' },
@@ -49,7 +58,7 @@ export class ActivitiesComponent {
     // this.loadContact();
     this.loadTemplate();
     this.subscribeActivities();
-    console.log(this.isContactActivityList);
+    console.log(this.activityListType);
 
   }
 
@@ -59,13 +68,24 @@ export class ActivitiesComponent {
   }
 
   loadTemplate() {
-    this.isContactActivityList ? this.loadContact() : this.loadCustomer()
+    this.router.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+      if (param) {
+        console.log(('hallo'));
+
+        this.activityListType = param.get('actlist');
+        console.log(this.activityListType);
+
+      }
+
+    });
+
+    this.activityListType === 'contact' ? this.loadContact() : this.activityListType === 'customer' ? this.loadCustomer() : '';
   }
 
   loadCustomer() {
     this.router.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('customer_id');
-      if (id && this.isContactActivityList === false) {
+      if (id && this.activityListType === 'customer') {
         this.customerID = id;
         this.loadActivities(id, 'customer');
       }
@@ -73,10 +93,11 @@ export class ActivitiesComponent {
   }
 
   loadContact() {
-    this.router.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+    this.router.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('contact_id');
-      if (id && this.isContactActivityList === true) {
-        console.log(id);
+      console.log(id);
+      
+      if (id && this.activityListType === 'contact') {
         this.contactID = id
         this.loadActivities(id, 'contact');
       }
@@ -86,10 +107,9 @@ export class ActivitiesComponent {
   loadActivities(id: string, key: string) {
     this.apiservice.getData(`activities/${key}/${id}/`).subscribe({
       next: (response) => {
-        console.log(response);
-        const list = this.sortList(response);
-        this.activities = list;
-        this.allActivities = list;
+        const sortedList = this.globalservice.sortListbyTime(response, 'date');
+        this.activities = sortedList;
+        this.allActivities = sortedList;
       }
     })
 
@@ -99,10 +119,8 @@ export class ActivitiesComponent {
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        const id = this.isContactActivityList ? this.contactID : this.customerID;
-        const key = this.isContactActivityList ? 'contact' : 'customer'
-        console.log(id);
-
+        const id = this.activityListType === 'contact' ? this.contactID : this.activityListType === 'costumer' ? this.customerID : '';
+        const key = this.activityListType === 'contact' ? 'contact' : this.activityListType === 'customer' ? 'customer' : '';
         this.loadActivities(id, key);
       }
     })
@@ -112,37 +130,12 @@ export class ActivitiesComponent {
 
 
 
-  // loadCustomerActivities(id: string) {
-  //   console.log('Kunde');
 
-  //   this.apiservice.getData(`activities/customer/${id}/`).subscribe({
-  //     next: (response) => {
-  //       console.log(response);
-  //       const list = this.sortList(response);
-  //       this.activities = list;
-  //       this.allActivities = list;
-  //     }
-  //   })
-
+  // sortList(list: any[]) {
+  //   return list.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
   // }
 
-  sortList(list: any[]) {
-    return list.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }
 
-  // loadContactActivities(id: string) {
-  //   console.log('Kontakt');
-
-  //   this.apiservice.getData(`activities/contact/${id}/`).subscribe({
-  //     next: (response) => {
-  //       console.log(response);
-  //       const list = this.sortList(response);
-  //       this.activities = list;
-  //       this.allActivities = list;
-  //     }
-  //   })
-
-  // }
 
 
   searchInActivities() {
@@ -184,6 +177,34 @@ export class ActivitiesComponent {
     this.activities = this.allActivities;
     this.endTime = '';
     this.startTime = '';
+  }
+
+  openActivity(index: number) {
+    console.log(index);
+    this.currentActivity = this.activities[index];
+    console.log(this.currentActivity);
+    this.activityOpen = true
+  }
+
+  editActivity(key: string) {
+    const aid = this.currentActivity.id
+    const data = {
+      [key]: this.currentActivity[key],
+
+    }
+    if (data[key] === '') {
+      console.log('Feld leer');
+      this.editInvalid = true;
+      return
+    }
+
+    this.editInvalid = false;
+    this.apiservice.patchData(`activity/${aid}/`, data).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.observservice.sendActivity(response);
+      }
+    })
   }
 }
 

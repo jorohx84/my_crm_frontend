@@ -37,27 +37,28 @@
                 <p *ngIf="department.invalid && department.touched">*Pflichtfeld</p>
             </div>
         </div>
-          <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': email.invalid && email.touched}">
-                    <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
-                        [(ngModel)]="contact.email" required
-                        pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
-                </div>
-                <div class="errorTxt">
-                    <p *ngIf="email.invalid && email.touched">Bitte gültige E-Mail eingeben</p>
-                </div>
+        <div class="inputCont">
+            <div class="inputfield" [ngClass]="{'errorBorder': email.invalid && email.touched}">
+                <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
+                    [(ngModel)]="contact.email" required pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
             </div>
+            <div class="errorTxt">
+                <p *ngIf="email.invalid && email.touched">Bitte gültige E-Mail eingeben</p>
+            </div>
+        </div>
 
-            <!-- phone -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': phone.invalid && phone.touched}">
-                    <input #phone="ngModel" type="tel" id="phone" name="phone" placeholder="Telefonnummer"
-                        [(ngModel)]="contact.phone" required pattern="^[0-9\-\+\s\(\)]*$">
-                </div>
-                <div class="errorTxt">
-                    <p *ngIf="phone.invalid && phone.touched">Bitte gültige Telefonnummer eingeben</p>
-                </div>
+        <!-- phone -->
+        <div class="inputCont">
+            <div class="inputfield" [ngClass]="{'errorBorder': phone.invalid && phone.touched}">
+                <input #phone="ngModel" type="tel" id="phone" name="phone" placeholder="Telefonnummer"
+                    [(ngModel)]="contact.phone" required pattern="^\+\d{1,3} \d{1,4} \d{4,10}$">
             </div>
+            <div class="errorTxt">
+                <p *ngIf="phone.invalid && phone.touched && phone.errors?.['required']">Bitte Telefonnummer eingeben</p>
+                <p *ngIf="phone.invalid && phone.touched && phone.errors?.['pattern']">Telefonnummer muss im Format'+49
+                    30 12345678' sein</p>
+            </div>
+        </div>
 
 
 

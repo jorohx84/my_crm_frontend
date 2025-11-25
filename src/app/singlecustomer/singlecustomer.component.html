@@ -18,7 +18,8 @@
             <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'dashboard'])">
                 <h4>Dashboard</h4>
             </div>
-            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'activities'], {sidebarOpen:true})">
+            <div
+                (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'activities'], {actlist:'customer'})">
                 <h4>Aktivitäten</h4>
             </div>
             <div
@@ -46,8 +47,7 @@
                     src=" ./icons/contact.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn">
-                <img (click)="openActivityForm()"
-                    src=" ./icons/activity.svg" alt="">
+                <img (click)="openActivityForm()" src=" ./icons/activity.svg" alt="">
             </div>
 
         </div>
@@ -91,7 +91,7 @@
                     <h4>Notizen</h4>
                     <textarea (change)="updateCustomer()" [(ngModel)]="customer.notes" name="" id=""></textarea>
                 </div>
-                <div class="informationCont">
+                <!-- <div class="informationCont">
                     <h4>Information:</h4>
                     <p>erstellt von: {{customer?.creator}} am {{customer?.created_at | date: 'dd.MM.yyyy : HH:mm'}}
                         Uhr
@@ -99,7 +99,7 @@
                     <p *ngIf="customer.editor">zuletzt geändert durch {{customer?.editor}} am {{customer?.updated_at
                         |
                         date: 'dd.MM.yyyy: HH:mm'}} Uhr </p>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -118,8 +118,8 @@
             <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.contactWrapperOpen}">
                 <app-contactwrapper></app-contactwrapper>
             </div>
-            <div  class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen}">
-             <app-activitywrapper></app-activitywrapper>
+            <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen}">
+                <app-activitywrapper></app-activitywrapper>
             </div>
 
         </div>

@@ -6,7 +6,7 @@
                 <div class="errorTxt">
                     <p *ngIf="globalservice.wrongTime">Startdatum muss vor Enddatum liegen</p>
                 </div>
-               
+
                 <button *ngIf="isfiltered===true" (click)="resetTimeFilter()">Filter löschen</button>
                 <div class="inputCont">
                     <h4>Start</h4>
@@ -43,7 +43,7 @@
                 <h4 *ngIf="activities.length===0">- keine Aktivitäten gefunden -</h4>
 
 
-                <div class="listRow" *ngFor="let activity of activities let index=index">
+                <div class="listRow" *ngFor="let activity of activities let index=index" (click)="openActivity(index)">
 
                     <div class="typeCont">
                         <img [src]="dataservice.activityTypes[activity.type].path" alt="">
@@ -52,8 +52,8 @@
 
                     <p>{{activity?.date | date: 'dd.MM.yyyy'}}</p>
 
-                    <p>{{activity?.description}}</p>
-                    <p>{{activity?.user?.profile.fullname}}</p>
+                    <p>{{activity?.title}}</p>
+                    <p>{{activity?.created_by?.profile.fullname}}</p>
                     <p>{{activity?.customer.companyname}}</p>
                     <p>{{activity?.contact.name}}</p>
 
@@ -69,5 +69,37 @@
 
 
 
+    <div class="formWrapper slideOut" [ngClass]="{'slideIn': activityOpen}">
+        <div class="activityWrapper">
+            <div class="titleCont">
+                <input class="title" type="text" [(ngModel)]="currentActivity.title" (change)="editActivity('title')">
+                <div class="imgCont">
+                    <img [src]="dataservice.activityTypes[currentActivity?.type]?.path" alt="">
+                    <p>{{dataservice.activityTypes[currentActivity?.type]?.label}}</p>
+                </div>
+            </div>
 
+            <div class="divider"></div>
+            <div class="activityInfos">
+                <div class="imgCont">
+                    <img src="./icons/duedate.svg" alt="">
+                    <h4>{{currentActivity?.date | date: 'dd.MM.yy - hh:MM' }} Uhr</h4>
+                </div>
+                <div class="imgCont">
+                    <img src="./icons/contactprofile.svg" alt="">
+                    <p>{{currentActivity?.contact?.name}}</p>
+                </div>
+            </div>
+            <div class="inputCont">
+                <h4>Beschreibung</h4>
+                <textarea class="txtContHeight" name="description" [(ngModel)]="currentActivity.description" id=""
+                    (change)="editActivity('description')"></textarea>
+            </div>
+            <div *ngIf="editInvalid" class="errorTxt">
+                <p>*Titel und Beschreibung dürfen nicht leer sein</p>
+            </div>
+
+        </div>
+
+    </div>
 </section>

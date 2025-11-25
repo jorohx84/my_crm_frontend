@@ -84,7 +84,10 @@ export class ActivitywrapperComponent {
 
   checkValidation(form: NgForm) {
     this.typeInvalid = !this.activity.type;
-    this.noContact = !this.contact;
+    this.noContact = !this.contactID;
+    console.log('hallo');
+    console.log(this.noContact);
+    
     if (this.typeInvalid || this.noContact || !form.valid) {
       form.control.markAllAsTouched();
       return;
@@ -107,6 +110,7 @@ export class ActivitywrapperComponent {
     this.apiservice.postData('activities/', data).subscribe({
       next: (response) => {
         this.observerservice.sendActivity(response);
+        this.observerservice.sendConfirmation('Aktivität wurde erfolgreich angelegt');
       }
     })
   }
@@ -114,6 +118,7 @@ export class ActivitywrapperComponent {
 
   createActivityData() {
     return {
+      title: this.activity.title,
       contact: this.contactID,
       customer: this.customerID,
       type: this.activity.type,

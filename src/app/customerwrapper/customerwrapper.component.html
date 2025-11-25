@@ -1,115 +1,114 @@
-  
-        <form #customerCreateForm="ngForm" (ngSubmit)="onSubmit(customerCreateForm)">
-            <!-- companyName -->
-            <div class="inputCont">
-                <div class="inputfield"
-                    [ngClass]="{'errorBorder': companyName.invalid && companyName.touched && globalservice.customerWrapperOpen}">
-                    <input #companyName="ngModel" type="text" id="companyName" name="companyName"
-                        placeholder="Firmenname" [(ngModel)]="customer.companyName" required>
-                </div>
-                <!-- <div class="errorTxt">
+<form #customerCreateForm="ngForm" (ngSubmit)="onSubmit(customerCreateForm)">
+    <!-- companyName -->
+    <div class="inputCont">
+        <div class="inputfield"
+            [ngClass]="{'errorBorder': companyName.invalid && companyName.touched && globalservice.customerWrapperOpen}">
+            <input #companyName="ngModel" type="text" id="companyName" name="companyName" placeholder="Firmenname"
+                [(ngModel)]="customer.companyName" required>
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="companyName.invalid && companyName.touched && isOpen">Pflichtfeld</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- street -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': street.invalid && street.touched}">
-                    <input #street="ngModel" type="text" id="street" name="street" placeholder="Straße"
-                        [(ngModel)]="customer.street" required>
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- street -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': street.invalid && street.touched}">
+            <input #street="ngModel" type="text" id="street" name="street" placeholder="Straße"
+                [(ngModel)]="customer.street" required>
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="street.invalid && street.touched">Pflichtfeld</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- areacode -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': areacode.invalid && areacode.touched}">
-                    <input #areacode="ngModel" type="text" id="areacode" name="areacode" placeholder="Postleitzahl"
-                        [(ngModel)]="customer.areacode" required>
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- areacode -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': areacode.invalid && areacode.touched}">
+            <input #areacode="ngModel" type="text" id="areacode" name="areacode" placeholder="Postleitzahl"
+                [(ngModel)]="customer.areacode" required>
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="areacode.invalid && areacode.touched">Pflichtfeld</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- city -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': city.invalid && city.touched}">
-                    <input #city="ngModel" type="text" id="city" name="city" placeholder="Stadt"
-                        [(ngModel)]="customer.city" required>
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- city -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': city.invalid && city.touched}">
+            <input #city="ngModel" type="text" id="city" name="city" placeholder="Stadt" [(ngModel)]="customer.city"
+                required>
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="city.invalid && city.touched">Pflichtfeld</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- country -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': country.invalid && country.touched}">
-                    <input #country="ngModel" type="text" id="country" name="country" placeholder="Land"
-                        [(ngModel)]="customer.country" required>
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- country -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': country.invalid && country.touched}">
+            <input #country="ngModel" type="text" id="country" name="country" placeholder="Land"
+                [(ngModel)]="customer.country" required>
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="country.invalid && country.touched">Pflichtfeld</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- email -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': email.invalid && email.touched}">
-                    <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
-                        [(ngModel)]="customer.email" required
-                        pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- email -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': email.invalid && email.touched}">
+            <input #email="ngModel" type="email" id="email" name="email" placeholder="E-Mail"
+                [(ngModel)]="customer.email" required pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="email.invalid && email.touched">Bitte gültige E-Mail eingeben</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- phone -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': phone.invalid && phone.touched}">
-                    <input #phone="ngModel" type="tel" id="phone" name="phone" placeholder="Telefonnummer"
-                        [(ngModel)]="customer.phone" required pattern="^[0-9\-\+\s\(\)]*$">
-                </div>
-                <!-- <div class="errorTxt">
-                    <p *ngIf="phone.invalid && phone.touched">Bitte gültige Telefonnummer eingeben</p>
-                </div> -->
-            </div>
+    <!-- phone -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': phone.invalid && phone.touched}">
+            <input #phone="ngModel" type="tel" id="phone" name="phone" placeholder="Telefonnummer"
+                [(ngModel)]="customer.phone" required pattern="^\+\d{1,3} \d{1,4} \d{4,10}$">
+        </div>
+        <div class="errorTxt">
+            <p *ngIf="phone.invalid && phone.touched && phone.errors?.['required']">Bitte Telefonnummer eingeben</p>
+            <p *ngIf="phone.invalid && phone.touched && phone.errors?.['pattern']">Telefonnummer muss im Format'+49 30
+                12345678' sein</p>
+        </div>
+    </div>
 
-            <!-- website -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': website.invalid && website.touched}">
-                    <input #website="ngModel" type="url" id="website" name="website" placeholder="Webseite"
-                        [(ngModel)]="customer.website" required
-                        pattern="^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$">
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- website -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': website.invalid && website.touched}">
+            <input #website="ngModel" type="url" id="website" name="website" placeholder="Webseite"
+                [(ngModel)]="customer.website" required pattern="^(https?:\/\/)?([\w\-]+\.)+[\w\-]+(\/[\w\-./?%&=]*)?$">
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="website.invalid && website.touched">Bitte gültige URL eingeben</p>
                 </div> -->
-            </div>
+    </div>
 
-            <!-- branch -->
-            <div class="inputCont">
-                <div class="inputfield" [ngClass]="{'errorBorder': branch.invalid && branch.touched}">
-                    <input #branch="ngModel" type="text" id="branch" name="branch" placeholder="Branche"
-                        [(ngModel)]="customer.branch" required>
-                </div>
-                <!-- <div class="errorTxt">
+    <!-- branch -->
+    <div class="inputCont">
+        <div class="inputfield" [ngClass]="{'errorBorder': branch.invalid && branch.touched}">
+            <input #branch="ngModel" type="text" id="branch" name="branch" placeholder="Branche"
+                [(ngModel)]="customer.branch" required>
+        </div>
+        <!-- <div class="errorTxt">
                     <p *ngIf="branch.invalid && branch.touched">Pflichtfeld</p>
                 </div> -->
-            </div>
-            <div *ngIf="!isValid && isSend" class="errorTxt flexheight">
-                <p>Bitte alle Felder ausfüllen.</p>
-                <p *ngIf="email.errors?.['pattern']"> E-Mail-Adresse ungültig</p>
-                <p *ngIf="website.errors?.['pattern']"> Website-URL ungültig</p>
-                <p *ngIf="phone.errors?.['pattern']">Telefonnummer ungültig</p>
-            </div>
-            <div class="btnCont">
-                <button type="button" (click)="resetFormData(customerCreateForm)">Abbrechen</button>
-                <button type="submit">Nutzer anlegen</button>
-            </div>
+    </div>
+    <div *ngIf="!isValid && isSend" class="errorTxt flexheight">
+        <p>Bitte alle Felder ausfüllen.</p>
+        <p *ngIf="email.errors?.['pattern']"> E-Mail-Adresse ungültig</p>
+        <p *ngIf="website.errors?.['pattern']"> Website-URL ungültig</p>
+        <p *ngIf="phone.errors?.['pattern']">Telefonnummer ungültig</p>
+    </div>
+    <div class="btnCont">
+        <button type="button" (click)="resetFormData(customerCreateForm)">Abbrechen</button>
+        <button type="submit">Nutzer anlegen</button>
+    </div>
 
-        </form>
+</form>

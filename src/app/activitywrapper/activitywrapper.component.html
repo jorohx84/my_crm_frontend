@@ -1,44 +1,53 @@
 <section>
     <div class="acitvityForm">
         <h3>Neue Aktivität</h3>
-        <div>
-            <div class="typeChoices">
-                <div class="typeBtn" (click)="changeActivityType('call')"
-                    [ngClass]="{'tabActive': activity.type==='call'}">
-                    <p>Anruf</p>
-                </div>
-                <div class="typeBtn" (click)="changeActivityType('email')"
-                    [ngClass]="{'tabActive': activity.type==='email'}">
-                    <p>E-Mail</p>
-                </div>
-                <div class="typeBtn" (click)="changeActivityType('invite')"
-                    [ngClass]="{'tabActive': activity.type==='invite'}">
-                    <p>Besuch</p>
-                </div>
-                <div class="typeBtn" (click)="changeActivityType('video')"
-                    [ngClass]="{'tabActive': activity.type==='video'}">
-                    <p>VideoCall</p>
-                </div>
-            </div>
-            <div class="errorTxt">
-                <p *ngIf="typeInvalid">*Pflichtfeld</p>
-            </div>
-
-        </div>
-        <div *ngIf="isSingleContact===false" class="contactChoice">
-            <button (click)="openContactList()">Kontakt wählen</button>
-            <div *ngIf="contact" class="currentContact">
-                <img src="./icons/contactprofile.svg" alt="">
-                <p>{{contact?.name}}</p>
-                
-            </div>
-            <div *ngIf="noContact===true" class="errorTxt">
-                <p>*Kontakt wählen</p>
-            </div>
-        </div>
-
-
         <form #createActivityForm="ngForm" (ngSubmit)="checkValidation(createActivityForm)">
+            <div class="inputCont">
+                <div class="inputfield">
+                    <input #title="ngModel" name="title" type="text" [(ngModel)]="activity.title" placeholder="Kurzbeschreibung" required maxlength="45">
+                </div>
+                <div *ngIf="title.invalid && title.touched" class="errorTxt">
+                    <p>*Pflichtfeld</p>
+                </div>
+            </div>
+            <div class="typeChoiceBtns">
+                <div class="typeChoices">
+                    <div class="typeBtn" (click)="changeActivityType('call')"
+                        [ngClass]="{'tabActive': activity.type==='call'}">
+                        <p>Anruf</p>
+                    </div>
+                    <div class="typeBtn" (click)="changeActivityType('email')"
+                        [ngClass]="{'tabActive': activity.type==='email'}">
+                        <p>E-Mail</p>
+                    </div>
+                    <div class="typeBtn" (click)="changeActivityType('invite')"
+                        [ngClass]="{'tabActive': activity.type==='invite'}">
+                        <p>Besuch</p>
+                    </div>
+                    <div class="typeBtn" (click)="changeActivityType('video')"
+                        [ngClass]="{'tabActive': activity.type==='video'}">
+                        <p>VideoCall</p>
+                    </div>
+                </div>
+                <div class="errorTxt">
+                    <p *ngIf="typeInvalid">*Pflichtfeld</p>
+                </div>
+
+            </div>
+            <div *ngIf="isSingleContact===false" class="contactChoice">
+                <button type="button" (click)="openContactList()">Kontakt wählen</button>
+                <div *ngIf="contact" class="currentContact">
+                    <img src="./icons/contactprofile.svg" alt="">
+                    <p>{{contact?.name}}</p>
+
+                </div>
+                <div *ngIf="noContact===true" class="errorTxt">
+                    <p>*Kontakt wählen</p>
+                </div>
+            </div>
+
+
+
 
 
             <div class="inputCont">

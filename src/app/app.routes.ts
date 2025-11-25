@@ -32,7 +32,9 @@ export const routes: Routes = [
                     { path: 'tasklist', component: TasklistComponent },
                     { path: 'task/:task_id', component: SingletaskComponent },
                     { path: 'contacts', component: ContactsComponent },
-                    { path: 'singlecontact/:contact_id', component: SinglecontactComponent },
+                    { path: 'singlecontact/:contact_id', component: SinglecontactComponent, children:[
+                        {path:'activities', component: ActivitiesComponent},
+                    ] },
                 ]
             },
             { path: 'board', component: BoardComponent },

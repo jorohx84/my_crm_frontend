@@ -9,10 +9,10 @@ import { ActivitywrapperComponent } from '../activitywrapper/activitywrapper.com
 import { GlobalService } from '../services/global.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ActivitiesComponent } from '../activities/activities.component';
-
+import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-singlecontact',
-  imports: [CommonModule, FormsModule, ActivitiesComponent],
+  imports: [CommonModule, FormsModule, RouterOutlet, ActivitiesComponent],
   templateUrl: './singlecontact.component.html',
   styleUrl: './singlecontact.component.scss'
 })
@@ -77,7 +77,8 @@ export class SinglecontactComponent {
   ];
 
   ngOnInit() {
-    this.loadTemplate()
+    this.loadTemplate();
+    this.loadIDFromURL();
     this.subscribeActivity();
     this.dataservice.saveDataToLocalStorage('sidebarOpen', false);
   }

@@ -47,6 +47,7 @@ section {
     height: 100vh;
     display: flex;
     flex-direction: column;
+
 }
 
 // div {
@@ -69,10 +70,10 @@ section {
     // }
 }
 
-.placeholder {
-    //   width: 120px;
-    //     height: 100%;
-}
+// .placeholder {
+//     //   width: 120px;
+//     //     height: 100%;
+// }
 
 .mainWindow {
     width: 100%;
@@ -99,7 +100,7 @@ section {
     position: relative;
 }
 
-.globalSearchWrapper{
+.globalSearchWrapper {
     position: absolute;
     top: 80px;
     right: 0;
@@ -121,3 +122,48 @@ section {
 // background-color: rgba(255, 255, 255, 0.722);
 
 // }
+
+.confirmation {
+    position: absolute;
+    right: 56px;
+    bottom: 56px;
+    width: 400px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+    padding: 12px 24px;
+    background-color: white;
+    border: solid 1px var(--border);
+    border-radius: 4px;
+    transition: transform 0.5s ease-in-out;
+z-index: 10;
+    .confirmState {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        >img {
+            width: 24px;
+        }
+
+        >p {
+            font-size: 20px;
+            font-weight: 400;
+        }
+    }
+    >span{
+        margin-top: 8px;
+        font-size: 16px;
+    }
+
+}
+
+.slideOutRight {
+    transform: translateX(120%);
+}
+
+.slideInRight {
+    transform: translateX(0%);
+}

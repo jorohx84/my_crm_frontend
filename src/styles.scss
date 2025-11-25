@@ -87,7 +87,9 @@ textarea::-webkit-scrollbar {
     display: none;
 }
 
-
+.txtContHeight{
+    height: 200px !important;
+}
 
 
 
@@ -200,6 +202,9 @@ form {
     display: flex;
     flex-direction: column;
     position: relative;
+    >h4{
+        margin-bottom: 4px;
+    }
 }
 
 .inputfield {
@@ -281,7 +286,10 @@ button {
     padding: 32px;
 }
 
-
+.flxnd{
+    justify-content: flex-end !important;
+    padding: 32px 0 !important;
+}
 
 .addBtn {
     width: 120px;
@@ -426,6 +434,42 @@ button {
 }
 
 // list
+
+
+
+.timeFilter {
+    display: flex;
+    gap: 32px;
+
+    .inputCont {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+    }
+
+    >button {
+        min-width: 100px !important;
+        max-width: 100px !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
+
+        >img {
+            filter: invert(100%);
+        }
+    }
+}
+
+.imgCont {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+
+    >img {
+        width: 24px;
+    }
+}
+
 .listSection {
     width: 100%;
     height: calc(100vh - 178px);
@@ -530,28 +574,5 @@ button {
 
     >img {
         width: 24px;
-    }
-}
-
-
-.timeFilter {
-    display: flex;
-    gap: 32px;
-
-    .inputCont {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-    }
-
-    >button {
-        min-width: 100px !important;
-        max-width: 100px !important;
-        min-height: 30px !important;
-        max-height: 30px !important;
-
-        >img {
-            filter: invert(100%);
-        }
     }
 }

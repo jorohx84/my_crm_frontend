@@ -1,0 +1,33 @@
+
+
+.activityWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+}
+
+
+.title {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.titleCont {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.activityInfos {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    background-color: var(--box-light);
+    border-radius: 4px;
+    padding: 12px;
+
+}

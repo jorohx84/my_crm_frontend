@@ -29,13 +29,24 @@
         <div class="placeholder"></div>
         <div class="content">
             <router-outlet></router-outlet>
-            
+
         </div>
     </div>
 
 
-<!-- <div class="overlay"></div> -->
- <div [ngClass]="{'slideIn': globalservice.searchWrapperOpen===true}" class="globalSearchWrapper slideOut">
-    <app-globalsearchwrapper></app-globalsearchwrapper>
- </div>
+    <!-- <div class="overlay"></div> -->
+    <div [ngClass]="{'slideIn': globalservice.searchWrapperOpen===true}" class="globalSearchWrapper slideOut">
+        <app-globalsearchwrapper></app-globalsearchwrapper>
+    </div>
+
+    <div class="confirmation slideOutRight" [ngClass]="{'slideInRight': showConfrim}">
+        <!-- <p>{{confirmation}}</p> -->
+        <div class="confirmState">
+            <p>Aktion erfolgreich</p>
+            <img src="./icons/done.svg" alt="">
+        </div>
+
+        <div class="divider"></div>
+        <span>{{confirmation}}</span>
+    </div>
 </section>

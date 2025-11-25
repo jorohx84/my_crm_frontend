@@ -85,7 +85,7 @@ export class ContactsComponent {
     const currentContact = this.contacts[index];
     console.log();
 
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singlecontact', currentContact.id]);
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singlecontact', currentContact.id, 'activities'], { actlist: 'contact' });
   }
   searchContact() {
 
