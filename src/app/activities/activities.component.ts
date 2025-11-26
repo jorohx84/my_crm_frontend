@@ -9,11 +9,12 @@ import { ActivatedRoute } from '@angular/router';
 import { response } from 'express';
 import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
 
 
 @Component({
   selector: 'app-activities',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ContactlistwrapperComponent],
   templateUrl: './activities.component.html',
   styleUrl: './activities.component.scss'
 })
@@ -36,6 +37,9 @@ export class ActivitiesComponent {
   isfiltered: boolean = false;
   activityOpen: boolean = false;
   editInvalid: boolean = false;
+  editDateOpen: boolean = false;
+  contactListOpen: boolean = false;
+  editTypeOpen: boolean = false;
   currentActivity: any = {
     title: '',
     description: '',
@@ -44,6 +48,7 @@ export class ActivitiesComponent {
     customer: null,
     date: '',
   }
+
   activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
     { fieldName: 'type', displayName: 'Typ' },
     { fieldName: 'date', displayName: 'Datum' },
@@ -54,7 +59,7 @@ export class ActivitiesComponent {
 
   ];
 
- constructor() {
+  constructor() {
     this.globalservice.setCustomerSidebarState();
   }
 
@@ -63,7 +68,7 @@ export class ActivitiesComponent {
     // this.loadContact();
     this.loadTemplate();
     this.subscribeActivities();
-    console.log(this.activityListType);
+    this.subscribeContact();
 
   }
 
@@ -75,36 +80,21 @@ export class ActivitiesComponent {
   loadTemplate() {
     this.router.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       if (param) {
-        console.log(('hallo'));
-
         this.activityListType = param.get('actlist');
-        console.log(this.activityListType);
-
+        this.activityListType === 'contact' ? this.loadDataFromURl('contact_id') : this.loadDataFromURl('customer_id');
       }
-
     });
 
-    this.activityListType === 'contact' ? this.loadContact() : this.loadCustomer();
   }
 
-  loadCustomer() {
+  loadDataFromURl(paramID: string) {
     this.router.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      const id = param.get('customer_id');
-      if (id && this.activityListType === 'customer') {
-        this.customerID = id;
-        this.loadActivities(id, 'customer');
-      }
-    })
-  }
-
-  loadContact() {
-    this.router.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      const id = param.get('contact_id');
-      console.log(id);
-
-      if (id && this.activityListType === 'contact') {
-        this.contactID = id
-        this.loadActivities(id, 'contact');
+      if (param) {
+        const id = param.get(paramID);
+        if (id) {
+          const apiKey = paramID.replace('_id', '');
+          this.loadActivities(id, apiKey);
+        }
       }
     })
   }
@@ -124,23 +114,27 @@ export class ActivitiesComponent {
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        const id = this.activityListType === 'contact' ? this.contactID : this.customerID;
-        const key = this.activityListType === 'contact' ? 'contact' : 'customer';
-        this.loadActivities(id, key);
+        // console.log(data);
+
+        // const id = this.activityListType === 'contact' ? data.contact : data.customer;
+        // console.log(id);
+
+        // const key = this.activityListType === 'contact' ? 'contact' : 'customer';
+        // this.loadActivities(id, key);
+        this.loadTemplate();
       }
     })
   }
 
-
-
-
-
-
-  // sortList(list: any[]) {
-  //   return list.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  // }
-
-
+  subscribeContact() {
+    this.observservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      if (data) {
+        this.currentActivity.contact = data;
+        this.contactListOpen = false;
+        this.editActivity('contact');
+      }
+    })
+  }
 
 
   searchInActivities() {
@@ -176,7 +170,6 @@ export class ActivitiesComponent {
   }
 
 
-
   resetTimeFilter() {
     this.isfiltered = false;
     this.activities = this.allActivities;
@@ -185,7 +178,6 @@ export class ActivitiesComponent {
   }
 
   openActivity(index: number) {
-    console.log(index);
     this.currentActivity = this.activities[index];
     console.log(this.currentActivity);
     this.activityOpen = true
@@ -193,23 +185,55 @@ export class ActivitiesComponent {
 
   editActivity(key: string) {
     const aid = this.currentActivity.id
-    const data = {
-      [key]: this.currentActivity[key],
+    const data: any = this.getData(key);
+    this.editInvalid = this.validateData(data[key]) ? true : false;
+    if (this.editInvalid) { return }
+    this.saveEdit(aid, data);
+  }
 
-    }
-    if (data[key] === '') {
-      console.log('Feld leer');
-      this.editInvalid = true;
-      return
-    }
 
-    this.editInvalid = false;
+  saveEdit(aid: string, data: any) {
     this.apiservice.patchData(`activity/${aid}/`, data).subscribe({
       next: (response) => {
-        console.log(response);
         this.observservice.sendActivity(response);
       }
     })
+  }
+
+  getData(key: string) {
+    if (key === 'contact') {
+      return { contact: this.currentActivity.contact.id }
+    } else {
+      return { [key]: this.currentActivity[key] }
+    }
+  }
+
+
+  validateData(value: any) {
+    return value === '' || value === null || value === undefined
+  }
+
+
+  openContactList() {
+    const cid = this.currentActivity.customer.id
+    this.observservice.triggerloadCustomer(cid);
+    this.contactListOpen = true
+
+  }
+
+  closeActivity() {
+    if (this.editInvalid) {
+      return
+    }
+    this.activityOpen = false;
+    this.editInvalid = false;
+  }
+
+  editType(type: string) {
+    console.log(type);
+    this.currentActivity.type = type;
+    this.editActivity('type');
+    this.editTypeOpen = false
   }
 }
 

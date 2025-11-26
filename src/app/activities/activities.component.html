@@ -71,21 +71,47 @@
 
     <div class="formWrapper slideOut" [ngClass]="{'slideIn': activityOpen}">
         <div class="activityWrapper">
-            <div class="titleCont">
-                <input class="title" type="text" [(ngModel)]="currentActivity.title" (change)="editActivity('title')">
-                <div class="imgCont">
-                    <img [src]="dataservice.activityTypes[currentActivity?.type]?.path" alt="">
-                    <p>{{dataservice.activityTypes[currentActivity?.type]?.label}}</p>
+            <div class="wrapperHeadline">
+                <div class="titleCont">
+                    <img (click)="editTypeOpen=true" [src]="dataservice.activityTypes[currentActivity?.type]?.path"
+                        alt="">
+                    <input class="title" type="text" [(ngModel)]="currentActivity.title"
+                        (change)="editActivity('title')">
+
+                </div>
+                <img (click)="closeActivity()" src="./icons/close.svg" alt="">
+                <!-- editType -->
+                <div class="editType" *ngIf="editTypeOpen">
+                    <div>
+                        <p>Typ ändern</p>
+                        <img (click)="editTypeOpen=false;" src="./icons/close.svg" alt="">
+                    </div>
+                    <div class="divider"></div>
+                    <div>
+
+                        <img (click)="editType('call')" src="./icons/phone.svg" alt="">
+                        <img (click)="editType('email')" src="./icons/mail.svg" alt="">
+                        <img (click)="editType('invite')" src="./icons/invite.svg" alt="">
+                        <img (click)="editType('video')" src="./icons/invite.svg" alt="">
+
+                    </div>
                 </div>
             </div>
-
             <div class="divider"></div>
             <div class="activityInfos">
-                <div class="imgCont">
+                <div class="imgCont" (click)="editDateOpen=true">
                     <img src="./icons/duedate.svg" alt="">
-                    <h4>{{currentActivity?.date | date: 'dd.MM.yy - hh:MM' }} Uhr</h4>
+                    <h4>{{currentActivity?.date | date: 'dd.MM.yy - hh:mm' }} Uhr</h4>
+
+                    <!-- Edit Date -->
+                    <div *ngIf="editDateOpen" class="changeDate">
+                        <h4>Datum ändern</h4>
+                        <input (change)="editActivity('date')" [(ngModel)]="currentActivity.date" type="datetime-local">
+                        <img (click)="editDateOpen = false; $event.stopPropagation()" src="./icons/close.svg" alt="">
+                    </div>
+                    <!--  -->
                 </div>
-                <div class="imgCont">
+                <div class="imgCont" (click)="openContactList()">
                     <img src="./icons/contactprofile.svg" alt="">
                     <p>{{currentActivity?.contact?.name}}</p>
                 </div>
@@ -100,6 +126,8 @@
             </div>
 
         </div>
-
+        <div class="formWrapper slideOut" [ngClass]="{'slideIn': contactListOpen===true}">
+            <app-contactlistwrapper></app-contactlistwrapper>
+        </div>
     </div>
 </section>

@@ -7,11 +7,12 @@ import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { response } from 'express';
 import { flatMap, Subject, takeUntil } from 'rxjs';
+import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
 
 
 @Component({
   selector: 'app-activitywrapper',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ContactlistwrapperComponent],
   templateUrl: './activitywrapper.component.html',
   styleUrl: './activitywrapper.component.scss'
 })
@@ -54,13 +55,25 @@ export class ActivitywrapperComponent {
   }
 
   subscribeContact() {
-    this.observerservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((contactId) => {
-      if (contactId) {
-        this.contactID = contactId;
+    this.observerservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      if (data) {
+        this.setContactData(data);
+        this.contactListOpen = false;
+        this.noContact = false;
       }
       this.setVariabelFromURL();
 
     })
+  }
+
+
+  setContactData(data: any) {
+    if (typeof data === 'string') {
+      this.contactID = data;
+    } else {
+      this.contact = data;
+      this.contactID = data.id;
+    }
   }
 
   setVariabelFromURL() {
@@ -85,9 +98,6 @@ export class ActivitywrapperComponent {
   checkValidation(form: NgForm) {
     this.typeInvalid = !this.activity.type;
     this.noContact = !this.contactID;
-    console.log('hallo');
-    console.log(this.noContact);
-    
     if (this.typeInvalid || this.noContact || !form.valid) {
       form.control.markAllAsTouched();
       return;
@@ -100,7 +110,7 @@ export class ActivitywrapperComponent {
     const requestData = this.createActivityData();
     this.saveActivity(requestData);
     if (!this.noNavigate && !this.isSingleContact) {
-      this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'activities']);
+      this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'activities'], { actlist: 'customer' });
     }
     this.resetForm(form);
 
@@ -141,11 +151,12 @@ export class ActivitywrapperComponent {
 
   openContactList() {
     this.contactListOpen = true;
-    this.apiservice.getData(`contacts/${this.customerID}/`).subscribe({
-      next: (response) => {
-        this.contacts = response;
-      }
-    })
+    // this.apiservice.getData(`contacts/${this.customerID}/`).subscribe({
+    //   next: (response) => {
+    //     this.contacts = response;
+    //   }
+    // })
+    this.observerservice.triggerloadCustomer(this.customerID)
   }
 
 
