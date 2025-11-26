@@ -34,11 +34,12 @@ export class CustomerwrapperComponent {
     const customerData = this.createCustomerObject();
     this.apiservice.postData('customers/', customerData).subscribe({
       next: (response) => {
-        this.observerservice.triggerloadCustomer(response);
+        // this.observerservice.triggerloadCustomer(response);
         this.globalservice.customerWrapperOpen = false;
         this.isSend = true
         this.isValid = true
         this.observerservice.sendConfirmation('Kunde wurde erfolgreich angelegt')
+        this.globalservice.navigateToPath(['main', 'singlecustomer', response.id, 'dashboard']);
         setTimeout(() => {
           this.resetFormData(form)
         }, 1000);

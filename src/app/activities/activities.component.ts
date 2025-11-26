@@ -7,7 +7,7 @@ import { ObservableService } from '../services/observable.service';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { response } from 'express';
-import { Subject, takeUntil } from 'rxjs';
+import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
 
@@ -64,11 +64,9 @@ export class ActivitiesComponent {
   }
 
   ngOnInit() {
-    // this.loadCustomer();
-    // this.loadContact();
     this.loadTemplate();
-    this.subscribeActivities();
-    this.subscribeContact();
+    // this.subscribeActivities();
+    // this.subscribeContact();
 
   }
 
@@ -77,31 +75,41 @@ export class ActivitiesComponent {
     this.destroy$.complete();
   }
 
+  // loadTemplate() {
+  //   this.router.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+  //     if (param) {
+  //       this.activityListType = param.get('actlist');
+  //       this.activityListType === 'contact' ? this.loadDataFromURl('contact_id') : this.loadDataFromURl('customer_id');
+  //     }
+  //   });
+
+  // }
+
+
   loadTemplate() {
-    this.router.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      if (param) {
-        this.activityListType = param.get('actlist');
-        this.activityListType === 'contact' ? this.loadDataFromURl('contact_id') : this.loadDataFromURl('customer_id');
-      }
+    combineLatest([this.router.queryParamMap, this.router.parent!.paramMap]).pipe(takeUntil(this.destroy$)).subscribe(([query, params]) => {
+
+      const listType = query.get('actlist');
+      const paramID = listType === 'contact' ? 'contact_id' : 'customer_id';
+
+      const id = params.get(paramID);
+      if (!id) return;
+
+      const apiKey = paramID.replace('_id', '');
+      this.loadActivities(id, apiKey);
     });
 
+    this.subscribeActivities();
+    this.subscribeContact();
+
   }
 
-  loadDataFromURl(paramID: string) {
-    this.router.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      if (param) {
-        const id = param.get(paramID);
-        if (id) {
-          const apiKey = paramID.replace('_id', '');
-          this.loadActivities(id, apiKey);
-        }
-      }
-    })
-  }
 
   loadActivities(id: string, key: string) {
     this.apiservice.getData(`activities/${key}/${id}/`).subscribe({
       next: (response) => {
+        console.log(response);
+
         const sortedList = this.globalservice.sortListbyTime(response, 'date');
         this.activities = sortedList;
         this.allActivities = sortedList;
@@ -114,13 +122,6 @@ export class ActivitiesComponent {
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        // console.log(data);
-
-        // const id = this.activityListType === 'contact' ? data.contact : data.customer;
-        // console.log(id);
-
-        // const key = this.activityListType === 'contact' ? 'contact' : 'customer';
-        // this.loadActivities(id, key);
         this.loadTemplate();
       }
     })
@@ -195,7 +196,12 @@ export class ActivitiesComponent {
   saveEdit(aid: string, data: any) {
     this.apiservice.patchData(`activity/${aid}/`, data).subscribe({
       next: (response) => {
-        this.observservice.sendActivity(response);
+        // this.observservice.sendActivity(response);
+        const updatedActivity = this.currentActivity
+        this.activities = this.activities.map(a =>
+          a.id === updatedActivity.id ? updatedActivity : a
+        );
+        this.allActivities = this.activities;
       }
     })
   }

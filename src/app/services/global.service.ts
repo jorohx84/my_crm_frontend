@@ -65,7 +65,7 @@ export class GlobalService {
     }
 
 
-    constructor() {}
+    constructor() { }
 
     setCustomerSidebarState() {
         if (this.checkURL('singlecontact')) {
@@ -199,10 +199,24 @@ export class GlobalService {
         return foundActivities;
     }
 
-    sortListbyTime(list: any[], key: string) {
-        return list.sort((a: any, b: any) => new Date(b[key]).getTime() - new Date(a[key]).getTime());
+    sortListbyTime(list: any[], key: string, direction: 'up' | 'down' = 'down'): any[] {
+        return list.sort((a, b) => {
+            const timeA = new Date(a[key]).getTime();
+            const timeB = new Date(b[key]).getTime();
+
+            return direction === 'up' ? timeA - timeB : timeB - timeA;
+        });
     }
 
+    sortListByName(list: any[], key: string, direction: 'up' | 'down' = 'up'): any[] {
+        return list.sort((a, b) => {
+            const nameA = (a[key] || '').toString().toLowerCase();
+            const nameB = (b[key] || '').toString().toLowerCase();
 
+            if (nameA < nameB) return direction === 'up' ? -1 : 1;
+            if (nameA > nameB) return direction === 'up' ? 1 : -1;
+            return 0;
+        });
+    }
 
 }

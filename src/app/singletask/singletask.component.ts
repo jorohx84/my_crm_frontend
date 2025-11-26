@@ -83,7 +83,7 @@ export class SingletaskComponent {
   ngOnInit() {
     this.loadTemplate();
     this.subscribeUser();
-    this.subscribeSubtasks();
+    // this.subscribeSubtasks();
     this.subscribeMember();
 
   }
@@ -116,20 +116,18 @@ export class SingletaskComponent {
     })
   }
 
-  subscribeSubtasks() {
-    this.observerservice.taskTriggerSubject$.pipe(takeUntil(this.destroy$)).subscribe((subtaskData) => {
-      if (subtaskData) {
-        if (subtaskData.type === 'task') {
-          return
-        }
-        // this.subtask = subtaskData;
-        // this.loadSubtasks(this.taskId);
-        this.updateTask({ log: [] }, 'subtask');
-        this.sidebarKey = 'comments';
-        this.taskWrapperOpen = false;
-      }
-    })
-  }
+  // subscribeSubtasks() {
+  //   this.observerservice.taskTriggerSubject$.pipe(takeUntil(this.destroy$)).subscribe((subtaskData) => {
+  //     if (subtaskData) {
+  //       if (subtaskData.type === 'task') {
+  //         return
+  //       }
+  //       this.updateTask({ log: [] }, 'subtask');
+  //       this.sidebarKey = 'comments';
+  //       this.taskWrapperOpen = false;
+  //     }
+  //   })
+  // }
 
   subscribeMember() {
     this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((memberData) => {
@@ -172,24 +170,15 @@ export class SingletaskComponent {
 
   }
   loadLog(task: any) {
-    // console.log(task);
-    // this.logBook = task.log.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
     this.apiservice.getData(`task/logs/${task.id}`).subscribe({
       next: (response) => {
-        this.logBook = response.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
+        console.log(response);
+        
+        // this.logBook = response.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
+        this.logBook=this.globalservice.sortListbyTime(response, 'logged_at', 'down')
       }
     })
   }
-
-  // loadSubtasks(id: string | null) {
-  //   this.apiservice.getData(`subtasks/${id}`).subscribe({
-  //     next: (response) => {
-  //       this.subtasks = response;
-  //       console.log(response);
-
-  //     }
-  //   })
-  // }
 
   backToCustomer() {
     this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'], null);
@@ -198,7 +187,7 @@ export class SingletaskComponent {
   sortComments() {
     if (this.task.comments.length > 0) {
       const comments = this.task.comments
-      this.sortedComments = comments.sort((a: any, b: any) => b.created_at.localeCompare(a.created_at));
+      this.sortedComments = this.globalservice.sortListbyTime(comments, 'created_at', 'down');
     }
 
   }
@@ -229,6 +218,9 @@ export class SingletaskComponent {
   changeSidebarContent(key: string) {
     this.sidebarKey = key;
   }
+
+
+
   changeTitle(objKey: string) {
     const data = {
       title: this.task.title,
@@ -252,13 +244,6 @@ export class SingletaskComponent {
     event.stopPropagation()
   }
 
-  // updateTaskState(newState: string, objKey: string) {
-  //   this.task.state = newState
-  //   const data = {
-  //     state: newState,
-  //   }
-  //   this.updateTask(data, objKey);
-  // }
 
   updateDueDate(objKey: string, event: Event) {
     this.task.due_date = this.newDueDate
@@ -462,7 +447,7 @@ export class SingletaskComponent {
       next: (response => {
         console.log(response);
 
-        this.foundMembers = response.sort((a: any, b: any) => a.fullname.localeCompare(b.fullname))
+        this.foundMembers = this.globalservice.sortListByName(response, 'fullname', 'up')
 
       })
     })

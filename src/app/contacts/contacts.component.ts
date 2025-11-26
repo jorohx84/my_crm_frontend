@@ -61,9 +61,9 @@ export class ContactsComponent {
   subscribeContact() {
     this.observerservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((contact) => {
       if (contact) {
-        console.log(contact.customer);
-        const customerId = contact.customer
-        this.loadContacts(customerId);
+        // console.log(contact);
+        // const customerId = contact.customer
+        // this.loadContacts(customerId);
       }
 
     })
