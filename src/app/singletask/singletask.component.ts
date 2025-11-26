@@ -159,7 +159,7 @@ export class SingletaskComponent {
           this.task = response;
           console.log(response);
           this.loadLog(response)
-          this.getProgressState();
+          // this.getProgressState();
           this.sortComments();
 
           this.subtasks = response.subtasks
@@ -193,26 +193,26 @@ export class SingletaskComponent {
   }
 
 
-  getProgressState() {
-    if (this.task.state === 'undone') {
-      this.linewidth = 0;
-    }
-    else if (this.task.state === 'in_progress') {
-      this.linewidth = 20;
-    }
-    else if (this.task.state === 'under_review') {
-      this.linewidth = 40;
-    }
-    else if (this.task.state === 'done') {
-      this.linewidth = 60;
-    }
-    else if (this.task.state === 'released') {
-      this.linewidth = 80;
-    }
-    else
-      this.linewidth = 100;
+  // getProgressState() {
+  //   if (this.task.state === 'undone') {
+  //     this.linewidth = 0;
+  //   }
+  //   else if (this.task.state === 'in_progress') {
+  //     this.linewidth = 20;
+  //   }
+  //   else if (this.task.state === 'under_review') {
+  //     this.linewidth = 40;
+  //   }
+  //   else if (this.task.state === 'done') {
+  //     this.linewidth = 60;
+  //   }
+  //   else if (this.task.state === 'released') {
+  //     this.linewidth = 80;
+  //   }
+  //   else
+  //     this.linewidth = 100;
 
-  }
+  // }
 
 
   changeSidebarContent(key: string) {
@@ -265,7 +265,7 @@ export class SingletaskComponent {
 
     this.apiservice.patchData(`task/${this.taskId}/`, requestData).subscribe({
       next: (response) => {
-        this.getProgressState();
+        // this.getProgressState();
         if (objKey === 'assignee') {
           this.globalservice.saveLog(objKey, response, this.newAssignee);
         } else if (objKey === 'tododone' || objKey === 'todoundone') {

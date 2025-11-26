@@ -22,7 +22,8 @@ export class GlobalsearchwrapperComponent {
   ngOnInit() {
     this.observerservice.globalsearchSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        this.members = data.members;
+        // this.members = data.members;
+        this.members=this.globalservice.sortListByName(data.members, 'profile.fullname', 'up');
         this.tasks = data.tasks;
         this.customers = data.customers
         this.contacts = data.contacts

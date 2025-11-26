@@ -210,13 +210,17 @@ export class GlobalService {
 
     sortListByName(list: any[], key: string, direction: 'up' | 'down' = 'up'): any[] {
         return list.sort((a, b) => {
-            const nameA = (a[key] || '').toString().toLowerCase();
-            const nameB = (b[key] || '').toString().toLowerCase();
+            const nameA = (this.getNestedValue(a, key) || '').toString().toLowerCase();
+            const nameB = (this.getNestedValue(b, key) || '').toString().toLowerCase();
 
             if (nameA < nameB) return direction === 'up' ? -1 : 1;
             if (nameA > nameB) return direction === 'up' ? 1 : -1;
             return 0;
         });
     }
-
+    getNestedValue(obj: any, key: string): any {
+        return key.split('.').reduce((value, key) => {
+            return value ? value[key] : null;
+        }, obj);
+    }
 }
