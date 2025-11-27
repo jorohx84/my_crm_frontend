@@ -28,6 +28,10 @@ export class ObservableService {
     public activitySubject$ = this.activitySubject.asObservable();
     private confirmSubject = new BehaviorSubject<any>(null);
     public confirmSubject$ = this.confirmSubject.asObservable();
+    private listCountSubject = new BehaviorSubject<any>(null);
+    public listCountSubject$ = this.listCountSubject.asObservable();
+    private menulistSubject = new BehaviorSubject<any>(null);
+    public menulistSubject$ = this.menulistSubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -66,5 +70,13 @@ export class ObservableService {
 
     sendConfirmation(confirm: any) {
         this.confirmSubject.next(confirm);
+    }
+
+    sendListCount(count: number) {
+        this.listCountSubject.next(count)
+    }
+
+    sendListData(data: any) {
+        this.menulistSubject.next(data);
     }
 }

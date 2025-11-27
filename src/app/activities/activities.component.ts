@@ -10,11 +10,12 @@ import { response } from 'express';
 import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
+import { ListmenuComponent } from '../listmenu/listmenu.component';
 
 
 @Component({
   selector: 'app-activities',
-  imports: [CommonModule, FormsModule, ContactlistwrapperComponent],
+  imports: [CommonModule, FormsModule, ContactlistwrapperComponent, ListmenuComponent],
   templateUrl: './activities.component.html',
   styleUrl: './activities.component.scss'
 })
@@ -48,7 +49,8 @@ export class ActivitiesComponent {
     customer: null,
     date: '',
   }
-
+  totalPages: number | null = null;
+  next: string | null = null;
   activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
     { fieldName: 'type', displayName: 'Typ' },
     { fieldName: 'date', displayName: 'Datum' },
@@ -65,9 +67,6 @@ export class ActivitiesComponent {
 
   ngOnInit() {
     this.loadTemplate();
-    // this.subscribeActivities();
-    // this.subscribeContact();
-
   }
 
   ngOnDestroy() {
@@ -75,41 +74,25 @@ export class ActivitiesComponent {
     this.destroy$.complete();
   }
 
-  // loadTemplate() {
-  //   this.router.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-  //     if (param) {
-  //       this.activityListType = param.get('actlist');
-  //       this.activityListType === 'contact' ? this.loadDataFromURl('contact_id') : this.loadDataFromURl('customer_id');
-  //     }
-  //   });
-
-  // }
-
-
   loadTemplate() {
     combineLatest([this.router.queryParamMap, this.router.parent!.paramMap]).pipe(takeUntil(this.destroy$)).subscribe(([query, params]) => {
-
       const listType = query.get('actlist');
       const paramID = listType === 'contact' ? 'contact_id' : 'customer_id';
-
       const id = params.get(paramID);
       if (!id) return;
-
       const apiKey = paramID.replace('_id', '');
       this.loadActivities(id, apiKey);
     });
 
     this.subscribeActivities();
     this.subscribeContact();
-
+    this.subscribeListMenuData();
   }
 
 
   loadActivities(id: string, key: string) {
     this.apiservice.getData(`activities/${key}/${id}/`).subscribe({
       next: (response) => {
-        console.log(response);
-
         const sortedList = this.globalservice.sortListbyTime(response, 'date');
         this.activities = sortedList;
         this.allActivities = sortedList;
@@ -117,7 +100,16 @@ export class ActivitiesComponent {
     })
 
   }
-
+  subscribeListMenuData() {
+    this.observservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response) {
+        console.log(response);
+        // this.pageSize = response.size;
+        // this.searchValue = response.value;
+        // this.currentSearchFilter = response.filter
+      }
+    })
+  }
 
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
@@ -146,9 +138,9 @@ export class ActivitiesComponent {
 
       for (let index = 0; index < this.allActivities.length; index++) {
         const activity = this.allActivities[index];
-        if (activity.description.toLowerCase().includes(value)
+        if (activity.title.toLowerCase().includes(value)
           || activity.contact.name.toLowerCase().includes(value)
-          || activity.user.profile.fullname.toLowerCase().includes(value)
+          || activity.created_by.profile.fullname.toLowerCase().includes(value)
           || this.dataservice.activityTypes[activity.type].label.toLowerCase().includes(value)) {
           foundActivities.push(activity);
         }

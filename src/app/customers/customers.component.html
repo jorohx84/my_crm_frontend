@@ -5,34 +5,10 @@
     </div>
     <div class="listCont">
 
-
-        <div class="menubar">
-            <h2>Kunden</h2>
-            <div class="searchField">
-                <div class="filterContainer">
-                    <div class="searchFilter" (click)="openFilter()">
-                        <img [ngClass]="{'rotate': searchFilterOpen}" src="./icons/dropdown.svg" alt="">
-                        <p>{{currentSearchFilter?.displayName}}</p>
-                    </div>
-                    <div *ngIf="searchFilterOpen" class="searchOptions" (mouseleave)="searchFilterOpen=false">
-                        <div *ngFor="let filter of customerFields; let index = index">
-                            <p (click)="changeSearchFitler(index); openFilter()">{{filter.displayName}}</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="inputfield">
-                    <input type="text" (input)="searchCustomer()" [(ngModel)]="searchValue" placeholder="Suche">
-                    <img src="./icons/search.svg" alt="">
-                </div>
-            </div>
-            <div class="addBtn" (click)="globalservice.customerWrapperOpen=true">
-
-                <img src="./icons/add.svg" alt="">
-                <p>Neu</p>
-            </div>
-        </div>
         <div class="customerListCont">
+
+            <app-listmenu [totalPages]="totalPages" [next]="next" [listKey]="'customers'" [fields]="customerFields"></app-listmenu>
+
             <div class="listHeadline">
                 <p *ngFor="let headline of customerFields">{{headline.displayName}}</p>
             </div>
@@ -52,8 +28,7 @@
                     
                     <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                 </div> -->
-                    <div class="customerListRow"
-                        (click)="openCustomerFile(index)">
+                    <div class="customerListRow" (click)="openCustomerFile(index)">
 
                         <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                     </div>

@@ -1,7 +1,7 @@
 <section>
     <div class="listHeader">
         <h2>Aktivitäten</h2>
-        <div class="menubar">
+        <!-- <div class="menubar">
             <div class="timeFilter">
                 <div class="errorTxt">
                     <p *ngIf="globalservice.wrongTime">Startdatum muss vor Enddatum liegen</p>
@@ -29,7 +29,8 @@
                     placeholder="Suchen ( Beschreibung, Kontakt, Mitarbeiter oder Typ )">
 
             </div>
-        </div>
+        </div> -->
+      <app-listmenu [totalPages]="totalPages" [next]="next" [listKey]="'activities'" [fields]="activityFields"></app-listmenu>
     </div>
     <div class="listMainCont">
         <div class="listContainer">

@@ -3,6 +3,8 @@ import { Router, Route, ActivatedRoute } from "@angular/router";
 import { DataService } from "./data.service";
 import { APIService } from "./api.service";
 import { Subject, takeUntil } from "rxjs";
+import { response } from "express";
+import { ObservableService } from "./observable.service";
 
 
 
@@ -15,7 +17,7 @@ export class GlobalService {
     route = inject(ActivatedRoute);
     dataservice = inject(DataService);
     apiservice = inject(APIService);
-
+    observer = inject(ObservableService);
     number: number | null = null;
     memberListOpen: boolean = false;
     taskWrapperOpen: boolean = false;
@@ -172,8 +174,6 @@ export class GlobalService {
 
 
     filterToDate(list: any[], startTime: string, endTime: string) {
-
-
         const start = startTime ? new Date(startTime).getTime() : null;
         const end = endTime ? new Date(endTime).getTime() : null;
         if (start && end && start > end) {
@@ -222,5 +222,27 @@ export class GlobalService {
         return key.split('.').reduce((value, key) => {
             return value ? value[key] : null;
         }, obj);
+    }
+
+
+    getTotalListCount(list: string) {
+        console.log(list);
+
+        this.apiservice.getData(`list-count/${list}/`).subscribe({
+            next: (response) => {
+                console.log(response);
+                this.observer.sendListCount(response);
+            }
+        })
+
+
+    }
+
+    calcPages(totalCount: number, pageSize: number) {
+        if (totalCount) {
+            return Math.ceil(totalCount / pageSize);
+        } else {
+            return 1
+        }
     }
 }

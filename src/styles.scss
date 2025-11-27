@@ -20,6 +20,8 @@
     --listrow-hover: #10779d81;
     --input: #10779d28;
     --greenLine: #18A408;
+    --borderstyle: solid 0.5px var(--border);
+    --radius: 4px;
 }
 
 html {
@@ -87,7 +89,7 @@ textarea::-webkit-scrollbar {
     display: none;
 }
 
-.txtContHeight{
+.txtContHeight {
     height: 200px !important;
 }
 
@@ -202,17 +204,18 @@ form {
     display: flex;
     flex-direction: column;
     position: relative;
-    >h4{
+
+    >h4 {
         margin-bottom: 4px;
     }
 }
 
 .inputfield {
     width: 100%;
-    height: 40px;
+    height: 30px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     border: solid 0.5px var(--inputborder);
     border-radius: 4px;
     padding: 0 16px;
@@ -286,7 +289,7 @@ button {
     padding: 32px;
 }
 
-.flxnd{
+.flxnd {
     justify-content: flex-end !important;
     padding: 32px 0 !important;
 }
@@ -575,4 +578,121 @@ button {
     >img {
         width: 24px;
     }
+}
+
+// listmenu
+
+.listMenuCont {
+    width: 100%;
+}
+
+.listmenu {
+    width: 100%;
+    min-height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .searchField {
+        width: 500px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .menufields {
+        width: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+
+
+
+        .navigation {
+            width: 120px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            border: var(--borderstyle);
+            border-radius: var(--radius);
+
+            >p {
+                width: 100px;
+                display: flex;
+                justify-content: center;
+            }
+
+            :nth-child(1) {
+                >img {
+                    transform: rotate(180deg);
+                }
+            }
+
+            >button {
+                min-width: 30px !important;
+                max-width: 50px !important;
+                background-color: transparent;
+
+                >img {
+                    width: 20px;
+                }
+            }
+        }
+    }
+}
+
+
+.dropdown {
+    width: auto !important;
+    height: 30px;
+    display: flex;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    padding: 8px;
+    position: relative;
+    cursor: pointer;
+
+    s>img {
+        transform: rotate(90deg);
+        width: 16px;
+        opacity: 0.7;
+    }
+
+    .choices {
+        min-width: 100px;
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        top: 30px;
+        left: -5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        background-color: white;
+        // border: var(--borderstyle);
+        box-shadow: 0px 0px 10px 6px rgba(0, 0, 0, 0.2);
+        border-radius: 4px;
+        padding: 24px;
+
+        >div {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-radius: var(--radius);
+            padding: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: var(--listrow-hover);
+            }
+        }
+    }
+
+
 }

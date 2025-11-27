@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { GlobalService } from '../services/global.service';
 import { CommonModule } from '@angular/common';
 import { Customer } from '../models/customer.models';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule, NgForm, NgSelectOption } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { APIService } from '../services/api.service';
 import { response } from 'express';
@@ -10,10 +10,12 @@ import { DataService } from '../services/data.service';
 import { CustomerwrapperComponent } from '../customerwrapper/customerwrapper.component';
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
+import { ListmenuComponent } from '../listmenu/listmenu.component';
+
 
 @Component({
   selector: 'app-customers',
-  imports: [CommonModule, FormsModule, CustomerwrapperComponent],
+  imports: [CommonModule, FormsModule, CustomerwrapperComponent, ListmenuComponent],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.scss'
 })
@@ -34,22 +36,25 @@ export class CustomersComponent {
   isFound: boolean = false;
   searchFilterOpen: boolean = false;
   isloading: boolean = true;
-
+  pageSize: number = 25;
+  currentPage: number = 1;
+  next: string | null = null;
+  previous: string | null = null;
   customerFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
-    { fieldName: 'companyname', displayName: 'Firmenname' },
+    { fieldName: 'companyname', displayName: 'Name' },
     { fieldName: 'street', displayName: 'Straße' },
     { fieldName: 'areacode', displayName: 'Postleitzahl' },
     { fieldName: 'city', displayName: 'Stadt' },
     { fieldName: 'country', displayName: 'Land' },
-    // { fieldName: 'email', displayName: 'E-Mail' },
-    // { fieldName: 'phone', displayName: 'Telefon' },
-    // { fieldName: 'website', displayName: 'Webseite' },
     { fieldName: 'branch', displayName: 'Branche' },
 
   ];
-  currentSearchFilter: any = this.customerFields[0];
+  dropdownOpen: boolean = false;
+  currentSearchFilter: any;
   searchValue: string = '';
   isSearch: boolean = false;
+  totalPages: number | null = null;
+  totalCount: number | null = null;
   customerList = [
     { companyname: "TechNova GmbH", street: "Hauptstraße 45", areacode: "10115", city: "Berlin", country: "Deutschland", email: "kontakt@technova.de", phone: "+49 30 1234567", website: "https://www.technova.de", branch: "IT-Dienstleistungen", created_by: 1 },
     { companyname: "GreenLeaf Solutions", street: "Parkweg 12", areacode: "20095", city: "Hamburg", country: "Deutschland", email: "info@greenleaf-solutions.de", phone: "+49 40 9876543", website: "https://www.greenleaf-solutions.de", branch: "Umwelttechnik", created_by: 2 },
@@ -114,6 +119,10 @@ export class CustomersComponent {
       this.loadCustomers();
     })
 
+
+    this.subscribeListCount();
+    this.subscribeListMenu();
+    this.globalservice.getTotalListCount('customers');
     this.loadCustomers()
   }
 
@@ -123,26 +132,52 @@ export class CustomersComponent {
   }
 
 
-  loadCustomers() {
-    this.apiservice.getData('customers/').subscribe({
+  loadCustomers(page: number = 1) {
+    this.currentPage = page
+    this.apiservice.getData(`customers/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
-        this.customers = response;
-        this.allCustomers = response;
-        this.isloading = false;
-        console.log('Kunden aus DB geladen!', response);
-        this.sortList();
-      },
-      error: (err) => {
-        console.error("Daten konnten nicht geladen werden", err)
+        this.buildCustomersList(response);
       }
     });
-
   }
 
-  sortList() {
-    this.customers.sort((a, b) => a.companyname.localeCompare(b.companyname));
-    this.allCustomers.sort((a, b) => a.companyname.localeCompare(b.companyname));
+  buildCustomersList(data: any) {
+    this.next = data.next;
+    this.previous = data.previous;
+    this.customers = data.results;
+    this.allCustomers = data.results;
+    this.isloading = false;
+    if (this.totalCount) {
+      this.totalPages = this.globalservice.calcPages(this.totalCount, this.pageSize);
+    }
   }
+
+
+  subscribeListMenu() {
+    this.observerservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response) {
+        console.log(response);
+        this.pageSize = response.size;
+        this.searchValue = response.value;
+        this.currentSearchFilter = response.filter
+        this.loadCustomers(response.page)
+        if (this.searchValue) {
+          this.searchCustomer();
+        }
+      }
+    })
+  }
+
+
+  subscribeListCount() {
+    this.observerservice.listCountSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      if (data) {
+        this.totalCount = data.count;
+      }
+    })
+  }
+
+
 
   fillDB() {
 
@@ -168,24 +203,19 @@ export class CustomersComponent {
 
   searchCustomer() {
     if (this.searchValue.length > 0) {
-      this.isSearch = true;
-      const key: keyof Customer = this.currentSearchFilter.fieldName as keyof Customer;
-      const searchedCustomers: any[] = [];
-      for (let index = 0; index < this.allCustomers.length; index++) {
-        const customer = this.allCustomers[index];
-        if (customer[key].toLowerCase().includes(this.searchValue.toLowerCase())) {
-          searchedCustomers.push(customer);
-          console.log(searchedCustomers);
-
+      const field = this.currentSearchFilter.fieldName;
+      const value = this.searchValue;
+      this.apiservice.getData(`search-list/customers/${field}/${value}`).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.customers = response.results;
         }
-      }
-      this.isFound = searchedCustomers.length > 0 ? true : false;
-      this.customers = searchedCustomers;
+      })
     } else {
       this.customers = this.allCustomers;
-      this.isSearch = false;
     }
   }
+
 
   openCustomerFile(index: number) {
     const customer = this.customers[index];

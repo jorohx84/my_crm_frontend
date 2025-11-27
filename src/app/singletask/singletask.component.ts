@@ -341,12 +341,12 @@ export class SingletaskComponent {
 
 
 
-  navigateToMainTask() {
-    const queryParam = {
-      type: 'task',
-    }
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'task', this.task.parent.id], queryParam);
-  }
+  // navigateToMainTask() {
+  //   const queryParam = {
+  //     type: 'task',
+  //   }
+  //   this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'task', this.task.parent.id], queryParam);
+  // }
 
   addSubtask() {
     const listObj = {
@@ -427,12 +427,12 @@ export class SingletaskComponent {
     // this.sendSystemMessage();
   }
 
-  sendSystemMessage() {
-    const urlStr = ['main', 'singlecustomer', this.task.customer.id, 'task', this.task.id];
-    const text = 'Aufgabe wurde freigegeben'
-    const param = { type: this.task.type }
-    // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee.id, urlStr, text, param);
-  }
+  // sendSystemMessage() {
+  //   const urlStr = ['main', 'singlecustomer', this.task.customer.id, 'task', this.task.id];
+  //   const text = 'Aufgabe wurde freigegeben'
+  //   const param = { type: this.task.type }
+  //   // this.messageservice.sendSystemMessage(this.user.id, this.task.assignee.id, urlStr, text, param);
+  // }
 
   closeTask() {
     const data = {

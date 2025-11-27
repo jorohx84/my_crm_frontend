@@ -36,13 +36,13 @@
             <button (click)="globalservice.navigateToPath(['main', 'board'])">Board öffnen</button>
             <button (click)="saveTaskTemplate()">Als Vorlage speichern</button>
 
-            <div *ngIf="queryType==='task'" class="closeBtn">
+            <div class="closeBtn">
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
             </div>
-            <div *ngIf="queryType==='subtask'" (click)="navigateToMainTask()" class="closeBtn">
+            <!-- <div *ngIf="queryType==='subtask'" (click)="navigateToMainTask()" class="closeBtn">
                 <img src="./icons/back.svg" alt="">
-            </div>
+            </div> -->
         </div>
 
     </div>
