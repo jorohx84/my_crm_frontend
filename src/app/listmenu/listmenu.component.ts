@@ -3,6 +3,8 @@ import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
+import { GlobalService } from '../services/global.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-listmenu',
@@ -12,16 +14,19 @@ import { ObservableService } from '../services/observable.service';
 })
 export class ListmenuComponent {
   dataservice = inject(DataService);
-  observer = inject(ObservableService)
-  @Input() totalPages: number | null = null;
+  observer = inject(ObservableService);
+  global = inject(GlobalService);
+  totalPages: number | null = null;
   @Input() next: string | null = null;
-  @Input() listKey: string = '';
+  @Input() list: string = '';
   @Input() fields: any[] = [];
+ 
+  //  @Input() totalCount: number | null = null;
   searchFilterOpen: boolean = false;
   dropdownOpen: boolean = false;
   pageSize: number = 25;
   currentPage: number = 1;
-
+  private destroy$ = new Subject<void>()
   previous: string | null = null;
   searchValue: string = '';
   // customerFields = [ 
@@ -42,8 +47,29 @@ export class ListmenuComponent {
 
 
   ngOnInit() {
-    console.log(this.listKey);
+    console.log(this.list);
+    console.log(this.totalCount);
+    
     this.currentSearchFilter = this.fields[0];
+    // this.global.getTotalListCount(this.list);
+    this.subscribeListCount();
+  }
+
+
+  subscribeListCount() {
+    this.observer.listCountSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+      if (data) {
+        console.log(data);
+        
+        this.totalCount = data;
+        console.log(data);
+        
+        if (this.totalCount) {
+          this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
+        }
+
+      }
+    })
   }
 
   changeSearchFilter(index: number) {
@@ -63,6 +89,9 @@ export class ListmenuComponent {
     this.responseData = this.buildResponse();
     console.log(this.responseData);
     this.observer.sendListData(this.responseData);
+    if (this.totalCount) {
+      this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
+    }
 
   }
 
@@ -75,5 +104,7 @@ export class ListmenuComponent {
     }
 
   }
+
+
 
 }

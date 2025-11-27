@@ -85,7 +85,7 @@ export class SinglecontactComponent {
 
     this.loadTemplate();
     this.loadIDFromURL();
-    this.subscribeActivity();
+    // this.subscribeActivity();
    
   }
 
@@ -94,14 +94,14 @@ export class SinglecontactComponent {
     this.destroy$.complete();
   }
 
-  subscribeActivity() {
-    this.observerservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((activityData) => {
-      if (activityData) {
-        this.loadActivities(this.contact.id)
-      }
+  // subscribeActivity() {
+  //   this.observerservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((activityData) => {
+  //     if (activityData) {
+  //       this.loadActivities(this.contact.id)
+  //     }
 
-    })
-  }
+  //   })
+  // }
 
 
   loadTemplate() {
@@ -127,18 +127,18 @@ export class SinglecontactComponent {
     this.apiservice.getData(`contact/${id}`).subscribe({
       next: (response) => {
         this.contact = response;
-        this.loadActivities(response.id)
+        // this.loadActivities(response.id)
       }
     })
   }
 
-  loadActivities(id: string) {
-    this.apiservice.getData(`activities/contact/${id}/`).subscribe({
-      next: (response) => {
-        this.activities = response.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      }
-    })
-  }
+  // loadActivities(id: string) {
+  //   this.apiservice.getData(`activities/contact/${id}/`).subscribe({
+  //     next: (response) => {
+  //       this.activities = response.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  //     }
+  //   })
+  // }
 
   updateContact(changeKey: string) {
     if (changeKey === 'newsletter_opt_in') {

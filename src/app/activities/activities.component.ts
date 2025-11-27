@@ -49,8 +49,7 @@ export class ActivitiesComponent {
     customer: null,
     date: '',
   }
-  totalPages: number | null = null;
-  next: string | null = null;
+
   activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
     { fieldName: 'type', displayName: 'Typ' },
     { fieldName: 'date', displayName: 'Datum' },
@@ -61,6 +60,14 @@ export class ActivitiesComponent {
 
   ];
 
+  pageSize: number = 25;
+  currentPage: number = 1;
+  // totalPages: number | null = null;
+  next: string | null = null;
+  previous: string | null = null;
+  listID: string = '';
+  apiKey: string = '';
+  totalCount: number | null = null;
   constructor() {
     this.globalservice.setCustomerSidebarState();
   }
@@ -80,8 +87,11 @@ export class ActivitiesComponent {
       const paramID = listType === 'contact' ? 'contact_id' : 'customer_id';
       const id = params.get(paramID);
       if (!id) return;
+      this.listID = id;
+      listType === 'contact' ? this.contactID = id : this.customerID = id;
       const apiKey = paramID.replace('_id', '');
-      this.loadActivities(id, apiKey);
+      this.apiKey = apiKey;
+      this.loadActivities(id, apiKey, 1);
     });
 
     this.subscribeActivities();
@@ -90,12 +100,22 @@ export class ActivitiesComponent {
   }
 
 
-  loadActivities(id: string, key: string) {
-    this.apiservice.getData(`activities/${key}/${id}/`).subscribe({
+  loadActivities(id: string, key: string, page: number = 1) {
+    this.currentPage = page;
+    console.log(this.pageSize);
+
+    this.apiservice.getData(`activities/${key}/${id}/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
-        const sortedList = this.globalservice.sortListbyTime(response, 'date');
-        this.activities = sortedList;
-        this.allActivities = sortedList;
+        console.log(response);
+        this.next = response.next;
+        this.previous = response.previous
+        this.activities = response.results
+        this.allActivities = response.results;
+        this.totalCount = response.count;
+        this.observservice.sendListCount(response.count);
+        // const sortedList = this.globalservice.sortListbyTime(response, 'date');
+        // this.activities = sortedList;
+        // this.allActivities = sortedList;
       }
     })
 
@@ -104,9 +124,10 @@ export class ActivitiesComponent {
     this.observservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
         console.log(response);
-        // this.pageSize = response.size;
-        // this.searchValue = response.value;
+        this.pageSize = response.size;
+        this.searchValue = response.value;
         // this.currentSearchFilter = response.filter
+        this.loadActivities(this.listID, this.apiKey, response.page);
       }
     })
   }
@@ -114,7 +135,10 @@ export class ActivitiesComponent {
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        this.loadTemplate();
+        if (this.totalCount) {
+          this.totalCount ++;
+          this.observservice.sendListCount(this.totalCount)
+        }
       }
     })
   }
@@ -194,6 +218,7 @@ export class ActivitiesComponent {
           a.id === updatedActivity.id ? updatedActivity : a
         );
         this.allActivities = this.activities;
+
       }
     })
   }

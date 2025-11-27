@@ -118,11 +118,7 @@ export class CustomersComponent {
     this.observerservice.customerTriggersubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadCustomers();
     })
-
-
-    this.subscribeListCount();
     this.subscribeListMenu();
-    this.globalservice.getTotalListCount('customers');
     this.loadCustomers()
   }
 
@@ -136,7 +132,10 @@ export class CustomersComponent {
     this.currentPage = page
     this.apiservice.getData(`customers/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
+        console.log(response);
+
         this.buildCustomersList(response);
+        this.observerservice.sendListCount(response.count);
       }
     });
   }
@@ -147,9 +146,12 @@ export class CustomersComponent {
     this.customers = data.results;
     this.allCustomers = data.results;
     this.isloading = false;
-    if (this.totalCount) {
-      this.totalPages = this.globalservice.calcPages(this.totalCount, this.pageSize);
-    }
+  
+
+
+    // if (this.totalCount) {
+    //   this.totalPages = this.globalservice.calcPages(this.totalCount, this.pageSize);
+    // }
   }
 
 
@@ -169,13 +171,6 @@ export class CustomersComponent {
   }
 
 
-  subscribeListCount() {
-    this.observerservice.listCountSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      if (data) {
-        this.totalCount = data.count;
-      }
-    })
-  }
 
 
 

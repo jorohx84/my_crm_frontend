@@ -225,18 +225,18 @@ export class GlobalService {
     }
 
 
-    getTotalListCount(list: string) {
-        console.log(list);
+    // getTotalListCount(list: string) {
+    //     console.log(list);
 
-        this.apiservice.getData(`list-count/${list}/`).subscribe({
-            next: (response) => {
-                console.log(response);
-                this.observer.sendListCount(response);
-            }
-        })
+    //     this.apiservice.getData(`list-count/${list}/`).subscribe({
+    //         next: (response) => {
+    //             console.log(response);
+    //             this.observer.sendListCount(response);
+    //         }
+    //     })
 
 
-    }
+    // }
 
     calcPages(totalCount: number, pageSize: number) {
         if (totalCount) {

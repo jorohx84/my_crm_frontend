@@ -7,7 +7,7 @@
 
         <div class="customerListCont">
 
-            <app-listmenu [totalPages]="totalPages" [next]="next" [listKey]="'customers'" [fields]="customerFields"></app-listmenu>
+            <app-listmenu [next]="next" [list]="'customers'" [fields]="customerFields"></app-listmenu>
 
             <div class="listHeadline">
                 <p *ngFor="let headline of customerFields">{{headline.displayName}}</p>
