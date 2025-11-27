@@ -146,7 +146,7 @@ export class CustomersComponent {
     this.customers = data.results;
     this.allCustomers = data.results;
     this.isloading = false;
-  
+
 
 
     // if (this.totalCount) {
@@ -162,16 +162,14 @@ export class CustomersComponent {
         this.pageSize = response.size;
         this.searchValue = response.value;
         this.currentSearchFilter = response.filter
-        this.loadCustomers(response.page)
         if (this.searchValue) {
           this.searchCustomer();
+        } else {
+          this.loadCustomers(response.page)
         }
       }
     })
   }
-
-
-
 
 
   fillDB() {
@@ -200,14 +198,11 @@ export class CustomersComponent {
     if (this.searchValue.length > 0) {
       const field = this.currentSearchFilter.fieldName;
       const value = this.searchValue;
-      this.apiservice.getData(`search-list/customers/${field}/${value}`).subscribe({
+      this.apiservice.getData(`search-list/customers/${field}/${value}/`).subscribe({
         next: (response) => {
-          console.log(response);
           this.customers = response.results;
         }
       })
-    } else {
-      this.customers = this.allCustomers;
     }
   }
 

@@ -68,6 +68,7 @@ export class ActivitiesComponent {
   listID: string = '';
   apiKey: string = '';
   totalCount: number | null = null;
+  currentSearchFilter: any;
   constructor() {
     this.globalservice.setCustomerSidebarState();
   }
@@ -113,9 +114,6 @@ export class ActivitiesComponent {
         this.allActivities = response.results;
         this.totalCount = response.count;
         this.observservice.sendListCount(response.count);
-        // const sortedList = this.globalservice.sortListbyTime(response, 'date');
-        // this.activities = sortedList;
-        // this.allActivities = sortedList;
       }
     })
 
@@ -126,8 +124,14 @@ export class ActivitiesComponent {
         console.log(response);
         this.pageSize = response.size;
         this.searchValue = response.value;
+        this.currentSearchFilter = response.filter
         // this.currentSearchFilter = response.filter
-        this.loadActivities(this.listID, this.apiKey, response.page);
+
+        if (this.searchValue) {
+          this.searchInActivities();
+        } else {
+          this.loadActivities(this.listID, this.apiKey, response.page);
+        }
       }
     })
   }
@@ -136,7 +140,7 @@ export class ActivitiesComponent {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
         if (this.totalCount) {
-          this.totalCount ++;
+          this.totalCount++;
           this.observservice.sendListCount(this.totalCount)
         }
       }
@@ -154,27 +158,27 @@ export class ActivitiesComponent {
   }
 
 
-  searchInActivities() {
-    if (this.searchValue.length > 0) {
-      console.log(this.searchValue);
-      const value = this.searchValue.toLowerCase();
-      const foundActivities: any[] = [];
+  // searchInActivities() {
+  //   if (this.searchValue.length > 0) {
+  //     console.log(this.searchValue);
+  //     const value = this.searchValue.toLowerCase();
+  //     const foundActivities: any[] = [];
 
-      for (let index = 0; index < this.allActivities.length; index++) {
-        const activity = this.allActivities[index];
-        if (activity.title.toLowerCase().includes(value)
-          || activity.contact.name.toLowerCase().includes(value)
-          || activity.created_by.profile.fullname.toLowerCase().includes(value)
-          || this.dataservice.activityTypes[activity.type].label.toLowerCase().includes(value)) {
-          foundActivities.push(activity);
-        }
-      }
-      this.activities = foundActivities;
+  //     for (let index = 0; index < this.allActivities.length; index++) {
+  //       const activity = this.allActivities[index];
+  //       if (activity.title.toLowerCase().includes(value)
+  //         || activity.contact.name.toLowerCase().includes(value)
+  //         || activity.created_by.profile.fullname.toLowerCase().includes(value)
+  //         || this.dataservice.activityTypes[activity.type].label.toLowerCase().includes(value)) {
+  //         foundActivities.push(activity);
+  //       }
+  //     }
+  //     this.activities = foundActivities;
 
-    } else {
-      this.activities = this.allActivities
-    }
-  }
+  //   } else {
+  //     this.activities = this.allActivities
+  //   }
+  // }
 
   filterActivitiesToDate() {
     const foundActivities = this.globalservice.filterToDate(this.allActivities, this.startTime, this.endTime);
@@ -257,6 +261,19 @@ export class ActivitiesComponent {
     this.currentActivity.type = type;
     this.editActivity('type');
     this.editTypeOpen = false
+  }
+
+  searchInActivities() {
+    if (this.searchValue.length > 0) {
+      const field = this.currentSearchFilter.fieldName;
+      const value = this.searchValue;
+      this.apiservice.getData(`search-list/activities/${field}/${value}/${this.listID}/`).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.activities = response.results;
+        }
+      })
+    }
   }
 }
 
