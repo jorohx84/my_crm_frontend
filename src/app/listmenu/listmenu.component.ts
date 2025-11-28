@@ -20,7 +20,11 @@ export class ListmenuComponent {
   @Input() next: string | null = null;
   @Input() list: string = '';
   @Input() fields: any[] = [];
- 
+  @Input() timeFilter: boolean = false;
+  @Input() searchField: boolean = false;
+  isfiltered: boolean = false;
+  startTime: string = '';
+  endTime: string = '';
   //  @Input() totalCount: number | null = null;
   searchFilterOpen: boolean = false;
   dropdownOpen: boolean = false;
@@ -39,6 +43,12 @@ export class ListmenuComponent {
 
   // ];
 
+  headlines: Record<string, string> = {
+    activities: 'Aktivitäten',
+    customers:'Kundenliste'
+  };
+
+
 
   currentSearchFilter: any;
   responseData: any;
@@ -47,11 +57,7 @@ export class ListmenuComponent {
 
 
   ngOnInit() {
-    console.log(this.list);
-    console.log(this.totalCount);
-    
     this.currentSearchFilter = this.fields[0];
-    // this.global.getTotalListCount(this.list);
     this.subscribeListCount();
   }
 
@@ -60,10 +66,10 @@ export class ListmenuComponent {
     this.observer.listCountSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
         console.log(data);
-        
+
         this.totalCount = data;
         console.log(data);
-        
+
         if (this.totalCount) {
           this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
         }
@@ -76,19 +82,13 @@ export class ListmenuComponent {
     this.currentSearchFilter = this.fields[index];
   }
   searchInList() {
-    this.responseData = this.buildResponse();
-    this.observer.sendListData(this.responseData);
+    this.sendDataToList();
     console.log(this.responseData);
-
-
   }
 
   setCurrentPage(page: number) {
-
     this.currentPage = page;
-    this.responseData = this.buildResponse();
-    console.log(this.responseData);
-    this.observer.sendListData(this.responseData);
+    this.sendDataToList();
     if (this.totalCount) {
       this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
     }
@@ -101,10 +101,39 @@ export class ListmenuComponent {
       size: this.pageSize,
       filter: this.currentSearchFilter,
       value: this.searchValue,
+      startTime: this.startTime,
+      endTime: this.endTime,
+    }
+
+  }
+  setDate() {
+    if (this.validateDate()) { return }
+    this.isfiltered = true;
+    this.sendDataToList();
+  }
+
+  validateDate() {
+    const start = this.startTime ? new Date(this.startTime).getTime() : null;
+    const end = this.endTime ? new Date(this.endTime).getTime() : null;
+    if (start && end && start > end) {
+      this.global.wrongTime = true
+      return true
+    } else {
+      this.global.wrongTime = false;
+      return false
     }
 
   }
 
+  resetTimeFilter() {
+    this.isfiltered = false;
+    this.endTime = '';
+    this.startTime = '';
+    this.sendDataToList();
+  }
 
-
+  sendDataToList() {
+    this.responseData = this.buildResponse();
+    this.observer.sendListData(this.responseData);
+  }
 }

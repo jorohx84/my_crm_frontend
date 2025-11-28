@@ -198,7 +198,7 @@ export class CustomersComponent {
     if (this.searchValue.length > 0) {
       const field = this.currentSearchFilter.fieldName;
       const value = this.searchValue;
-      this.apiservice.getData(`search-list/customers/${field}/${value}/`).subscribe({
+      this.apiservice.getData(`customers/search/${field}/${value}/`).subscribe({
         next: (response) => {
           this.customers = response.results;
         }

@@ -4,33 +4,33 @@
         <!-- <button (click)="fillDB()">Dummys laden</button> -->
     </div>
     <div class="listCont">
-
-        <div class="customerListCont">
-
-            <app-listmenu [next]="next" [list]="'customers'" [fields]="customerFields"></app-listmenu>
-
-            <div class="listHeadline">
-                <p *ngFor="let headline of customerFields">{{headline.displayName}}</p>
-            </div>
-            <div class="divider"></div>
-            <div class="customerList">
-
-                <div *ngIf="isloading">
-                    <p>Kundendaten werden geladen...</p>
+            <app-listmenu [next]="next" [searchField]="true" [timeFilter]="false" [list]="'customers'"
+                    [fields]="customerFields"></app-listmenu>
+        <div class="listMainCont">
+            <div class="listContainer">
+                <div class="listHeadline">
+                    <p *ngFor="let headline of customerFields">{{headline.displayName}}</p>
                 </div>
-                <div *ngIf="!isFound && isSearch">
-                    <p>Keine Kunden gefunden</p>
-                </div>
-                <div *ngFor="let customer of customers, let index=index">
+                <div class="divider"></div>
+                <div class="list">
 
-                    <!-- <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
+                    <div *ngIf="isloading">
+                        <p>Kundendaten werden geladen...</p>
+                    </div>
+                    <div *ngIf="!isFound && isSearch">
+                        <p>Keine Kunden gefunden</p>
+                    </div>
+                    <div *ngFor="let customer of customers, let index=index">
+
+                        <!-- <div class="customerListRow" [ngClass]="{'rowBGColor': index % 2 !== 0}"
                     (click)="globalservice.navigateToPathID('main/singlecustomer',customer.id )">
                     
                     <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
                 </div> -->
-                    <div class="customerListRow" (click)="openCustomerFile(index)">
+                        <div class="listRow" (click)="openCustomerFile(index)">
 
-                        <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
+                            <p *ngFor="let field of customerFields ">{{customer?.[field.fieldName]}}</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -102,15 +102,18 @@
     border: solid 1px var(--border);
     border-radius: 4px;
     z-index: 1;
-:nth-child(1){
-      >img {
+
+    :nth-child(1) {
+        >img {
             width: 16px;
-           
+
         }
-        >p{
+
+        >p {
             font-size: 18px;
         }
-}
+    }
+
     >div {
         width: 100%;
         display: flex;

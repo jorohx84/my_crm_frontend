@@ -33,9 +33,7 @@ export class ActivitiesComponent {
   searchValue: string = '';
   customerID: string = '';
   contactID: string = '';
-  startTime: string = '';
-  endTime: string = '';
-  isfiltered: boolean = false;
+
   activityOpen: boolean = false;
   editInvalid: boolean = false;
   editDateOpen: boolean = false;
@@ -54,7 +52,7 @@ export class ActivitiesComponent {
     { fieldName: 'type', displayName: 'Typ' },
     { fieldName: 'date', displayName: 'Datum' },
     { fieldName: 'description', displayName: 'Beschreibung' },
-    { fieldName: 'user', displayName: 'Mitarbeiter' },
+    { fieldName: 'created_by', displayName: 'Mitarbeiter' },
     { fieldName: 'customer', displayName: 'Firma' },
     { fieldName: 'contact', displayName: 'Kontakt' },
 
@@ -125,10 +123,8 @@ export class ActivitiesComponent {
         this.pageSize = response.size;
         this.searchValue = response.value;
         this.currentSearchFilter = response.filter
-        // this.currentSearchFilter = response.filter
-
-        if (this.searchValue) {
-          this.searchInActivities();
+        if (response.startTime || response.endTime) {
+          this.filterActivitiesToDate(response.startTime, response.endTime);
         } else {
           this.loadActivities(this.listID, this.apiKey, response.page);
         }
@@ -180,23 +176,31 @@ export class ActivitiesComponent {
   //   }
   // }
 
-  filterActivitiesToDate() {
-    const foundActivities = this.globalservice.filterToDate(this.allActivities, this.startTime, this.endTime);
-    if (foundActivities) {
-      this.activities = foundActivities;
-      this.isfiltered = true
-    } else {
-      this.isfiltered = false;
-    }
+  filterActivitiesToDate(starttime: string, endtime: string) {
+    const params: any = {};
+    console.log(starttime);
+    console.log(endtime);
+
+
+    if (starttime) params.start = starttime;
+    if (endtime) params.end = endtime;
+
+    this.apiservice.getData(`activities/search/${this.apiKey}/${this.listID}/`, params).subscribe({
+      next: (response) => {
+        this.activities = response.result;
+        console.log(response);
+
+      }
+    })
+
   }
 
 
-  resetTimeFilter() {
-    this.isfiltered = false;
-    this.activities = this.allActivities;
-    this.endTime = '';
-    this.startTime = '';
-  }
+
+
+
+
+
 
   openActivity(index: number) {
     this.currentActivity = this.activities[index];
@@ -267,7 +271,7 @@ export class ActivitiesComponent {
     if (this.searchValue.length > 0) {
       const field = this.currentSearchFilter.fieldName;
       const value = this.searchValue;
-      this.apiservice.getData(`search-list/activities/${field}/${value}/${this.listID}/`).subscribe({
+      this.apiservice.getData(`activities/search/${field}/${value}/${this.apiKey}/${this.listID}/`).subscribe({
         next: (response) => {
           console.log(response);
           this.activities = response.results;

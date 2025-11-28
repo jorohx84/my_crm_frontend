@@ -53,9 +53,11 @@ export class APIService {
         return this.http.delete(url, options);
     }
 
-    getData(endpoint: string, useAuth: boolean = true): Observable<any> {
+    getData(endpoint: string, params?: any, useAuth: boolean = true): Observable<any> {
         const url = this.BASE_URL + endpoint;
-        const options = useAuth ? { headers: this.getAuthHeaders() } : {};
+        const options: { headers?: HttpHeaders; params?: any } = {};
+        if (useAuth) { options.headers = this.getAuthHeaders(); }
+        if (params) { options.params = params; }
         return this.http.get(url, options);
     }
 }

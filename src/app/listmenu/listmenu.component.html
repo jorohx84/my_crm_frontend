@@ -1,47 +1,64 @@
+<div class="listmenu">
+    <h3>{{ headlines[list] }}</h3>
+    <div class="menufields">
 
+        <div class="timeFilter" *ngIf="timeFilter">
+            <div class="errorTxt">
+                <p *ngIf="global.wrongTime">Startdatum muss vor Enddatum liegen</p>
+            </div>
 
-                <div class="listmenu">
-                <div class="menufields">
+            <button *ngIf="isfiltered===true" (click)="resetTimeFilter()">Filter löschen</button>
+            <div class="inputCont">
+                <h4>Start</h4>
+                <div class="inputfield">
+                    <input (change)="setDate()" type="date" [(ngModel)]="startTime">
+                </div>
+            </div>
 
+            <div class="inputCont">
+                <h4>Ende</h4>
+                <div class="inputfield">
+                    <input (change)="setDate()" type="date" [(ngModel)]="endTime">
+                </div>
+            </div>
 
+        </div>
 
-                    <div class="searchField">
+        <div *ngIf="searchField" class="searchField">
 
-                        <div class="dropdown" (click)="searchFilterOpen=true">
-                            <input [disabled]="true" type="text" placeholder="wähle"
-                                [(ngModel)]="currentSearchFilter.displayName">
-                                <!-- <p>{{currentSearchFilter?.displayName}}</p> -->
-                            <img src="./icons/dropdown.svg" alt="">
-                            <div class="choices" *ngIf="searchFilterOpen" (mouseleave)="searchFilterOpen=false">
-                                <div *ngFor="let field of fields, let index=index"
-                                    (click)="changeSearchFilter(index); searchFilterOpen=false; $event.stopPropagation()">
-                                    <p>{{field?.displayName}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="inputfield">
-                            <input type="text" (change)="searchInList()" [(ngModel)]="searchValue"
-                                placeholder="Suche">
-                            <img src="./icons/search.svg" alt="">
-                        </div>
-                    </div>
-                    <div class="dropdown" (click)="dropdownOpen=true">
-                        <input style="width: 40px" [disabled]="true" type="text" placeholder="wähle" [(ngModel)]="pageSize">
-                        <img src="./icons/dropdown.svg" alt="">
-                        <div class="choices" *ngIf="dropdownOpen">
-                            <div *ngFor="let choice of dataservice.paginations"
-                                (click)="pageSize=choice; setCurrentPage(1); dropdownOpen=false; $event.stopPropagation()">
-                                <p>{{choice}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="navigation">
-                        <button (click)="setCurrentPage(currentPage - 1)" [disabled]="currentPage === 1"><img
-                                src="./icons/dropdown.svg" alt=""></button>
-                        <p>{{currentPage}} / {{totalPages}} </p>
-                        <button (click)="setCurrentPage(currentPage + 1)" [disabled]="!next"><img
-                                src="./icons/dropdown.svg" alt=""></button>
-
+            <div class="dropdown" (click)="searchFilterOpen=true">
+                <input [disabled]="true" type="text" placeholder="wähle" [(ngModel)]="currentSearchFilter.displayName">
+                <!-- <p>{{currentSearchFilter?.displayName}}</p> -->
+                <img src="./icons/dropdown.svg" alt="">
+                <div class="choices" *ngIf="searchFilterOpen" (mouseleave)="searchFilterOpen=false">
+                    <div *ngFor="let field of fields, let index=index"
+                        (click)="changeSearchFilter(index); searchFilterOpen=false; $event.stopPropagation()">
+                        <p>{{field?.displayName}}</p>
                     </div>
                 </div>
             </div>
+            <div class="inputfield">
+                <input type="text" (change)="searchInList()" [(ngModel)]="searchValue" placeholder="Suche">
+                <img src="./icons/search.svg" alt="">
+            </div>
+        </div>
+        <div class="dropdown" (click)="dropdownOpen=true">
+            <input style="width: 40px" [disabled]="true" type="text" placeholder="wähle" [(ngModel)]="pageSize">
+            <img src="./icons/dropdown.svg" alt="">
+            <div class="choices" *ngIf="dropdownOpen">
+                <div *ngFor="let choice of dataservice.paginations"
+                    (click)="pageSize=choice; setCurrentPage(1); dropdownOpen=false; $event.stopPropagation()">
+                    <p>{{choice}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="navigation">
+            <button (click)="setCurrentPage(currentPage - 1)" [disabled]="currentPage === 1"><img
+                    src="./icons/dropdown.svg" alt=""></button>
+            <p>{{currentPage}} / {{totalPages}} </p>
+            <button (click)="setCurrentPage(currentPage + 1)" [disabled]="!next"><img src="./icons/dropdown.svg"
+                    alt=""></button>
+
+        </div>
+    </div>
+</div>

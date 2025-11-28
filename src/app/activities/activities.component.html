@@ -1,37 +1,7 @@
 <section>
-    <div class="listHeader">
-        <h2>Aktivitäten</h2>
-        <!-- <div class="menubar">
-            <div class="timeFilter">
-                <div class="errorTxt">
-                    <p *ngIf="globalservice.wrongTime">Startdatum muss vor Enddatum liegen</p>
-                </div>
-
-                <button *ngIf="isfiltered===true" (click)="resetTimeFilter()">Filter löschen</button>
-                <div class="inputCont">
-                    <h4>Start</h4>
-                    <div class="inputfield">
-                        <input (change)="filterActivitiesToDate()" type="date" [(ngModel)]="startTime">
-                    </div>
-                </div>
-
-                <div class="inputCont">
-                    <h4>Ende</h4>
-                    <div class="inputfield">
-                        <input (change)="filterActivitiesToDate()" type="date" [(ngModel)]="endTime">
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="inputfield">
-                <input (input)="searchInActivities()" type="text" [(ngModel)]="searchValue"
-                    placeholder="Suchen ( Beschreibung, Kontakt, Mitarbeiter oder Typ )">
-
-            </div>
-        </div> -->
-      <app-listmenu [next]="next" [list]="'activities'" [fields]="activityFields"></app-listmenu>
-    </div>
+    
+      <app-listmenu [next]="next" [searchField]="false" [timeFilter]="true" [list]="'activities'" [fields]="activityFields"></app-listmenu>
+  
     <div class="listMainCont">
         <div class="listContainer">
             <div class="listHeadline">
