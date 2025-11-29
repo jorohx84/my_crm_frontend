@@ -146,22 +146,13 @@ export class CustomersComponent {
     this.customers = data.results;
     this.allCustomers = data.results;
     this.isloading = false;
-
-
-
-    // if (this.totalCount) {
-    //   this.totalPages = this.globalservice.calcPages(this.totalCount, this.pageSize);
-    // }
   }
 
 
   subscribeListMenu() {
     this.observerservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
-        console.log(response);
-        this.pageSize = response.size;
-        this.searchValue = response.value;
-        this.currentSearchFilter = response.filter
+        this.setList(response);
         if (this.searchValue) {
           this.searchCustomer();
         } else {
@@ -171,9 +162,15 @@ export class CustomersComponent {
     })
   }
 
+  setList(data: any) {
+    this.pageSize = data.size;
+    this.searchValue = data.value;
+    this.currentSearchFilter = data.filter;
+
+  }
+
 
   fillDB() {
-
     for (let index = 0; index < this.customerList.length; index++) {
       const customer = this.customerList[index];
       this.apiservice.postData('customers/', customer).subscribe({

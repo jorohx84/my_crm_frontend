@@ -2,21 +2,8 @@
 
     <div class="taskHeader">
         <div class="taskTitle">
-
-            <!-- <p *ngIf="queryType==='subtask'">{{task?.parent?.title}}</p> -->
-            <!-- <img *ngIf="queryType==='subtask'" src="./icons/back.svg" alt=""> -->
-            <!-- <div class="prioDot"></div> -->
-            <!-- <h2>{{task?.title}} </h2> -->
-            <!-- <div class="taskIcon">
-                <img src="./icons/task_white.svg" alt="">
-             </div> -->
             <input [disabled]="!checkPermissions('reviewer')" (change)="changeTitle('title')" class="title"
                 [(ngModel)]="task.title" type="text">
-            <!-- <img (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt=""> -->
-            <!-- <div class="typeCont">
-                <p *ngIf="task.type==='subtask'">ToDo</p>
-                <p *ngIf="task.type==='task'">Aufgabe</p>
-            </div> -->
             <div *ngIf="task?.state==='closed'" class="closeText">
                 <h1>Abgschlossen</h1>
                 <img src="./icons/done.svg" alt="">
@@ -33,6 +20,7 @@
 
             <button *ngIf="task?.assignee?.id===user?.id && task?.state==='released'"
                 (click)="closeTask()">Abschließen</button>
+            <button (click)="openMemberlist()">Mitarbeiter hinzufügen</button>
             <button (click)="globalservice.navigateToPath(['main', 'board'])">Board öffnen</button>
             <button (click)="saveTaskTemplate()">Als Vorlage speichern</button>
 
@@ -40,9 +28,6 @@
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
 
             </div>
-            <!-- <div *ngIf="queryType==='subtask'" (click)="navigateToMainTask()" class="closeBtn">
-                <img src="./icons/back.svg" alt="">
-            </div> -->
         </div>
 
     </div>
@@ -50,35 +35,6 @@
 
 
         <div class="taskInfoCont">
-
-            <!-- StatusLins -->
-
-            <!-- <div class="stateLine">
-
-                 <div class="progressLineCont">
-                    <div class="progressDot activeDot" [ngClass]="{'activeDot': task?.state ==='undone'}">
-                        <p>unbearbeitet</p>
-                    </div>
-                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='in_progress'}">
-                        <p>in Bearbeitung</p>
-                    </div>
-                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='under_review'}">
-                        <p>Rückmeldung</p>
-                    </div>
-                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='done'}">
-                        <p>Erledigt</p>
-                    </div>
-                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='released'}">
-                        <p>Freigabe erteilt</p>
-                    </div>
-                    <div class="progressDot" [ngClass]="{'activeDot': task?.state ==='closed'}">
-                        <p>Geschlossen</p>
-                    </div>
-              
-                </div> 
-
-            </div> -->
-
             <!-- Infos -->
             <div class="infoRow">
                 <div class="infoTab">
@@ -91,18 +47,6 @@
                         <div *ngIf="assigneeChangeOpen" class="changeAssignee">
                             <img class="close" src="./icons/close.svg" alt="" (click)="closeAssigneeChanger()">
                             <p>Zuständigkeiten ändern:</p>
-
-
-
-                            <!-- <h3 *ngIf="newAssignee">{{newAssignee.fullname}}</h3>
-                            <div *ngIf="!newAssignee" class="btnCont">
-                                <button (click)="assigneeChangeOpen=false">Abbrechen</button>
-                                <button (click)="memberListOpen=true">Auswählen</button>
-                            </div>
-                            <div *ngIf="newAssignee" class="btnCont">
-                                <button (click)="newAssignee=null">Abbrechen</button>
-                                <button (click)="updateAssignee()">speichern</button>
-                            </div> -->
                             <div class="inputCont">
                                 <div class="inputfield">
                                     <input (change)="searchMember()" type="text" placeholder="Mitarbeiter suchen"
@@ -145,7 +89,7 @@
                     <!-- Prio -->
                     <div *ngIf="priochangeOpen" class="changePrio">
                         <img class="close" (click)="priochangeOpen=false" src="./icons/close.svg" alt="">
-                        
+
                         <div class="prioBtn" (click)="changePrio('low', $event)">
                             <img src="./icons/low.svg" alt="">
                             <p>Niedrig</p>
@@ -195,18 +139,27 @@
 
                     </div>
                 </div>
-                    <div class="infoTab">
+                <div class="infoTab">
                     <p>Status:</p>
-               <p>{{globalservice.interpretation['state'][task.state]}}</p>
+                    <p>{{globalservice.interpretation['state'][task.state]}}</p>
+                </div>
+            </div>
+
+
+            <div class="memberList">
+                <div *ngFor="let member of task.members">
+                   <div class="memberDot" [style.background-color]="member.profile.color">
+                        <p>{{member?.profile?.initials}}</p>
+                    </div>
+
                 </div>
             </div>
 
 
 
-
-
-
             <div class="taskInfoSubCont">
+
+
                 <!-- TextField -->
                 <div class="description">
                     <div class="subheadline">
@@ -305,63 +258,15 @@
                         <p>{{log.new_state}}</p>
                         <p>Änderung durch: {{log.updated_by.profile.fullname}}</p>
                     </div>
-
-
-
                 </div>
-
-
-
             </div>
-
-            <!-- <div *ngIf="sidebarKey==='subtasks' && queryType==='task'" class="sidebarList">
-
-                <div *ngFor="let subtask of subtasks, let index=index">
-                    <div (click)="openSubtask(index)" class="subtaskCard">
-                        <div class="titleCont">
-                            <div class="title">
-
-                                <h4>{{subtask.title}}</h4>
-                            </div>
-
-                            {{subtask.created_at | date: 'dd.MM.yyyy'}}
-                        </div>
-
-                        <div class="divider"></div>
-                        <div class="subtaskInfo">
-                       
-                            <p> Bearbeiter: {{subtask.assignee.fullname}}</p>
-                            <p> Prüfer: {{subtask.reviewer.fullname}}</p>
-                        </div>
-                        <div class="subtaskState">
-                            <div> Fällig am:{{subtask.due_date | date: 'dd.MM.yyyy' }}</div>
-                            <div class="stateCont">
-                                <img *ngIf="subtask.priority==='low'" src="./icons/low.svg" alt="">
-                                <img *ngIf="subtask.priority==='mid'" src="./icons/mid.svg" alt="">
-                                <img *ngIf="subtask.priority==='high'" src="./icons/high.svg" alt="">
-                                <img *ngIf="subtask.state==='undone'" src="./icons/undone.svg" alt="">
-                                <img *ngIf="subtask.state==='in_progress'" src="./icons/progress.svg" alt="">
-                                <img *ngIf="subtask.state==='under_review'" src="./icons/review.svg" alt="">
-                                <img *ngIf="subtask.state==='done'" src="./icons/done.svg" alt="">
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div> -->
 
         </div>
     </div>
 
-    <!-- <div class="taskFormWrapper slideOut" [ngClass]="{'slideIn': taskWrapperOpen}">
-        <app-taskwrapper></app-taskwrapper>
-    </div> -->
-    <!-- <div class="memberListWrapper slideOut borderLeft" [ngClass]="{'slideIn': memberListOpen}">
-        <app-memberlist></app-memberlist>
-    </div> -->
+
+    <div class="memberListWrapper  slideOut borderLeft" [ngClass]="{'slideIn': memberListOpen}">
+        <app-memberlist [many]="true"></app-memberlist>
+    </div>
 
 </section>

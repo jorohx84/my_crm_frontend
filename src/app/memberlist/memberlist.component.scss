@@ -20,20 +20,30 @@ section {
 .memberListRow {
     width: 100%;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 16px;
     padding: 8px;
     border-radius: 4px;
     cursor: pointer;
->p{
-    font-size: 18px;
+
+
+
+    &:hover {
+        background-color: var(--box-light);
+    }
 }
+
+.memberInfo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     >img {
         width: 50px;
 
     }
 
-    &:hover{
-        background-color: var(--box-light);
+    >p {
+        font-size: 18px;
     }
 }

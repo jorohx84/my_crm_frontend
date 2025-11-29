@@ -82,15 +82,7 @@ export class ActivitiesComponent {
 
   loadTemplate() {
     combineLatest([this.router.queryParamMap, this.router.parent!.paramMap]).pipe(takeUntil(this.destroy$)).subscribe(([query, params]) => {
-      const listType = query.get('actlist');
-      const paramID = listType === 'contact' ? 'contact_id' : 'customer_id';
-      const id = params.get(paramID);
-      if (!id) return;
-      this.listID = id;
-      listType === 'contact' ? this.contactID = id : this.customerID = id;
-      const apiKey = paramID.replace('_id', '');
-      this.apiKey = apiKey;
-      this.loadActivities(id, apiKey, 1);
+      this.setTemplateData(query, params);
     });
 
     this.subscribeActivities();
@@ -98,31 +90,51 @@ export class ActivitiesComponent {
     this.subscribeListMenuData();
   }
 
+  setTemplateData(query: any, params: any) {
+    const listType = query.get('actlist');
+    const paramID = this.getParamID(listType);
+    const id = params.get(paramID);
+    if (!id) { return }
+    this.setListData(listType, id, paramID);
+  }
+
+
+  setListData(type: string, id: string, paramID: string) {
+    this.listID = id;
+    type === 'contact' ? this.contactID = id : this.customerID = id;
+    const apiKey = paramID.replace('_id', '');
+    this.apiKey = apiKey;
+    this.loadActivities(id, apiKey, 1);
+  }
+
+  getParamID(type: string) {
+    return type === 'contact' ? 'contact_id' : 'customer_id';
+  }
+
+
 
   loadActivities(id: string, key: string, page: number = 1) {
     this.currentPage = page;
-    console.log(this.pageSize);
-
     this.apiservice.getData(`activities/${key}/${id}/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
-        console.log(response);
-        this.next = response.next;
-        this.previous = response.previous
-        this.activities = response.results
-        this.allActivities = response.results;
-        this.totalCount = response.count;
+        this.buildActivityList(response);
         this.observservice.sendListCount(response.count);
       }
-    })
-
+    });
   }
+
+  buildActivityList(data: any) {
+    this.next = data.next;
+    this.previous = data.previous
+    this.activities = data.results
+    this.allActivities = data.results;
+  }
+
+
   subscribeListMenuData() {
     this.observservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
-        console.log(response);
-        this.pageSize = response.size;
-        this.searchValue = response.value;
-        this.currentSearchFilter = response.filter
+        this.setList(response);
         if (response.startTime || response.endTime) {
           this.filterActivitiesToDate(response.startTime, response.endTime);
         } else {
@@ -130,6 +142,13 @@ export class ActivitiesComponent {
         }
       }
     })
+  }
+
+  setList(data: any) {
+    this.pageSize = data.size;
+    this.searchValue = data.value;
+    this.currentSearchFilter = data.filter;
+
   }
 
   subscribeActivities() {
@@ -153,38 +172,10 @@ export class ActivitiesComponent {
     })
   }
 
-
-  // searchInActivities() {
-  //   if (this.searchValue.length > 0) {
-  //     console.log(this.searchValue);
-  //     const value = this.searchValue.toLowerCase();
-  //     const foundActivities: any[] = [];
-
-  //     for (let index = 0; index < this.allActivities.length; index++) {
-  //       const activity = this.allActivities[index];
-  //       if (activity.title.toLowerCase().includes(value)
-  //         || activity.contact.name.toLowerCase().includes(value)
-  //         || activity.created_by.profile.fullname.toLowerCase().includes(value)
-  //         || this.dataservice.activityTypes[activity.type].label.toLowerCase().includes(value)) {
-  //         foundActivities.push(activity);
-  //       }
-  //     }
-  //     this.activities = foundActivities;
-
-  //   } else {
-  //     this.activities = this.allActivities
-  //   }
-  // }
-
   filterActivitiesToDate(starttime: string, endtime: string) {
     const params: any = {};
-    console.log(starttime);
-    console.log(endtime);
-
-
     if (starttime) params.start = starttime;
     if (endtime) params.end = endtime;
-
     this.apiservice.getData(`activities/search/${this.apiKey}/${this.listID}/`, params).subscribe({
       next: (response) => {
         this.activities = response.result;
@@ -194,13 +185,6 @@ export class ActivitiesComponent {
     })
 
   }
-
-
-
-
-
-
-
 
   openActivity(index: number) {
     this.currentActivity = this.activities[index];

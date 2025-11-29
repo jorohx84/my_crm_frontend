@@ -3,7 +3,8 @@
     <div class="divider"></div>
     <div class="inputCont">
         <div class="inputfield">
-            <input #search="ngModel" name="search" (input)="searchUser()" [(ngModel)]="searchValue" type="text" placeholder="Name oder E-Mail-Adresse">
+            <input #search="ngModel" name="search" (input)="searchUser()" [(ngModel)]="searchValue" type="text"
+                placeholder="Name oder E-Mail-Adresse">
             <img src="./icons/search.svg" alt="">
         </div>
     </div>
@@ -12,12 +13,21 @@
         <p *ngIf="members.length===0 && !isSearch">Liste wird geladen...</p>
         <p *ngIf="isSearch && !isFound">Keine Mitarbeiter gefunden</p>
         <div *ngFor="let member of members, let index=index">
-        
+
             <div class="memberListRow" (click)="sendUserdata(index)">
-                <img src="./icons/profile.svg" alt="">
+                <div class="memberInfo">
+                    <img src="./icons/profile.svg" alt="">
                     <p>{{member.profile.fullname}}</p>
+                </div>
+                <div *ngIf="many" class="checkbox" (click)="addMember(member)">
+                    <img *ngIf="checkMemberAdded(member.id)" src="./icons/done.svg" alt="">
+                </div>
             </div>
 
         </div>
     </div>
+    <div *ngIf="many" class="btnCont flxnd">
+         <button (click)="sendList()">Liste speichern</button>
+    </div>
+   
 </section>

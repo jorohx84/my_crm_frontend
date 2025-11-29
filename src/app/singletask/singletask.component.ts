@@ -9,10 +9,12 @@ import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
 import { MessageService } from '../services/message.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MemberlistComponent } from '../memberlist/memberlist.component';
+import { response } from 'express';
 
 @Component({
   selector: 'app-singletask',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MemberlistComponent],
   templateUrl: './singletask.component.html',
   styleUrl: './singletask.component.scss'
 })
@@ -85,7 +87,7 @@ export class SingletaskComponent {
     this.subscribeUser();
     // this.subscribeSubtasks();
     this.subscribeMember();
-
+    this.subscribeMemberList();
   }
 
   ngOnDestroy() {
@@ -138,6 +140,19 @@ export class SingletaskComponent {
     })
   }
 
+  subscribeMemberList() {
+    this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response) {
+        console.log(response);
+        const data = {
+          members: response,
+        }
+        this.updateTask(data, 'members');
+        this.memberListOpen = false;
+      }
+    })
+  }
+
 
   checkPermissions(permission: string): boolean {
     if (permission === 'reviewer') {
@@ -173,9 +188,9 @@ export class SingletaskComponent {
     this.apiservice.getData(`task/logs/${task.id}`).subscribe({
       next: (response) => {
         console.log(response);
-        
+
         // this.logBook = response.sort((a: any, b: any) => new Date(b.logged_at).getTime() - new Date(a.logged_at).getTime());
-        this.logBook=this.globalservice.sortListbyTime(response, 'logged_at', 'down')
+        this.logBook = this.globalservice.sortListbyTime(response, 'logged_at', 'down')
       }
     })
   }
@@ -265,6 +280,8 @@ export class SingletaskComponent {
 
     this.apiservice.patchData(`task/${this.taskId}/`, requestData).subscribe({
       next: (response) => {
+        console.log(response);
+
         // this.getProgressState();
         if (objKey === 'assignee') {
           this.globalservice.saveLog(objKey, response, this.newAssignee);
@@ -511,5 +528,21 @@ export class SingletaskComponent {
     }
     console.log(savedList);
     return savedList
+  }
+
+  openMemberlist() {
+    const memberlist = this.transformMemberList();
+    this.observerservice.sendMemberList(memberlist);
+    this.memberListOpen = true;
+  }
+
+  transformMemberList() {
+    const memberlist = this.task.members;
+    const idList: any[] = [];
+    memberlist.forEach((member: any) => {
+      const uid = member.id
+      idList.push(uid);
+    });
+    return idList;
   }
 }

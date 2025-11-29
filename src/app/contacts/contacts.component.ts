@@ -6,9 +6,11 @@ import { ObservableService } from '../services/observable.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
+import { ListmenuComponent } from '../listmenu/listmenu.component';
+import { response } from 'express';
 @Component({
   selector: 'app-contacts',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ListmenuComponent],
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.scss'
 })
@@ -17,11 +19,22 @@ export class ContactsComponent {
   observerservice = inject(ObservableService);
   globalservice = inject(GlobalService);
   route = inject(ActivatedRoute);
-  customerID: string | null = '';
+  customerID: string = '';
   contacts: any[] = [];
   allContacts: any[] = [];
   searchValue: string = '';
   private destroy$ = new Subject<void>();
+  pageSize: number = 25;
+  currentPage: number = 1;
+  currentSearchFilter: any;
+  next: string | null = null;
+  contactTypes = [
+    { fieldName: 'name', displayName: 'Name' },
+    { fieldName: 'email', displayName: 'E-Mail' },
+    { fieldName: 'department', displayName: 'Abteilung' },
+  ]
+
+
   contactFields = [
     { field: 'name', label: 'Name' },
     { field: 'position', label: 'Position' },
@@ -31,13 +44,14 @@ export class ContactsComponent {
     { field: 'phone', label: 'Telefon' },
   ];
 
- constructor() {
+  constructor() {
     this.globalservice.setCustomerSidebarState();
   }
 
   ngOnInit() {
     this.loadDataUrl();
-    this.subscribeContact();
+    // this.subscribeContact();
+    this.subscribeListMenuData()
     this.searchValue = '';
   }
 
@@ -49,81 +63,68 @@ export class ContactsComponent {
   loadDataUrl() {
     this.route.parent?.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('customer_id');
-      this.customerID = id;
       if (id) {
+        this.customerID = id;
         console.log(id);
-        this.loadContacts(id);
+        this.loadContacts(id, 1);
       }
     });
-
   }
 
-  subscribeContact() {
-    this.observerservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((contact) => {
-      if (contact) {
-        // console.log(contact);
-        // const customerId = contact.customer
-        // this.loadContacts(customerId);
+  subscribeListMenuData() {
+    this.observerservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response) {
+        this.setList(response);
+        if (this.searchValue) {
+          this.searchContact();
+        } else {
+          this.loadContacts(this.customerID, 1);
+        }
       }
-
     })
   }
 
-  loadContacts(id: string) {
-    this.apiservice.getData(`contacts/${id}/`).subscribe({
+  setList(data: any) {
+    this.pageSize = data.size;
+    this.searchValue = data.value;
+    this.currentSearchFilter = data.filter;
+
+  }
+
+
+  loadContacts(id: string, page: number = 1) {
+    this.currentPage = page;
+    this.apiservice.getData(`contacts/${id}/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
-        console.log(response);
-        this.contacts = response.sort((a: any, b: any) => a.name.localeCompare(b.name));
-        this.allContacts = response.sort((a: any, b: any) => a.name.localeCompare(b.name));
-        this.searchValue = '';
+        this.buildContactList(response);
+        this.observerservice.sendListCount(response.count)
       }
     })
+  }
+
+  buildContactList(data: any) {
+    this.next = data.next;
+    this.contacts = data.results;
+    this.allContacts = data.results;
   }
 
   openContact(index: number) {
-    console.log(index);
     const currentContact = this.contacts[index];
-    console.log();
-
     this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singlecontact', currentContact.id, 'activities'], { actlist: 'contact' });
   }
+
+
+
   searchContact() {
-
     if (this.searchValue.length > 0) {
-      console.log(this.searchValue);
-      const searchedContacts: any[] = [];
-
-      for (let index = 0; index < this.allContacts.length; index++) {
-        const contact = this.allContacts[index];
-        if (contact.name.toLowerCase().includes(this.searchValue.toLowerCase()) || contact.email.toLowerCase().includes(this.searchValue.toLowerCase()) || contact.department.toLowerCase().includes(this.searchValue.toLowerCase())) {
-          searchedContacts.push(contact)
+      const field = this.currentSearchFilter.fieldName;
+      const value = this.searchValue;
+      this.apiservice.getData(`contact/search/${field}/${value}/${this.customerID}`).subscribe({
+        next: (response) => {
+          this.contacts = response.results;
         }
-
-      }
-      this.contacts = searchedContacts
-    }
-    else {
-      this.contacts = this.allContacts
+      })
     }
   }
-  // searchContact() {
-  //   if (this.searchValue.length > 0) {
-  //     this.isSearch = true;
-  //     const key: keyof Customer = this.currentSearchFilter.fieldName as keyof Customer;
-  //     const searchedCustomers: any[] = [];
-  //     for (let index = 0; index < this.allCustomers.length; index++) {
-  //       const customer = this.allCustomers[index];
-  //       if (customer[key].toLowerCase().includes(this.searchValue.toLowerCase())) {
-  //         searchedCustomers.push(customer);
-  //         console.log(searchedCustomers);
 
-  //       }
-  //     }
-  //     this.isFound = searchedCustomers.length > 0 ? true : false;
-  //     this.customers = searchedCustomers;
-  //   } else {
-  //     this.customers = this.allCustomers;
-  //     this.isSearch = false;
-  //   }
-  // }
 }

@@ -45,7 +45,8 @@ export class ListmenuComponent {
 
   headlines: Record<string, string> = {
     activities: 'Aktivitäten',
-    customers:'Kundenliste'
+    customers:'Kundenliste',
+    contacts:'Kontakte'
   };
 
 

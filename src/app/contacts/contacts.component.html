@@ -1,5 +1,5 @@
 <section class="listSection">
-    <div class="listHeader">
+    <!-- <div class="listHeader">
         <h2>Kontakte</h2>
         <div class="menubar">
             <div class="inputfield">
@@ -9,8 +9,9 @@
             </div>
           
         </div>
-    </div>
-  
+    </div> -->
+
+  <app-listmenu [next]="next" [list]="'contacts'" [searchField]="true" [fields]="contactTypes"></app-listmenu>
     <div class="listMainCont">
         <div class="listContainer">
             <div class="listHeadline">

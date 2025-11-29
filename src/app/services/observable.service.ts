@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +32,8 @@ export class ObservableService {
     public listCountSubject$ = this.listCountSubject.asObservable();
     private menulistSubject = new BehaviorSubject<any>(null);
     public menulistSubject$ = this.menulistSubject.asObservable();
+    private memberlistSubject = new Subject<any[]>;
+    public memberlistSubject$ = this.memberlistSubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -79,4 +81,8 @@ export class ObservableService {
     sendListData(data: any) {
         this.menulistSubject.next(data);
     }
+    sendMemberList(list: any[]) {
+        this.memberlistSubject.next(list);
+    };
+
 }

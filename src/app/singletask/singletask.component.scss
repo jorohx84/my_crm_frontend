@@ -104,7 +104,7 @@ textarea {
     display: flex;
     flex-direction: column;
     padding: 24px 32px;
-    gap: 56px;
+    gap: 16px;
     position: relative;
 }
 
@@ -292,6 +292,14 @@ textarea {
     }
 
 
+}
+
+.memberList {
+    width:100% ;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    
 }
 
 // .prioCont {
@@ -541,7 +549,7 @@ textarea {
         border: none;
         padding: 0;
         min-height: 50px;
-      
+
     }
 
     >img {
@@ -612,4 +620,3 @@ textarea {
         margin: 0;
     }
 }
-
