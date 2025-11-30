@@ -34,6 +34,7 @@
 .prioIconCont {
     display: flex;
     align-items: flex-start;
+  
     gap: 4px;
 
     >img {
@@ -134,40 +135,6 @@
 
 }
 
-.changeDueDate {
-    width: 100%;
-    width: 300px;
-    padding: 32px 64px;
-    position: absolute;
-    top: 60px;
-    left: 12px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 24px;
-    padding: 32px;
-    border: solid 0.5px var(--border);
-    border-radius: 4px;
-    background-color: white;
-    z-index: 1;
-
-    >img {
-        width: 12px;
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        cursor: pointer;
-    }
-
-
-    input {
-        border-radius: 4px;
-        padding: 8px;
-        border: solid 0.5px var(--border);
-    }
-
-
-}
 
 .changePrio {
     width: 100%;
@@ -184,7 +151,7 @@
     border: solid 0.5px var(--border);
     border-radius: 4px;
     background-color: white;
-
+z-index: 1;
     >p {
         width: 100%;
         text-align: center;

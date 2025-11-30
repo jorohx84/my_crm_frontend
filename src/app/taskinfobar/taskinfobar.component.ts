@@ -47,6 +47,7 @@ export class TaskinfobarComponent implements OnChanges {
       if (user) { this.user = user; }
     })
   }
+  
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['task']) {
       this.subtasks = this.task.subtasks

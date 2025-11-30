@@ -56,7 +56,7 @@ export class ContactlistwrapperComponent {
 
 
   loadContacts() {
-    this.apiservice.getData(`contacts/${this.customerID}/`).subscribe({
+    this.apiservice.getData(`contacts-wrapper/${this.customerID}/`).subscribe({
       next: (response) => {
         this.contacts = response;
         console.log(response);

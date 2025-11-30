@@ -49,7 +49,7 @@ export class SingletaskComponent {
   ngOnInit() {
     this.loadTemplate();
     this.subscribeUser();
-    this.subscribeMember();
+    // this.subscribeMember();
     this.subscribeMemberList();
   }
 
@@ -72,11 +72,11 @@ export class SingletaskComponent {
   }
 
 
-  subscribeMember() {
-    this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((memberData) => {
-      if (memberData) { this.memberListOpen = false; this.newReviewer = memberData; }
-    })
-  }
+  // subscribeMember() {
+  //   this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((memberData) => {
+  //     if (memberData) { this.memberListOpen = false; this.newReviewer = memberData; }
+  //   })
+  // }
 
   subscribeMemberList() {
     this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
@@ -86,7 +86,6 @@ export class SingletaskComponent {
 
 
   onTaskChanged(data:any){
-    console.log(data);
     this.updateTask(data.data, data.key)
   }
 

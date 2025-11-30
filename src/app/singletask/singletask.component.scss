@@ -81,6 +81,7 @@ textarea {
     padding: 24px 32px;
     gap: 16px;
     position: relative;
+
 }
 
 .taskInfoSubCont {
@@ -143,8 +144,9 @@ textarea {
 
 .memberList {
     width: 100%;
+    height: 60px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 2px;
 
 }
@@ -161,9 +163,13 @@ textarea {
 
 .description {
     width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    >textarea{
+        height:200px;
+    }
 }
 
 .sidebarCont {
@@ -172,3 +178,16 @@ textarea {
     height: calc(100vh - 268.5px);
 }
 
+
+.subheadline {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: solid 1px var(--border);
+
+    >img {
+        width: 16px;
+    }
+}

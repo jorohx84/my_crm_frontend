@@ -35,7 +35,6 @@
 
         <div class="taskInfoCont">
             <app-taskinfobar *ngIf="isloaded" [task]="task" (infosChanged)="onTaskChanged($event)"></app-taskinfobar>
-
             <div class="memberList">
                 <div *ngFor="let member of task.members, let index=index">
                     <div class="memberDot" [style.background-color]="member.profile.color">
@@ -45,6 +44,7 @@
                 </div>
             </div>
 
+
             <div class="taskInfoSubCont">
 
                 <div class="description">
@@ -52,11 +52,13 @@
                         <h4>Beschreibung</h4>
                     </div>
 
+
                     <textarea (change)="updateTask({description:task.description},'description')" name="" id=""
                         [(ngModel)]="task.description"></textarea>
                 </div>
                 <div class="subtaskCont">
-                    <app-subtasks *ngIf="isloaded" [task]="task" (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
+                    <app-subtasks *ngIf="isloaded" [task]="task"
+                        (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
                 </div>
 
             </div>
