@@ -40,7 +40,7 @@ export class SingletaskComponent {
   subtasks: any[] = [];
   subtaskText: string = '';
   searchValue: string = '';
-
+  isloaded: boolean = false;
 
   constructor() {
     this.globalservice.setCustomerSidebarState();
@@ -51,7 +51,6 @@ export class SingletaskComponent {
     this.subscribeUser();
     this.subscribeMember();
     this.subscribeMemberList();
-    this.subscribeSubtasks()
   }
 
   ngOnDestroy() {
@@ -85,15 +84,10 @@ export class SingletaskComponent {
     })
   }
 
-  subscribeSubtasks() {
-    this.observerservice.subtaskSubject$.pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-      if (response) {
-        console.log(response.data);
 
-
-        this.updateTask(response.data, response.key)
-      }
-    })
+  onTaskChanged(data:any){
+    console.log(data);
+    this.updateTask(data.data, data.key)
   }
 
   setMembers(res: any[]) {
@@ -112,8 +106,9 @@ export class SingletaskComponent {
 
   setTaskTemplate(res: any) {
     this.task = res;
-    this.observerservice.sendTask(res);
+    // this.observerservice.sendTask(res);
     this.subtasks = res.subtasks
+    this.isloaded = true;
   }
 
 

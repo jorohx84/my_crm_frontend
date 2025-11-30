@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -13,12 +13,13 @@ import { UserService } from '../services/user.service';
   templateUrl: './taskinfobar.component.html',
   styleUrl: './taskinfobar.component.scss'
 })
-export class TaskinfobarComponent {
+export class TaskinfobarComponent implements OnChanges {
   api = inject(APIService);
   observer = inject(ObservableService);
   userservice = inject(UserService);
   globalservice = inject(GlobalService);
-  task: any;
+  @Input() task: any;
+  @Output() infosChanged = new EventEmitter();
   user: any;
   subtasks: any[] = [];
   private destroy$ = new Subject<void>();
@@ -35,20 +36,10 @@ export class TaskinfobarComponent {
     high: 'Hoch'
 
   }
+
+
   ngOnInit() {
-    this.subscribeTask();
-    this.subscribeUser()
-  }
-
-  subscribeTask() {
-    this.observer.taskSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) {
-        this.task = response;
-        this.subtasks = response.subtasks
-        console.log(response);
-
-      };
-    })
+    this.subscribeUser();
   }
 
   subscribeUser() {
@@ -56,7 +47,11 @@ export class TaskinfobarComponent {
       if (user) { this.user = user; }
     })
   }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['task']) {
+      this.subtasks = this.task.subtasks
+    }
+  }
 
   changePrio(prio: string, event: Event) {
     this.priochangeOpen = false;
@@ -122,6 +117,6 @@ export class TaskinfobarComponent {
       data: data,
       key: key,
     }
-    this.observer.sendSubtask(responseData);
+    this.infosChanged.emit(responseData);
   }
 }

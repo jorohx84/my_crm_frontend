@@ -34,7 +34,7 @@
 
 
         <div class="taskInfoCont">
-            <app-taskinfobar></app-taskinfobar>
+            <app-taskinfobar *ngIf="isloaded" [task]="task" (infosChanged)="onTaskChanged($event)"></app-taskinfobar>
 
             <div class="memberList">
                 <div *ngFor="let member of task.members, let index=index">
@@ -56,7 +56,7 @@
                         [(ngModel)]="task.description"></textarea>
                 </div>
                 <div class="subtaskCont">
-                    <app-subtasks></app-subtasks>
+                    <app-subtasks *ngIf="isloaded" [task]="task" (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
                 </div>
 
             </div>

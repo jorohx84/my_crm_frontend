@@ -36,8 +36,7 @@ export class ObservableService {
     public memberlistSubject$ = this.memberlistSubject.asObservable();
     private taskMembersSubject = new Subject<any[]>;
     public taskMembersSubject$ = this.taskMembersSubject.asObservable();
-    private subtaskSubject = new Subject<any[]>;
-    public subtaskSubject$ = this.subtaskSubject.asObservable();
+
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -93,8 +92,5 @@ export class ObservableService {
         this.taskMembersSubject.next(list);
     }
 
-    sendSubtask(subtask: any) {
-        this.subtaskSubject.next(subtask);
-    }
 
 }

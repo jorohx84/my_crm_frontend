@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -10,30 +10,35 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './subtasks.component.html',
   styleUrl: './subtasks.component.scss'
 })
-export class SubtasksComponent {
+export class SubtasksComponent implements OnChanges {
   observer = inject(ObservableService);
-  task: any;
-  subtasks: any[] = [];
+  @Input() task: any;
+  @Input() subtasks: any[] = [];
+  @Output() subtaskChanged=new EventEmitter();
   subtaskText: string = '';
   private destroy$ = new Subject<void>()
   currentSubtask: any;
   assigneListOpen: boolean = false;
 
-
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['task']) {
+      this.subtasks = this.task.subtasks
+    }
+  }
 
   ngOnInit() {
-    this.subscribeTask();
+    this.subtasks = this.task.subtasks
   }
 
-  subscribeTask() {
-    this.observer.taskSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) {
-        this.setTaskData(response)
-      };
+  // subscribeTask() {
+  //   this.observer.taskSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+  //     if (response) {
+  //       this.setTaskData(response)
+  //     };
 
 
-    })
-  }
+  //   })
+  // }
 
   setTaskData(res: any) {
     this.task = res;
@@ -107,6 +112,8 @@ export class SubtasksComponent {
       data: data,
       key: key,
     }
-    this.observer.sendSubtask(responseData);
+
+    this.subtaskChanged.emit(responseData);
+    // this.observer.sendSubtask(responseData);
   }
 }
