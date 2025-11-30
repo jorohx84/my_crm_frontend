@@ -33,7 +33,7 @@
                     <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
                 </div>
             </div>
-            <div class="prioCont">
+            <div class="inputCont prioCont">
                 <h4>Priorität</h4>
                 <div class="inputfield cp" (click)="priocontOpen=!priocontOpen">
                     <div class="prioContInner">
@@ -69,12 +69,12 @@
 
 
 
-        <div class="inputCont">
+        <!-- <div class="inputCont">
 
-            <!-- <div class="assigneeCont">
+            <div class="assigneeCont">
                 <button type="button" (click)="globalservice.memberListOpen=true">Aufgabe zuweisen</button>
                 <p *ngIf="member">{{member.fullname}}</p>
-            </div> -->
+            </div>
             <div class="inputfield cp" (click)="globalservice.memberListOpen=true">
                 <p>Aufgabe zuweisen</p>
 
@@ -92,7 +92,7 @@
         <div class="subtasksConfirm" *ngIf="task.subtasks.length>0">
             <img src="./icons/done.svg" alt="">
             <p> Aufgabenliste geladen</p>
-        </div>
+        </div> -->
 
 
 

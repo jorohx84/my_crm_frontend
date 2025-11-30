@@ -1,0 +1,95 @@
+.subtasks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+position: relative;
+}
+
+.subheadline {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: solid 1px var(--border);
+
+    >img {
+        width: 16px;
+    }
+}
+
+.subtaskRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    .memberDot{
+        min-width: 16px;
+        min-height: 16px;
+    }
+}
+
+
+
+.counter {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+
+    >p {
+        font-size: 16px;
+        font-weight: 400;
+        margin: 0;
+    }
+}
+
+.inputAndTagCont{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.subtaskMenu{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.addAssignee{
+    >img{
+        width: 18px;
+    }
+}
+.assigneeList{
+    
+   display: flex;
+   flex-direction: column;
+   position: absolute;
+   top: 48px;
+   left: 0;
+   padding: 12px 24px;
+   background-color: var(--box-light);
+   border-radius: 4px;
+    backdrop-filter: blur(10px);
+}
+.assigneeListRow{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    border-radius: 4px;
+ cursor: pointer;
+    &:hover{
+        background-color: var(--listrow-hover);
+    }
+    .memberDot{
+        min-width: 20px;
+        min-height: 20px;
+    }
+}
+
+.opacity{
+    opacity: 0;
+}

@@ -1,0 +1,60 @@
+
+        <div class="taskSidebar">
+            <div class="sidabarNav">
+
+                <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
+                    <h4>Kommentare</h4>
+                </div>
+                <div [ngClass]="{'btnHlgt': sidebarKey==='logs'}" (click)="changeSidebarContent('logs')">
+                    <h4>Historie</h4>
+                </div>
+
+            </div>
+
+
+            <div *ngIf="sidebarKey==='comments'" class="commentCont">
+
+                <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment"
+                    placeholder="Schreibe ein Kommentar" id=""></textarea>
+                <img (click)="createComment()" src="./icons/send.svg" alt="">
+            </div>
+            <div *ngIf="sidebarKey==='comments'" class="sidebarList">
+
+                <div class="" *ngFor="let comment of sortedComments, let index=index">
+                    <div class="commentsRow">
+                        <div class="commentInfo">
+                            <h4>{{comment?.creator?.profile?.fullname}}</h4>
+                            <p *ngIf="global.isToday(comment.created_at); else showDate">{{comment.created_at |
+                                date: 'HH:mm'}} Uhr</p>
+                            <ng-template #showDate>{{comment.created_at | date: 'dd.MM.yy : HH:mm'}} Uhr</ng-template>
+
+                        </div>
+                        <div class="divider"></div>
+                        <textarea (change)="updateComment(index)" name="" [(ngModel)]="comment.text" id=""
+                            [disabled]="comment.creator.id !== user.id "></textarea>
+                        <div class="bottemLine">
+                            <img (click)="deleteComment(index)" *ngIf="comment.creator.id===user.id"
+                                src="./icons/trash.svg" alt="">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div *ngIf="sidebarKey==='logs'" class="sidebarList">
+
+                <div *ngFor="let log of logBook">
+                    <div class="logCard">
+                        <p>{{log.logged_at | date: 'dd.MM.yyyy : HH:mm'}} Uhr</p>
+                        <div class="divider"></div>
+                        <h4>{{log.log}}</h4>
+                        <p>{{log.new_state}}</p>
+                        <p>Änderung durch: {{log.updated_by.profile.fullname}}</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>

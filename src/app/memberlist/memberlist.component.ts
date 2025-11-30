@@ -51,7 +51,7 @@ export class MemberlistComponent {
   }
 
   susbscribeMemberListFromTaks() {
-    this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.observerservice.taskMembersSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
         console.log(response);
         

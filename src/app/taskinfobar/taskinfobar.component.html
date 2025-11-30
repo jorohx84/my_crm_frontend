@@ -1,0 +1,107 @@
+
+          <div class="infoRow">
+                <div class="infoTab">
+                    <div class="tabName">
+                        <p>Zuständigkeiten</p>
+                        <button *ngIf="globalservice.checkPermissions(user, task,'reviewer')" class="changeBtn"
+                            (click)="reviewerChangeOpen=true"><img class="editBtn" src="./icons/editx.svg" alt="">
+                        </button>
+                     
+                        <div *ngIf="reviewerChangeOpen" class="changeAssignee">
+                            <img class="close" src="./icons/close.svg" alt="" (click)="closeReviewerChanger()">
+                            <p>Zuständigkeiten ändern:</p>
+                            <div class="inputCont">
+                                <div class="inputfield">
+                                    <input (change)="searchMember()" type="text" placeholder="Mitarbeiter suchen"
+                                        [(ngModel)]="searchValue">
+                                </div>
+                                <div class="searchResults" *ngIf="foundMembers.length > 0 && searchValue.length>0">
+                                    <div class="searchResultsRow" (click)="setNewReviewer(index)"
+                                        *ngFor="let member of foundMembers let index=index">
+                                        <img src="./icons/profile.svg" alt="">
+                                        <div class="memberInfo">
+                                            <p>{{member.fullname}}</p>
+                                            <p>{{member.email}}</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <p class="infoText">{{task?.reviewer?.profile?.fullname}}</p>
+                </div>
+                <div class="infoTab">
+                    <div class="tabName">
+                        <p>Priorität:</p>
+                        <button *ngIf="globalservice.checkPermissions(user, task, 'reviewer')"
+                            [disabled]="globalservice.checkPermissions(user, task, 'reviewer')" class="changeBtn"><img
+                                (click)="priochangeOpen=!priochangeOpen" src="./icons/editx.svg" alt="">
+                        </button>
+                    </div>
+
+                    <div class="prioIconCont">
+                        <p class="infoText">{{prioLabels[task?.priority]}}</p>
+                        <img *ngIf="task?.priority==='low'" src="./icons/low.svg" alt="">
+                        <img *ngIf="task?.priority==='mid'" src="./icons/mid.svg" alt="">
+                        <img *ngIf="task?.priority==='high'" src="./icons/high.svg" alt="">
+                    </div>
+                
+                    <div *ngIf="priochangeOpen" class="changePrio">
+                        <img class="close" (click)="priochangeOpen=false" src="./icons/close.svg" alt="">
+
+                        <div class="prioBtn" (click)="changePrio('low', $event)">
+                            <img src="./icons/low.svg" alt="">
+                            <p>Niedrig</p>
+                        </div>
+                        <div class="prioBtn" (click)="changePrio('mid', $event)">
+                            <img src="./icons/mid.svg" alt="">
+                            <p>Mittel</p>
+                        </div>
+                        <div class="prioBtn" (click)="changePrio('high', $event)">
+                            <img src="./icons/high.svg" alt="">
+                            <p>Hoch</p>
+                        </div>
+
+
+        
+                    </div>
+                </div>
+                <div class="infoTab">
+                    <div class="tabName">
+                        <p>Fällig am</p>
+                        <button *ngIf="globalservice.checkPermissions(user, task, 'reviewer')"
+                            [disabled]="globalservice.checkPermissions(user, task, 'reviewer')" class="changeBtn"><img
+                                (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt=""></button>
+                    </div>
+
+                    <p class="infoText">{{task?.due_date | date: 'dd.MM.yyyy - HH:mm'}} Uhr</p>
+                    
+                    <div *ngIf="duedateChangeOpen" class="changeDueDate">
+                        <h4>Fälligkeitsdatum ändern</h4>
+                        <input (change)="updateDueDate('due_date', $event)" [(ngModel)]="newDueDate"
+                            type="datetime-local">
+                        <img (click)="duedateChangeOpen=false" src="./icons/close.svg" alt="">
+                    </div>
+                </div>
+
+                <div class="infoTab">
+                    <p>Bearbeitungsstand:</p>
+                    <div class="completedTodos">
+                        Erledigt:
+                        <div class="count">
+                            <p class="infoText">{{countCompletedSubtasks()}}</p>
+                            <p class="infoText">/</p>
+                            <p class="infoText">{{task?.subtasks?.length}}</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="infoTab">
+                    <p>Status:</p>
+                    <p>{{globalservice.interpretation['state'][task?.state]}}</p>
+                </div>
+            </div>

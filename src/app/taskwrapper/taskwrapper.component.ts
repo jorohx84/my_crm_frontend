@@ -8,12 +8,11 @@ import { ActivatedRoute } from '@angular/router';
 import { APIService } from '../services/api.service';
 import { UserService } from '../services/user.service';
 import { MessageService } from '../services/message.service';
-import { CdkVirtualScrollableElement } from "@angular/cdk/scrolling";
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-taskwrapper',
-  imports: [CommonModule, FormsModule, MemberlistComponent, CdkVirtualScrollableElement],
+  imports: [CommonModule, FormsModule, MemberlistComponent],
   templateUrl: './taskwrapper.component.html',
   styleUrl: './taskwrapper.component.scss'
 })
@@ -25,11 +24,11 @@ export class TaskwrapperComponent {
   messageservice = inject(MessageService);
   route = inject(ActivatedRoute);
   private destroy$ = new Subject<void>();
-  member: any;
+  // member: any;
   templatesOpen: boolean = false;
   singleTemplateOpen: boolean = false;
   priocontOpen: boolean = false;
-  noMember: boolean = false;
+  // noMember: boolean = false;
   customerID: number | string | null = null;
   subtaskText: string = '';
   user: any;
@@ -37,7 +36,6 @@ export class TaskwrapperComponent {
     title: '',
     description: '',
     customer: null,
-    assignee: null,
     state: 'todo',
     comment: '',
     priority: 'low',
@@ -58,7 +56,7 @@ export class TaskwrapperComponent {
   };
   ngOnInit() {
     this.loadUser()
-    this.loadMember();
+    // this.loadMember();
     this.loadTemplate();
     this.loadTask();
   }
@@ -75,19 +73,19 @@ export class TaskwrapperComponent {
       }
     })
   }
-  loadMember() {
-    this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((member) => {
-      if (member) {
-        this.member = member;
+  // loadMember() {
+  //   this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((member) => {
+  //     if (member) {
+  //       this.member = member;
 
-        this.task.assignee = member.id
-        console.log(member.id);
+  //       this.task.assignee = member.id
+  //       console.log(member.id);
 
 
-        this.noMember = false
-      }
-    });
-  }
+  //       this.noMember = false
+  //     }
+  //   });
+  // }
 
   loadTemplate() {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
@@ -117,8 +115,8 @@ export class TaskwrapperComponent {
 
 
   createTask(form: NgForm) {
-    this.noMember = this.checkMemberAdded();
-    if (!form.valid || this.noMember) {
+    // this.noMember = this.checkMemberAdded();
+    if (!form.valid) {
       form.control.markAllAsTouched();
       return;
     }
@@ -136,21 +134,7 @@ export class TaskwrapperComponent {
       new_state: 'Neue Aufgabe',
     }
   }
-  createTaskObject() {
 
-    return {
-      parent: null,
-      title: this.task.title,
-      description: this.task.description,
-      customer: this.task.customer,
-      assignee: this.task.assignee,
-      state: 'undone',
-      priority: this.task.priority,
-      due_date: this.task.due_date,
-      log: [],
-      subtasks: this.task.subtasks,
-    }
-  }
 
   saveTask() {
     const requestData = this.createTaskObject();
@@ -166,6 +150,20 @@ export class TaskwrapperComponent {
     })
   }
 
+    createTaskObject() {
+
+    return {
+      title: this.task.title,
+      description: this.task.description,
+      customer: this.task.customer,
+      state: 'undone',
+      priority: this.task.priority,
+      due_date: this.task.due_date,
+      log: [],
+      subtasks: this.task.subtasks,
+    }
+  }
+
   openNewTask(task: any) {
     const taskID = task.id
     const param = { type: task.type };
@@ -173,16 +171,8 @@ export class TaskwrapperComponent {
   }
 
 
-
-  checkMemberAdded() {
-    const isMember = this.member ? false : true;
-    return isMember
-  }
-
   resetTask(form: NgForm) {
     this.task.priority = 'low';
-    this.member = null;
-    this.noMember = false;
     this.globalservice.isSubtaskWrapper = false;
     form.resetForm();
     this.globalservice.taskWrapperOpen = false;

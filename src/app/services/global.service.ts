@@ -245,4 +245,16 @@ export class GlobalService {
             return 1
         }
     }
+
+
+    checkPermissions(user: any, obj: any, permission: string): boolean {
+        if (!user || !obj || !permission) {
+            return false
+        }
+        if (permission === 'reviewer') {
+            return obj.reviewer?.id === user?.id;
+        } else
+            return false
+
+    }
 }

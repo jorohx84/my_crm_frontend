@@ -1,0 +1,277 @@
+.infoRow {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    // margin-top: 40px;
+    background-color: var(--box-light);
+    border-radius: 4px;
+
+    .infoTab {
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: relative;
+        // background-color: var(--box-light);
+        padding: 12px;
+        border-radius: 4px;
+
+        .tabName {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+
+}
+
+
+.infoText {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.prioIconCont {
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+
+    >img {
+        width: 24px;
+    }
+}
+
+.completedTodos {
+    display: flex;
+    justify-content: flex-start;
+    gap: 38px;
+}
+
+.count {
+    display: flex;
+    gap: 4px;
+}
+
+.duedate {
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    >img {
+        width: 16px;
+        cursor: pointer;
+    }
+}
+
+.changeDueDate {
+    width: 100%;
+    width: 300px;
+    padding: 32px 64px;
+    position: absolute;
+    top: 60px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+    z-index: 1;
+
+    >img {
+        width: 12px;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        cursor: pointer;
+    }
+
+
+    input {
+        border-radius: 4px;
+        padding: 8px;
+        border: solid 0.5px var(--border);
+    }
+
+
+}
+
+.changeDueDate {
+    width: 100%;
+    width: 300px;
+    padding: 32px 64px;
+    position: absolute;
+    top: 60px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+    z-index: 1;
+
+    >img {
+        width: 12px;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        cursor: pointer;
+    }
+
+
+    input {
+        border-radius: 4px;
+        padding: 8px;
+        border: solid 0.5px var(--border);
+    }
+
+
+}
+
+.changeDueDate {
+    width: 100%;
+    width: 300px;
+    padding: 32px 64px;
+    position: absolute;
+    top: 60px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    padding: 32px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+    z-index: 1;
+
+    >img {
+        width: 12px;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        cursor: pointer;
+    }
+
+
+    input {
+        border-radius: 4px;
+        padding: 8px;
+        border: solid 0.5px var(--border);
+    }
+
+
+}
+
+.changePrio {
+    width: 100%;
+    width: 340px;
+    padding: 48px 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    position: absolute;
+    top: 60px;
+    left: 12px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+
+    >p {
+        width: 100%;
+        text-align: center;
+        cursor: pointer;
+        padding: 12px;
+
+        &:hover {
+            background-color: var(--listrow-hover);
+        }
+    }
+
+    .prioBtn {
+        width: 80px;
+        height: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        // border: solid;
+        border-radius: 4px;
+        background-color: var(--box-light);
+        padding: 4px;
+        cursor: pointer;
+
+        >img {
+            width: 40px;
+
+            cursor: pointer;
+        }
+
+        &:hover {
+            background-color: var(--listrow-hover);
+        }
+
+    }
+}
+
+.changeAssignee {
+    position: absolute;
+    top: 60px;
+    left: 12px;
+    width: 420px;
+    height: fit-content;
+    padding: 32px 32px;
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    background-color: white;
+
+
+
+}
+
+.searchResults {
+    width: 100%;
+    min-height: 100px;
+    position: absolute;
+    top: 42px;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: solid 0.5px var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    background-color: white;
+}
+
+.searchResultsRow {
+    display: flex;
+    align-items: flex-start !important;
+    gap: 16px;
+    padding: 8px;
+
+    background-color: var(--box-light);
+    border-radius: 4px;
+    cursor: pointer;
+
+    >img {
+        width: 24px;
+    }
+
+    &:hover {
+        background-color: var(--listrow-hover);
+    }
+}

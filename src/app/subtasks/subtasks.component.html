@@ -1,0 +1,43 @@
+<div class="subtasks">
+    <div class="subheadline">
+        <h4>Aufgabenliste</h4>
+        <img (click)="addSubtask()" src="./icons/add.svg" alt="">
+    </div>
+    <h4 *ngIf="task?.subtasks?.length===0">- Keine Aufgaben gesepeichert -</h4>
+    <div *ngFor="let subtask of subtasks, let index=index">
+        <div class="subtaskRow">
+            <div class="inputfield">
+
+                <div class="inputAndTagCont">
+                    <div [ngClass]="{'opacity': !subtask.assignee}" class="memberDot"
+                        [style.background-color]="subtask.assignee"></div>
+                    <input (change)="saveSubtask(index)" placeholder="Aufgabe hinzufügen"
+                        [(ngModel)]="subtasks[index].text" type="text">
+                </div>
+
+                <div class="subtaskMenu">
+                    <div *ngIf="subtask.is_saved && task.members.length>0" class="addAssignee" (click)="openAssigneList(subtask)">
+                        <img src="./icons/assignee.svg" alt="">
+                    </div>
+
+                    <div (click)="changeIsChecked(index)" class="checkbox" *ngIf="subtask.is_saved">
+                        <img *ngIf="subtask.is_checked===true" src="./icons/done.svg" alt="">
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+  
+    <div class="assigneeList" *ngIf="assigneListOpen">
+        <div class="assigneeListRow" *ngFor="let assignee of task.members" (click)="setAssignee(assignee)">
+
+            <div class="memberDot" [style.background-color]="assignee.profile.color"></div>
+            <p>{{assignee?.profile?.fullname}}</p>
+
+        </div>
+    </div>
+</div>

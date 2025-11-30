@@ -10,7 +10,7 @@ export class ObservableService {
     public userSubject$ = this.userSubject.asObservable();
     private memberSubject = new BehaviorSubject<any>(null);
     public memberSubject$ = this.memberSubject.asObservable();
-    private taskSubject = new BehaviorSubject<any>(null);
+    private taskSubject = new Subject<any>;
     public taskSubject$ = this.taskSubject.asObservable();
     private customerTriggersubject = new BehaviorSubject<any>(null);
     public customerTriggersubject$ = this.customerTriggersubject.asObservable();
@@ -34,6 +34,10 @@ export class ObservableService {
     public menulistSubject$ = this.menulistSubject.asObservable();
     private memberlistSubject = new Subject<any[]>;
     public memberlistSubject$ = this.memberlistSubject.asObservable();
+    private taskMembersSubject = new Subject<any[]>;
+    public taskMembersSubject$ = this.taskMembersSubject.asObservable();
+    private subtaskSubject = new Subject<any[]>;
+    public subtaskSubject$ = this.subtaskSubject.asObservable();
     observeUser(user: any) {
         this.userSubject.next(user)
     }
@@ -84,5 +88,13 @@ export class ObservableService {
     sendMemberList(list: any[]) {
         this.memberlistSubject.next(list);
     };
+
+    sendTaskMembers(list: any[]) {
+        this.taskMembersSubject.next(list);
+    }
+
+    sendSubtask(subtask: any) {
+        this.subtaskSubject.next(subtask);
+    }
 
 }

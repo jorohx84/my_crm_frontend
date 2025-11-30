@@ -26,7 +26,7 @@
                     <p> {{task.title}}</p>
                     <p>{{globalservice.interpretation['state'][task.state]}}</p>
 
-                    <p>{{task.assignee.profile.fullname}}</p>
+                    <p>{{task.reviewer.profile.fullname}}</p>
                     <p *ngIf="task.subtasks.length===0">leer</p>
                     <div *ngIf="task.subtasks.length!==0" class="subtaskCountCont">
                         <div class="checkbox">
