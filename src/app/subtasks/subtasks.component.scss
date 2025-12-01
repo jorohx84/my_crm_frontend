@@ -6,7 +6,7 @@
     // border:var(--borderstyle);
     // border-radius: var(--radius);
     // padding: 24px;
-position: relative;
+    position: relative;
 }
 
 .subheadline {
@@ -27,10 +27,12 @@ position: relative;
     display: flex;
     justify-content: space-between;
     gap: 16px;
-    .inputfield{
+
+    .inputfield {
         height: 40px;
     }
-    .memberDot{
+
+    .memberDot {
         min-width: 16px;
         min-height: 16px;
     }
@@ -51,51 +53,67 @@ position: relative;
     }
 }
 
-.inputAndTagCont{
+.inputAndTagCont {
     width: 100%;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.subtaskMenu{
+.subtaskMenu {
     display: flex;
     align-items: center;
     gap: 16px;
 }
-.addAssignee{
-    >img{
+
+.addAssignee {
+    cursor: pointer;
+    >img {
         width: 18px;
+        
     }
 }
-.assigneeList{
-    
-   display: flex;
-   flex-direction: column;
-   position: absolute;
-   top: 48px;
-   left: 0;
-   padding: 12px 24px;
-   background-color: var(--box-light);
-   border-radius: 4px;
+
+.assigneeList {
+
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 48px;
+    right: 0;
+    padding: 12px 24px;
+    background-color: var(--box-light);
+    border-radius: 4px;
     backdrop-filter: blur(10px);
 }
-.assigneeListRow{
+
+.assigneeListRow {
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 4px;
     border-radius: 4px;
- cursor: pointer;
-    &:hover{
+    cursor: pointer;
+
+    &:hover {
         background-color: var(--listrow-hover);
     }
-    .memberDot{
+
+    .memberDot {
         min-width: 20px;
         min-height: 20px;
     }
 }
 
-.opacity{
+.opacity {
     opacity: 0;
+}
+
+.deleteCont {
+cursor: pointer;
+    >img {
+        width: 18px;
+        display: block !important;
+        opacity: 1 !important;
+    }
 }

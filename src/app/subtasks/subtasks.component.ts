@@ -19,8 +19,9 @@ export class SubtasksComponent implements OnChanges {
   oldSubtask: any;
   private destroy$ = new Subject<void>()
   currentSubtask: any;
+  currentIndex: number | null = null;
   assigneListOpen: boolean = false;
-
+  isEmpty: boolean = false;
   ngOnChanges(changes: SimpleChanges) {
     if (changes['task']) {
       this.subtasks = this.task.subtasks
@@ -43,38 +44,32 @@ export class SubtasksComponent implements OnChanges {
     this.subtasks.push(listObj)
   }
 
-  saveSubtask(index: number) {
-    const currentSubtask = this.subtasks[index];
-    currentSubtask.is_saved = true;
-    const count = this.removeEmptySubtasks();
+  saveSubtask(subtask: any) {
+    const count = this.countEmptyTask();
+    this.isEmpty = count > 0 ? true : false;
+    if (this.isEmpty) { return }
+    subtask.is_saved = true;
     const data = {
       subtasks: this.subtasks,
     }
-    if (count > 0) {
-      this.sendDataToTask(data, 'subtask_delete', this.oldSubtask.text);
-
-    } else {
-      this.sendDataToTask(data, 'subtask_create', currentSubtask.text);
-
-    }
-
+    this.sendDataToTask(data, 'subtask_create', subtask.text);
   }
 
-
-  removeEmptySubtasks() {
-    const subtasks = this.subtasks
+  countEmptyTask() {
+    const subtasks = this.subtasks;
     let count = 0;
     for (let index = 0; index < subtasks.length; index++) {
       const subtask = subtasks[index];
       if (subtask.text === '') {
         count++
-        subtasks.splice(index, 1);
       }
     }
     return count
   }
 
+
   saveCurrentSubtask(index: number) {
+    this.currentIndex = index;
     const currentSubtask = this.subtasks[index]
     console.log(currentSubtask);
     this.oldSubtask = JSON.parse(JSON.stringify(currentSubtask));
@@ -111,6 +106,15 @@ export class SubtasksComponent implements OnChanges {
     this.assigneListOpen = false;
   }
 
+  deleteTask(index: number, subtask: any) {
+    console.log(index);
+    this.subtasks.splice(index, 1);
+    const data = {
+      subtasks: this.subtasks,
+    }
+    this.sendDataToTask(data, 'subtask_delete', subtask.text);
+  }
+
 
 
   sendDataToTask(data: any, key: string, varObj: any = null) {
@@ -124,4 +128,6 @@ export class SubtasksComponent implements OnChanges {
     this.subtaskChanged.emit(responseData);
     // this.observer.sendSubtask(responseData);
   }
+
+
 }
