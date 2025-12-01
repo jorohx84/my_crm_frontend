@@ -94,18 +94,20 @@ export class SubtasksComponent implements OnChanges {
 
 
   openAssigneList(subtask: any) {
-    console.log(subtask);
     this.currentSubtask = subtask
     this.assigneListOpen = !this.assigneListOpen;
   }
 
   setAssignee(assignee: any) {
     this.currentSubtask.assignee = assignee.profile.color;
-    const fullname = assignee.profile.fullname
     const data = {
       subtasks: this.task.subtasks
     }
-    this.sendDataToTask(data, 'assignee', fullname);
+    const logData = {
+      assignee: assignee,
+      subtask: this.currentSubtask
+    }
+    this.sendDataToTask(data, 'assignee', logData);
     this.assigneListOpen = false;
   }
 

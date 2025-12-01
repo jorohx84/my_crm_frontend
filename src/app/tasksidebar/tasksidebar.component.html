@@ -53,6 +53,7 @@
                         <h4>{{log.log}}</h4>
                         <p *ngIf="log.type!=='due_date'">{{log.new_state}}</p>
                         <p *ngIf="log.type==='due_date'">{{log.new_state | date: 'dd.MM.yyyy : HH:mm'}} Uhr</p>
+                        <p *ngIf="log.subtask">{{log.subtask}}</p>
                         <p>Änderung durch: {{log.updated_by.profile.fullname}}</p>
                     </div>
                 </div>

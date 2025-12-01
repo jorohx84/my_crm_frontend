@@ -67,64 +67,6 @@ export class SingletaskComponent {
     });
   }
 
-  subscribeUser() {
-    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
-      if (user) { this.user = user; }
-    })
-  }
-
-  subscribeMemberList() {
-    this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) { this.findChangesInIdList(response); }
-    })
-  }
-
-  findChangesInIdList(res: any) {
-    const newList = res.added;
-    const oldList = this.oldIdList;
-    const allMembers = res.all;
-    const oldSet = new Set(oldList);
-    const newSet = new Set(newList);
-    const added = newList.filter((id: string) => !oldSet.has(id));
-    const deleted = oldList.filter((id: string) => !newSet.has(id));
-    const addedMembers = this.resolveNames(added, allMembers);
-    const deletedMembers = this.resolveNames(deleted, allMembers);
-    this.initializeUpdateMembers(newList, addedMembers, deletedMembers);
-  }
-
-  resolveNames(memberIds: string[], allMembers: any[]) {
-    const result: string[] = [];
-    for (const id of memberIds) {
-      const member = allMembers.find(m => m.id === id);
-      if (member) {
-        result.push(member.profile.fullname);
-      }
-    }
-    return result;
-  }
-
-  initializeUpdateMembers(newList: any[], addedMembers: any[], deletedMembers: any[]) {
-    if (addedMembers.length > 0) {
-      this.setMembers(newList, addedMembers, 'members_added');
-    }
-    if (deletedMembers.length > 0) {
-      this.setMembers(newList, deletedMembers, 'members_deleted');
-    }
-  }
-
-
-  setMembers(res: any[], foundMembers: any[], logKey: string) {
-    const data = { members: res }
-    this.updateTask(data, logKey, foundMembers);
-    this.globalservice.memberListOpen = false;
-  }
-
-  onTaskChanged(data: any) {
-    this.updateTask(data.data, data.key, data.obj)
-  }
-
-
-
   loadtask(id: string | null) {
     if (id) {
       this.apiservice.getData(`task/${id}`).subscribe({
@@ -133,9 +75,55 @@ export class SingletaskComponent {
     }
   }
 
+  subscribeUser() {
+    this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      if (user) { this.user = user; }
+    })
+  }
+
+  subscribeMemberList() {
+    this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      if (response) {
+        const foundMemberData = this.logbook.findChangesInIdList(response, this.oldIdList);
+
+        this.initializeUpdateMembers(foundMemberData)
+      }
+    })
+  }
+
+  initializeUpdateMembers(foundMemberData: any) {
+    const newList = foundMemberData.newList
+    const foundMembers = {
+      added: foundMemberData.addedMembers,
+      deleted: foundMemberData.deletedMembers,
+    }
+    this.setMembers(newList, foundMembers, 'members');
+  }
+
+
+  setMembers(res: any[], foundMembers: any, logKey: string) {
+    const data = { members: res }
+    this.updateTask(data, logKey, foundMembers);
+    this.globalservice.memberListOpen = false;
+  }
+
+  onTaskChanged(data: any) {
+    this.updateTask(data.data, data.key, data.obj)
+  }
+  
+  updateTask(data: any, objKey: string, varObj: any = null) {
+    this.apiservice.patchData(`task/${this.taskId}/`, data).subscribe({
+      next: (response) => {
+        const task = response;
+        this.loadtask(this.taskId);
+        this.logbook.sendLog(varObj, objKey, task);
+      }
+    })
+  }
+
+
   setTaskTemplate(res: any) {
     this.task = res;
-    // this.observerservice.sendTask(res);
     this.subtasks = res.subtasks
     this.isloaded = true;
   }
@@ -153,30 +141,7 @@ export class SingletaskComponent {
   }
 
 
-  updateTask(data: any, objKey: string, varObj: any = null) {
-    this.apiservice.patchData(`task/${this.taskId}/`, data).subscribe({
-      next: (response) => {
-        const task = response;
-        this.loadtask(this.taskId);
-        this.sendLog(varObj, objKey, task);
-      }
-    })
-  }
 
-  sendLog(varObj: any, objKey: string, task: any) {
-    if (Array.isArray(varObj)) {
-      this.sendArrayLogs(varObj, objKey, task)
-    } else {
-      this.logbook.saveTaskLog(objKey, task, varObj);
-    }
-  }
-
-  sendArrayLogs(varObj: any[], objKey: any, task: any) {
-    varObj.forEach(obj => {
-      this.logbook.saveTaskLog(objKey, task, obj);
-    })
-
-  }
 
   releaseTask() {
     const data = {
@@ -236,7 +201,7 @@ export class SingletaskComponent {
       const obj = savedList[index];
       obj.is_saved = true;
       obj.is_checked = false;
-
+      obj.assignee = '';
     }
     return savedList
   }
