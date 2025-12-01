@@ -4,7 +4,7 @@ import { ObservableService } from '../services/observable.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../services/global.service';
-import { pipe, Subject, takeUntil } from 'rxjs';
+import { flatMap, pipe, Subject, takeUntil } from 'rxjs';
 import { response } from 'express';
 
 @Component({
@@ -41,12 +41,12 @@ export class MemberlistComponent {
     })
   }
 
-  sendUserdata(index: number) {
+  sendUserdata(member:any) {
     if (this.many) {
+      this.addMember(member)
       return
     }
-    const foundMember = this.members[index];
-    this.observerservice.sendMember(foundMember);
+    this.observerservice.sendMember(member);
     this.globalservice.memberListOpen = false;
   }
 
@@ -54,7 +54,7 @@ export class MemberlistComponent {
     this.observerservice.taskMembersSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
         console.log(response);
-        
+
         this.addedMembers = response;
       }
     })
@@ -102,8 +102,13 @@ export class MemberlistComponent {
   }
 
   sendList() {
-    this.observerservice.sendMemberList(this.addedMembers);
+    const listData: any = {
+      added: this.addedMembers,
+      all: this.allMembers
+    }
+    this.observerservice.sendMemberList(listData);
     this.addedMembers = [];
+    this.globalservice.memberListOpen = false;
   }
 
 }

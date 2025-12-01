@@ -11,12 +11,13 @@
                 <div class="inputAndTagCont">
                     <div [ngClass]="{'opacity': !subtask.assignee}" class="memberDot"
                         [style.background-color]="subtask.assignee"></div>
-                    <input (change)="saveSubtask(index)" placeholder="Aufgabe hinzufügen"
+                    <input (change)="saveSubtask(index)" (click)="saveCurrentSubtask(index)" placeholder="Aufgabe hinzufügen"
                         [(ngModel)]="subtasks[index].text" type="text">
                 </div>
 
                 <div class="subtaskMenu">
-                    <div *ngIf="subtask.is_saved && task.members.length>0" class="addAssignee" (click)="openAssigneList(subtask)">
+                    <div *ngIf="subtask.is_saved && task.members.length>0" class="addAssignee"
+                        (click)="openAssigneList(subtask)">
                         <img src="./icons/assignee.svg" alt="">
                     </div>
 
@@ -31,8 +32,8 @@
         </div>
 
     </div>
-  
-    <div class="assigneeList" *ngIf="assigneListOpen">
+
+    <div class="assigneeList" *ngIf="assigneListOpen" (mouseleave)="assigneListOpen=false">
         <div class="assigneeListRow" *ngFor="let assignee of task.members" (click)="setAssignee(assignee)">
 
             <div class="memberDot" [style.background-color]="assignee.profile.color"></div>

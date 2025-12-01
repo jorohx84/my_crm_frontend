@@ -14,6 +14,7 @@ import { query, response } from 'express';
 import { SubtasksComponent } from '../subtasks/subtasks.component';
 import { TaskinfobarComponent } from '../taskinfobar/taskinfobar.component';
 import { TasksidebarComponent } from '../tasksidebar/tasksidebar.component';
+import { LogBookService } from '../services/log.service';
 
 @Component({
   selector: 'app-singletask',
@@ -23,6 +24,7 @@ import { TasksidebarComponent } from '../tasksidebar/tasksidebar.component';
 })
 export class SingletaskComponent {
   observerservice = inject(ObservableService);
+  logbook = inject(LogBookService);
   globalservice = inject(GlobalService);
   apiservice = inject(APIService);
   route = inject(ActivatedRoute);
@@ -41,7 +43,7 @@ export class SingletaskComponent {
   subtaskText: string = '';
   searchValue: string = '';
   isloaded: boolean = false;
-
+  oldIdList: any[] = [];
   constructor() {
     this.globalservice.setCustomerSidebarState();
   }
@@ -71,29 +73,57 @@ export class SingletaskComponent {
     })
   }
 
-
-  // subscribeMember() {
-  //   this.observerservice.memberSubject$.pipe(takeUntil(this.destroy$)).subscribe((memberData) => {
-  //     if (memberData) { this.memberListOpen = false; this.newReviewer = memberData; }
-  //   })
-  // }
-
   subscribeMemberList() {
     this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) { this.setMembers(response) }
+      if (response) { this.findChangesInIdList(response); }
     })
   }
 
-
-  onTaskChanged(data:any){
-    this.updateTask(data.data, data.key)
+  findChangesInIdList(res: any) {
+    const newList = res.added;
+    const oldList = this.oldIdList;
+    const allMembers = res.all;
+    const oldSet = new Set(oldList);
+    const newSet = new Set(newList);
+    const added = newList.filter((id: string) => !oldSet.has(id));
+    const deleted = oldList.filter((id: string) => !newSet.has(id));
+    const addedMembers = this.resolveNames(added, allMembers);
+    const deletedMembers = this.resolveNames(deleted, allMembers);
+    this.initializeUpdateMembers(newList, addedMembers, deletedMembers);
   }
 
-  setMembers(res: any[]) {
+  resolveNames(memberIds: string[], allMembers: any[]) {
+    const result: string[] = [];
+    for (const id of memberIds) {
+      const member = allMembers.find(m => m.id === id);
+      if (member) {
+        result.push(member.profile.fullname);
+      }
+    }
+    return result;
+  }
+
+  initializeUpdateMembers(newList: any[], addedMembers: any[], deletedMembers: any[]) {
+    if (addedMembers.length > 0) {
+      this.setMembers(newList, addedMembers, 'members_added');
+    }
+    if (deletedMembers.length > 0) {
+      this.setMembers(newList, deletedMembers, 'members_deleted');
+    }
+  }
+
+
+  setMembers(res: any[], foundMembers: any[], logKey: string) {
     const data = { members: res }
-    this.updateTask(data, 'members');
-    this.memberListOpen = false;
+    this.updateTask(data, logKey, foundMembers);
+    this.globalservice.memberListOpen = false;
   }
+
+  onTaskChanged(data: any) {
+    this.updateTask(data.data, data.key, data.obj)
+  }
+
+
 
   loadtask(id: string | null) {
     if (id) {
@@ -123,24 +153,29 @@ export class SingletaskComponent {
   }
 
 
-  updateTask(data: any, objKey: string) {
+  updateTask(data: any, objKey: string, varObj: any = null) {
     this.apiservice.patchData(`task/${this.taskId}/`, data).subscribe({
       next: (response) => {
-        console.log(response);
+        const task = response;
         this.loadtask(this.taskId);
-
-        if (objKey === 'reviewer') {
-          this.globalservice.saveLog(objKey, response, this.newReviewer);
-        } else if (objKey === 'tododone' || objKey === 'todoundone') {
-          this.globalservice.saveLog(objKey, response, this.subtaskText);
-        }
-        else if (objKey === 'subtask') {
-          this.globalservice.saveLog(objKey, response, this.task.subtask);
-        } else {
-          this.globalservice.saveLog(objKey, response);
-        }
+        this.sendLog(varObj, objKey, task);
       }
     })
+  }
+
+  sendLog(varObj: any, objKey: string, task: any) {
+    if (Array.isArray(varObj)) {
+      this.sendArrayLogs(varObj, objKey, task)
+    } else {
+      this.logbook.saveTaskLog(objKey, task, varObj);
+    }
+  }
+
+  sendArrayLogs(varObj: any[], objKey: any, task: any) {
+    varObj.forEach(obj => {
+      this.logbook.saveTaskLog(objKey, task, obj);
+    })
+
   }
 
   releaseTask() {
@@ -159,8 +194,10 @@ export class SingletaskComponent {
 
   openMemberlist() {
     const memberlist = this.transformMemberList();
+    console.log(memberlist);
+
     this.observerservice.sendTaskMembers(memberlist);
-    this.memberListOpen = true;
+    this.globalservice.memberListOpen = true;
   }
 
 
@@ -171,6 +208,7 @@ export class SingletaskComponent {
       const uid = member.id
       idList.push(uid);
     });
+    this.oldIdList = [...idList];
     return idList;
   }
 
@@ -200,7 +238,6 @@ export class SingletaskComponent {
       obj.is_checked = false;
 
     }
-    console.log(savedList);
     return savedList
   }
 

@@ -55,6 +55,7 @@ export class CustomersComponent {
   isSearch: boolean = false;
   totalPages: number | null = null;
   totalCount: number | null = null;
+  isloaded: boolean = false;
   customerList = [
     { companyname: "TechNova GmbH", street: "Hauptstraße 45", areacode: "10115", city: "Berlin", country: "Deutschland", email: "kontakt@technova.de", phone: "+49 30 1234567", website: "https://www.technova.de", branch: "IT-Dienstleistungen", created_by: 1 },
     { companyname: "GreenLeaf Solutions", street: "Parkweg 12", areacode: "20095", city: "Hamburg", country: "Deutschland", email: "info@greenleaf-solutions.de", phone: "+49 40 9876543", website: "https://www.greenleaf-solutions.de", branch: "Umwelttechnik", created_by: 2 },
@@ -118,7 +119,6 @@ export class CustomersComponent {
     this.observerservice.customerTriggersubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadCustomers();
     })
-    this.subscribeListMenu();
     this.loadCustomers()
   }
 
@@ -133,9 +133,10 @@ export class CustomersComponent {
     this.apiservice.getData(`customers/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
         console.log(response);
-
+        this.totalCount = response.count;
         this.buildCustomersList(response);
         this.observerservice.sendListCount(response.count);
+        this.isloaded = true;
       }
     });
   }
@@ -148,18 +149,15 @@ export class CustomersComponent {
     this.isloading = false;
   }
 
-
-  subscribeListMenu() {
-    this.observerservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) {
-        this.setList(response);
-        if (this.searchValue) {
-          this.searchCustomer();
-        } else {
-          this.loadCustomers(response.page)
-        }
+  changeList(response:any) {
+    if (response) {
+      this.setList(response);
+      if (this.searchValue) {
+        this.searchCustomer();
+      } else {
+        this.loadCustomers(response.page)
       }
-    })
+    }
   }
 
   setList(data: any) {

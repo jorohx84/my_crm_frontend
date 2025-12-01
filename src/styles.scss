@@ -346,11 +346,11 @@ button {
 
 .memberListWrapper {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 80px);
     max-width: 600px;
     // padding: 24px;
     position: absolute;
-    top: 0;
+    top: 80px;
     right: 0;
     background-color: white;
     z-index: 1;

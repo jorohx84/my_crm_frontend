@@ -38,6 +38,9 @@
     <div [ngClass]="{'slideIn': globalservice.searchWrapperOpen===true}" class="globalSearchWrapper slideOut">
         <app-globalsearchwrapper></app-globalsearchwrapper>
     </div>
+        <div class="memberListWrapper  slideOut borderLeft" [ngClass]="{'slideIn': globalservice.memberListOpen}">
+        <app-memberlist [many]="true"></app-memberlist>
+    </div>
 
     <div class="confirmation slideOutRight" [ngClass]="{'slideInRight': showConfrim}">
         <!-- <p>{{confirmation}}</p> -->

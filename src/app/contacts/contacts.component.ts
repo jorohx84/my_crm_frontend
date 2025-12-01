@@ -27,7 +27,9 @@ export class ContactsComponent {
   pageSize: number = 25;
   currentPage: number = 1;
   currentSearchFilter: any;
+  totalCount: number | null = null;
   next: string | null = null;
+  isLoaded: boolean = false;
   contactTypes = [
     { fieldName: 'name', displayName: 'Name' },
     { fieldName: 'email', displayName: 'E-Mail' },
@@ -50,8 +52,6 @@ export class ContactsComponent {
 
   ngOnInit() {
     this.loadDataUrl();
-    // this.subscribeContact();
-    this.subscribeListMenuData()
     this.searchValue = '';
   }
 
@@ -71,9 +71,8 @@ export class ContactsComponent {
     });
   }
 
-  subscribeListMenuData() {
-    this.observerservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) {
+  changeList(response:any){
+    if (response) {
         this.setList(response);
         if (this.searchValue) {
           this.searchContact();
@@ -81,7 +80,6 @@ export class ContactsComponent {
           this.loadContacts(this.customerID, 1);
         }
       }
-    })
   }
 
   setList(data: any) {
@@ -97,7 +95,9 @@ export class ContactsComponent {
     this.apiservice.getData(`contacts/${id}/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
         this.buildContactList(response);
-        this.observerservice.sendListCount(response.count)
+        this.totalCount = response.count;
+        this.isLoaded = true;
+
       }
     })
   }

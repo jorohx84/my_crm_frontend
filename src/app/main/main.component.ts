@@ -7,10 +7,11 @@ import { GlobalsearchwrapperComponent } from '../globalsearchwrapper/globalsearc
 import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MemberlistComponent } from '../memberlist/memberlist.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, RouterOutlet, HeaderComponent, GlobalsearchwrapperComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, GlobalsearchwrapperComponent, MemberlistComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

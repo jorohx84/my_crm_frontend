@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
@@ -22,10 +22,12 @@ export class ListmenuComponent {
   @Input() fields: any[] = [];
   @Input() timeFilter: boolean = false;
   @Input() searchField: boolean = false;
+  @Input() totalCount: number | null = null;
+  @Output() searchChanges = new EventEmitter();
   isfiltered: boolean = false;
   startTime: string = '';
   endTime: string = '';
-  //  @Input() totalCount: number | null = null;
+
   searchFilterOpen: boolean = false;
   dropdownOpen: boolean = false;
   pageSize: number = 25;
@@ -45,8 +47,8 @@ export class ListmenuComponent {
 
   headlines: Record<string, string> = {
     activities: 'Aktivitäten',
-    customers:'Kundenliste',
-    contacts:'Kontakte'
+    customers: 'Kundenliste',
+    contacts: 'Kontakte'
   };
 
 
@@ -54,30 +56,39 @@ export class ListmenuComponent {
   currentSearchFilter: any;
   responseData: any;
   isSearch: boolean = false;
-  totalCount: number | null = null;
+
+
 
 
   ngOnInit() {
     this.currentSearchFilter = this.fields[0];
-    this.subscribeListCount();
+    // this.subscribeListCount();
   }
 
-
-  subscribeListCount() {
-    this.observer.listCountSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      if (data) {
-        console.log(data);
-
-        this.totalCount = data;
-        console.log(data);
-
-        if (this.totalCount) {
-          this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
-        }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['totalCount']) {
+      if (this.totalCount) {
+        this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
       }
-    })
+
+    }
   }
+
+  // subscribeListCount() {
+  //   this.observer.listCountSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+  //     if (data) {
+  //       console.log(data);
+
+  //       this.totalCount = data;
+  //       console.log(data);
+
+  //       if (this.totalCount) {
+  //         this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
+  //       }
+
+  //     }
+  //   })
+  // }
 
   changeSearchFilter(index: number) {
     this.currentSearchFilter = this.fields[index];
@@ -135,6 +146,7 @@ export class ListmenuComponent {
 
   sendDataToList() {
     this.responseData = this.buildResponse();
-    this.observer.sendListData(this.responseData);
+    // this.observer.sendListData(this.responseData);
+    this.searchChanges.emit(this.responseData)
   }
 }

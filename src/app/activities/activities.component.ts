@@ -87,7 +87,7 @@ export class ActivitiesComponent {
 
     this.subscribeActivities();
     this.subscribeContact();
-    this.subscribeListMenuData();
+    // this.subscribeListMenuData();
   }
 
   setTemplateData(query: any, params: any) {
@@ -118,7 +118,8 @@ export class ActivitiesComponent {
     this.apiservice.getData(`activities/${key}/${id}/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
         this.buildActivityList(response);
-        this.observservice.sendListCount(response.count);
+        // this.observservice.sendListCount(response.count);
+        this.totalCount = response.count
       }
     });
   }
@@ -131,17 +132,30 @@ export class ActivitiesComponent {
   }
 
 
-  subscribeListMenuData() {
-    this.observservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      if (response) {
-        this.setList(response);
-        if (response.startTime || response.endTime) {
-          this.filterActivitiesToDate(response.startTime, response.endTime);
-        } else {
-          this.loadActivities(this.listID, this.apiKey, response.page);
-        }
+  // subscribeListMenuData() {
+  //   this.observservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+  //     if (response) {
+  //       this.setList(response);
+  //       if (response.startTime || response.endTime) {
+  //         this.filterActivitiesToDate(response.startTime, response.endTime);
+  //       } else {
+  //         this.loadActivities(this.listID, this.apiKey, response.page);
+  //       }
+  //     }
+  //   })
+  // }
+
+
+
+  changeList(response: any) {
+    if (response) {
+      this.setList(response);
+      if (response.startTime || response.endTime) {
+        this.filterActivitiesToDate(response.startTime, response.endTime);
+      } else {
+        this.loadActivities(this.listID, this.apiKey, response.page);
       }
-    })
+    }
   }
 
   setList(data: any) {

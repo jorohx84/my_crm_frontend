@@ -8,6 +8,7 @@ import { ObservableService } from '../services/observable.service';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Subject, takeUntil } from 'rxjs';
+import { LogBookService } from '../services/log.service';
 
 @Component({
   selector: 'app-board',
@@ -20,6 +21,7 @@ export class BoardComponent {
   userservice = inject(UserService);
   dataservice = inject(DataService);
   apiservice = inject(APIService);
+  logbook=inject(LogBookService);
   observerservice = inject(ObservableService);
   user: any;
   countsLoaded: boolean = false;
@@ -187,7 +189,7 @@ export class BoardComponent {
         next: (response) => {
           console.log(response);
 
-          this.globalservice.saveLog('state', response)
+          this.logbook.saveTaskLog('state', response)
         }
       })
 

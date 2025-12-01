@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { APIService } from '../services/api.service';
 import { GlobalService } from '../services/global.service';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ export class TasksidebarComponent {
   global = inject(GlobalService);
   userservice = inject(UserService);
   route = inject(ActivatedRoute);
-  task: any;
+  @Input() task: any;
 
   user: any;
   logBook: any[] = [];
@@ -39,21 +39,37 @@ export class TasksidebarComponent {
     this.loadTemplate();
   }
 
-  loadTemplate() {
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      if (param) {
-        const id = param.get('task_id')
-        console.log(id);
-
-        if (id) {
-          this.taskID = id;
-          this.loadComments(id);
-          this.loadLog(id);
-        }
-
-      }
-    })
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['task']) {
+      this.loadTemplate()
+    }
   }
+
+  loadTemplate() {
+    const id = this.task.id
+    if (id) {
+      this.taskID = id;
+      this.loadComments(id);
+      this.loadLog(id);
+    }
+
+  }
+
+  // loadTemplate() {
+  //   this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+  //     if (param) {
+  //       const id = param.get('task_id')
+  //       console.log(id);
+
+  //       if (id) {
+  //         this.taskID = this.task.id;
+  //         this.loadComments(id);
+  //         this.loadLog(id);
+  //       }
+
+  //     }
+  //   })
+  // }
 
 
   loadComments(id: string) {
@@ -66,12 +82,12 @@ export class TasksidebarComponent {
 
   }
 
-    loadLog(id: string) {
+  loadLog(id: string) {
     this.api.getData(`task/logs/${id}`).subscribe({
       next: (response) => {
         this.logBook = this.global.sortListbyTime(response, 'logged_at', 'down');
         console.log(this.logBook);
-        
+
       }
     })
   }

@@ -4,8 +4,8 @@
         <!-- <button (click)="fillDB()">Dummys laden</button> -->
     </div>
     <div class="listCont">
-            <app-listmenu [next]="next" [searchField]="true" [timeFilter]="false" [list]="'customers'"
-                    [fields]="customerFields"></app-listmenu>
+            <app-listmenu *ngIf="isloaded" [next]="next" [searchField]="true" [timeFilter]="false" [list]="'customers'"
+                    [fields]="customerFields" [totalCount]="totalCount" (searchChanges)="changeList($event)"></app-listmenu>
         <div class="listMainCont">
             <div class="listContainer">
                 <div class="listHeadline">

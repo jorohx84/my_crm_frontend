@@ -1,6 +1,6 @@
 <section>
     
-      <app-listmenu [next]="next" [searchField]="false" [timeFilter]="true" [list]="'activities'" [fields]="activityFields"></app-listmenu>
+      <app-listmenu [next]="next" [searchField]="false" [timeFilter]="true" [list]="'activities'" [fields]="activityFields" [totalCount]="totalCount" (searchChanges)="changeList($event)"></app-listmenu>
   
     <div class="listMainCont">
         <div class="listContainer">

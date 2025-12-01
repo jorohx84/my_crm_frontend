@@ -1,8 +1,8 @@
 <section>
 
-    <div class="memberListWrapper slideOut" [ngClass]="{'slideIn': globalservice.memberListOpen}">
+    <!-- <div class="memberListWrapper slideOut" [ngClass]="{'slideIn': globalservice.memberListOpen}">
         <app-memberlist></app-memberlist>
-    </div>
+    </div> -->
     <h3 *ngIf="!globalservice.isSubtaskWrapper">Aufgabe erstellen</h3>
     <button (click)="loadTemplates()">Aus Vorlage</button>
 

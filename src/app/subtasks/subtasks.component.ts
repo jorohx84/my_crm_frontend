@@ -14,8 +14,9 @@ export class SubtasksComponent implements OnChanges {
   observer = inject(ObservableService);
   @Input() task: any;
   @Input() subtasks: any[] = [];
-  @Output() subtaskChanged=new EventEmitter();
+  @Output() subtaskChanged = new EventEmitter();
   subtaskText: string = '';
+  oldSubtask: any;
   private destroy$ = new Subject<void>()
   currentSubtask: any;
   assigneListOpen: boolean = false;
@@ -23,27 +24,14 @@ export class SubtasksComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['task']) {
       this.subtasks = this.task.subtasks
+
     }
   }
 
   ngOnInit() {
-    this.subtasks = this.task.subtasks
+
   }
 
-  // subscribeTask() {
-  //   this.observer.taskSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-  //     if (response) {
-  //       this.setTaskData(response)
-  //     };
-
-
-  //   })
-  // }
-
-  setTaskData(res: any) {
-    this.task = res;
-    this.subtasks = res.subtasks;
-  }
 
   addSubtask() {
     const listObj = {
@@ -56,62 +44,80 @@ export class SubtasksComponent implements OnChanges {
   }
 
   saveSubtask(index: number) {
-    const currentTask = this.subtasks[index];
-    currentTask.is_saved = true;
-    this.removeEmptySubtasks();
+    const currentSubtask = this.subtasks[index];
+    currentSubtask.is_saved = true;
+    const count = this.removeEmptySubtasks();
     const data = {
       subtasks: this.subtasks,
     }
-    this.sendDataToTask(data, 'checklist');
+    if (count > 0) {
+      this.sendDataToTask(data, 'subtask_delete', this.oldSubtask.text);
+
+    } else {
+      this.sendDataToTask(data, 'subtask_create', currentSubtask.text);
+
+    }
+
   }
 
 
   removeEmptySubtasks() {
     const subtasks = this.subtasks
-    console.log(subtasks);
-
+    let count = 0;
     for (let index = 0; index < subtasks.length; index++) {
       const subtask = subtasks[index];
       if (subtask.text === '') {
+        count++
         subtasks.splice(index, 1);
       }
     }
+    return count
+  }
+
+  saveCurrentSubtask(index: number) {
+    const currentSubtask = this.subtasks[index]
+    console.log(currentSubtask);
+    this.oldSubtask = JSON.parse(JSON.stringify(currentSubtask));
+
   }
 
   changeIsChecked(index: number) {
-    const checkbox = this.subtasks[index]
-    checkbox.is_checked = !checkbox.is_checked
+    const currentSubtask = this.subtasks[index]
+    currentSubtask.is_checked = !currentSubtask.is_checked
     const data = {
       subtasks: this.subtasks,
     }
-    this.subtaskText = checkbox.text
-    const log = checkbox.is_checked ? 'tododone' : 'todoundone';
-    this.sendDataToTask(data, log)
+    this.subtaskText = currentSubtask.text
+    const log = currentSubtask.is_checked ? 'subtask_done' : 'subtask_undone';
+    this.sendDataToTask(data, log, currentSubtask.text)
   }
 
 
   openAssigneList(subtask: any) {
     console.log(subtask);
     this.currentSubtask = subtask
-    this.assigneListOpen = true;
+    this.assigneListOpen = !this.assigneListOpen;
   }
 
   setAssignee(assignee: any) {
     this.currentSubtask.assignee = assignee.profile.color;
+    const fullname = assignee.profile.fullname
     const data = {
       subtasks: this.task.subtasks
     }
-    this.sendDataToTask(data, 'assignee')
+    this.sendDataToTask(data, 'assignee', fullname);
     this.assigneListOpen = false;
   }
 
 
 
-  sendDataToTask(data: any, key: string) {
+  sendDataToTask(data: any, key: string, varObj: any = null) {
     const responseData = {
       data: data,
       key: key,
+      obj: varObj,
     }
+    console.log(responseData);
 
     this.subtaskChanged.emit(responseData);
     // this.observer.sendSubtask(responseData);

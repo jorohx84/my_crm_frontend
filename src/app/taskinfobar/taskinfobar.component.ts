@@ -47,7 +47,7 @@ export class TaskinfobarComponent implements OnChanges {
       if (user) { this.user = user; }
     })
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['task']) {
       this.subtasks = this.task.subtasks
@@ -78,13 +78,17 @@ export class TaskinfobarComponent implements OnChanges {
   }
 
   updateReviewer() {
+    console.log(this.newReviewer);
+    
     const id = this.newReviewer.id
+
+    const fullname = this.newReviewer.fullname;
     const data = {
       reviewer: id
     }
 
 
-    this.sendDataToTask(data, 'reviewer');
+    this.sendDataToTask(data, 'reviewer', fullname);
     this.reviewerChangeOpen = false;
   }
 
@@ -113,10 +117,11 @@ export class TaskinfobarComponent implements OnChanges {
     return count
   }
 
-  sendDataToTask(data: any, key: string) {
+  sendDataToTask(data: any, key: string, varObj: any = null) {
     const responseData = {
       data: data,
       key: key,
+      obj: varObj,
     }
     this.infosChanged.emit(responseData);
   }

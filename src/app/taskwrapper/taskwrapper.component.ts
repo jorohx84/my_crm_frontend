@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { ActivatedRoute } from '@angular/router';
@@ -9,15 +8,17 @@ import { APIService } from '../services/api.service';
 import { UserService } from '../services/user.service';
 import { MessageService } from '../services/message.service';
 import { Subject, takeUntil } from 'rxjs';
+import { LogBookService } from '../services/log.service';
 
 @Component({
   selector: 'app-taskwrapper',
-  imports: [CommonModule, FormsModule, MemberlistComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './taskwrapper.component.html',
   styleUrl: './taskwrapper.component.scss'
 })
 export class TaskwrapperComponent {
   apiservice = inject(APIService);
+  logbook=inject(LogBookService);
   globalservice = inject(GlobalService);
   observerservice = inject(ObservableService);
   userservice = inject(UserService);
@@ -142,7 +143,7 @@ export class TaskwrapperComponent {
       next: (response) => {
         this.openNewTask(response);
         const newTask = response;
-        this.globalservice.saveLog('create', newTask);
+        this.logbook.saveTaskLog('create', newTask);
         this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singletask', newTask.id])
         this.observerservice.sendConfirmation('Aufgabe wurde erstellt');
       },

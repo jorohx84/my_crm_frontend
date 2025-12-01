@@ -34,21 +34,7 @@ export class GlobalService {
     //     this.router.navigate([path]);
     // }
     private destroy$ = new Subject<void>();
-    taskLogs: Record<string, string> = {
-        title: 'Titel wurde geändert',
-        description: 'Beschreibung wurde geändert',
-        state: 'Status wurde geändert',
-        priority: 'Priorität wurde geändert',
-        due_date: 'Fälligkeit wurde geändert',
-        subtask: 'neue Subtask wurde erstellt',
-        assignee: 'Bearbeiter wurde geändert',
-        checklist: 'Subtasks wurden bearbeitet',
-        tododone: 'Aufgabe abgeschlossen',
-        todoundone: 'Aufgabe auf unbearbeitet geändert',
-        release: 'Aufgabe wurde freigegeben',
-        close: 'Aufgabe wurde geschlossen',
-        create: 'Aufgabe wurde erstellt'
-    }
+
 
 
     interpretation: Record<string, Record<string, string>> = {
@@ -102,48 +88,7 @@ export class GlobalService {
     }
 
 
-    saveLog(objKey: string, task: any, variableObj: any = null) {
-        const logData = this.createLog(objKey, task, variableObj);
-        this.apiservice.postData('task/logs/', logData).subscribe({
-            next: (response) => {
-            }
-        })
-    }
 
-
-    createLog(objKey: string, task: any, variableObj: any) {
-        const logText = this.taskLogs[objKey]
-        const newState = this.getnewState(objKey, task, variableObj);
-
-        return {
-            task: task.id,
-            log: logText,
-            // updated_by: this.user.id,
-            new_state: newState
-        }
-    }
-
-    getnewState(objKey: string, task: any, variableObj: any) {
-        if (objKey === 'description' || objKey === 'due_date' || objKey === 'title') {
-            return task[objKey]
-        } else if (objKey === 'state' || objKey === 'priority') {
-            return this.interpretation[objKey][task[objKey]]
-        } else if (objKey === 'subtask') {
-            return variableObj.title;
-        } else if (objKey === 'assignee') {
-            return variableObj.fullname
-        } else if (objKey === 'checklist') {
-            return 'Aufgabe hinzugefügt'
-        } else if (objKey === 'tododone' || objKey === 'todoundone') {
-            return variableObj
-        } else if (objKey === 'release') {
-            return 'Freigabe erteilt durch Prüfer'
-        } else if (objKey === 'close') {
-            return 'Aufgabe abgeschlossen durch Bearbeiter'
-        } else if (objKey === 'create') {
-            return 'Neue Aufgabe'
-        }
-    }
 
 
     countSubtasksDone(index: number, tasksList: any[], countKey: string) {
