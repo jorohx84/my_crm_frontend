@@ -25,7 +25,7 @@ export class TasksidebarComponent {
   sortedComments: any[] = [];
   sidebarKey: string = 'comments';
   taskID: string = '';
-
+  textfieldOpen: boolean = false;
   comment: any = {
     task: '',
     creator: {},
@@ -76,6 +76,7 @@ export class TasksidebarComponent {
     this.api.getData(`comments/${id}/`).subscribe({
       next: (response) => {
         console.log(response);
+
         this.sortedComments = this.global.sortListbyTime(response, 'created_at', 'down')
       }
     })
@@ -110,6 +111,7 @@ export class TasksidebarComponent {
         this.sidebarKey = 'comments';
         this.comment.text = '';
         this.loadComments(this.taskID);
+        this.textfieldOpen = false;
       }
     });
   }
@@ -117,10 +119,13 @@ export class TasksidebarComponent {
 
 
   updateComment(index: number) {
-    const comments = this.task.comments;
+    console.log(index);
+    const comments = this.sortedComments;
     const currentComment = comments[index];
     const id = currentComment.id
-    this.api.patchData(`comments/${id}/`, currentComment).subscribe({
+    console.log(currentComment.id);
+
+    this.api.patchData(`comment/update/${id}/`, currentComment).subscribe({
       next: (response) => {
         const id = this.task.id
         console.log(response);
@@ -132,8 +137,10 @@ export class TasksidebarComponent {
   }
 
   deleteComment(index: number) {
-    const comments = this.task.comments;
-    const currentComment = comments[index];
+
+
+
+    const currentComment = this.sortedComments[index];
     const id = currentComment.id
     this.api.deleteData(`comments/${id}/`, currentComment).subscribe({
       next: (response) => {

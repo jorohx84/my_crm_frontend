@@ -123,6 +123,8 @@ export class SingletaskComponent {
 
 
   setTaskTemplate(res: any) {
+    console.log(res);
+    
     this.task = res;
     this.subtasks = res.subtasks
     this.isloaded = true;

@@ -11,7 +11,7 @@
 
                 <div class="inputAndTagCont">
                     <div [ngClass]="{'opacity': !subtask.assignee}" class="memberDot"
-                        [style.background-color]="subtask.assignee"></div>
+                        [style.background-color]="subtask.assignee.color"></div>
                     <input (change)="saveSubtask(subtask)" (click)="saveCurrentSubtask(index)"
                         placeholder="Aufgabe hinzufügen" [(ngModel)]="subtasks[index].text" type="text">
                 </div>

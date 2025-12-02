@@ -1,22 +1,27 @@
 .taskSidebar {
     width: 100%;
     max-width: 500px;
-   min-width: 400px;
+    min-width: 400px;
     height: calc(100vh - 268.5px);
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    padding: 24px 32px;
+    gap: 12px;
+    padding: 24px 24px;
 
     border-left: solid 0.5px var(--border);
     overflow: hidden;
+    position: relative;
 }
 
 .sidabarNav {
     width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 4px;
     display: flex;
     justify-content: space-between;
-    gap: 8px;
+   
 
     >div {
         width: 100%;
@@ -25,9 +30,14 @@
         justify-content: center;
         align-items: center;
         background-color: var(--box-light);
-        border-radius: 4px;
+        // border-radius: 4px;
         cursor: pointer;
     }
+}
+
+.placeholder{
+    width: 100%;
+    min-height: 20px;
 }
 
 .btnHlgt {
@@ -39,16 +49,39 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 24px;
     overflow-y: scroll;
 }
+.addCont{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    
+    >img{
+        transition: transform 0.3s ease-in-out;
+        width: 16px;
+        cursor: pointer;
+    }
+    border-bottom: var(--borderstyle);
+}
+
+.rotate{
+    transform: rotate(-45deg) !important;
+}
+
 .commentCont {
     width: 100%;
+    height: 0px;
+ 
+    top: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     gap: 8px;
-    position: relative;
+position: relative;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out, height 0.5s ease-in-out;
 
     >p {
         width: 100%;
@@ -64,20 +97,30 @@
 
 }
 
+.showTextfield{
+    opacity: 1;
+    height: 100px;
+}
+
 .commentsRow {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 12px;
+ 
     border-radius: 4px;
-    background-color: var(--box-light);
+
     position: relative;
 
     >textarea {
         border: none;
-        padding: 0;
+        padding: 12px;
         min-height: 50px;
+
+
+        background-color: var(--box-light);
+        // box-shadow: 6px 6px 6px 0px var(--box-light);
+        border-radius: 20px;
 
     }
 
@@ -103,6 +146,27 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
+    >img {
+        width: 18px;
+        color: rgb(37, 97, 153);
+    }
+
+}
+
+.profileCont {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .memberDot {
+        min-width: 28px !important;
+        min-height: 28px !important;
+        font-size: 12px !important;
+
+
+    }
 }
 
 .logCard {
@@ -113,4 +177,8 @@
     background-color: var(--box-light);
     padding: 12px;
     border-radius: 4px;
+}
+
+.reverse {
+    flex-direction: row-reverse;
 }

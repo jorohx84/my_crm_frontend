@@ -2,39 +2,51 @@
     <div class="sidabarNav">
 
         <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
-            <h4>Kommentare</h4>
+            <h4>Chat</h4>
         </div>
         <div [ngClass]="{'btnHlgt': sidebarKey==='logs'}" (click)="changeSidebarContent('logs')">
             <h4>Historie</h4>
         </div>
 
     </div>
+    <div class="placeholder"></div>
+    <div class="addCont">
+        <h4 *ngIf="!textfieldOpen">Nachrichten</h4>
+        <h4 *ngIf="textfieldOpen">Neue Nachricht</h4>
+        <img [ngClass]="{'rotate': textfieldOpen}" src="./icons/add.svg" alt="" (click)="textfieldOpen=!textfieldOpen">
+
+    </div>
 
 
-    <div *ngIf="sidebarKey==='comments'" class="commentCont">
+    <div *ngIf="sidebarKey==='comments'" class="commentCont" [ngClass]="{'showTextfield': textfieldOpen}">
 
-        <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment" placeholder="Schreibe ein Kommentar"
+        <textarea #commentInput="ngModel" [(ngModel)]="comment.text" name="comment" placeholder="Schreibe ein Nachricht"
             id=""></textarea>
-        <img (click)="createComment()" src="./icons/send.svg" alt="">
+        <img *ngIf="comment.text!==''" (click)="createComment()" src="./icons/send.svg" alt="">
     </div>
     <div *ngIf="sidebarKey==='comments'" class="sidebarList">
 
         <div class="" *ngFor="let comment of sortedComments, let index=index">
             <div class="commentsRow">
-                <div class="commentInfo">
-                    <h4>{{comment?.creator?.profile?.fullname}}</h4>
+                <div class="commentInfo" [ngClass]="{'reverse': user.id===comment.creator.id}">
+                    <div class="profileCont" [ngClass]="{'reverse': user.id===comment.creator.id}">
+                        <div class="memberDot" [style.backgroundColor]="comment.creator.profile.color">
+                            {{comment.creator.profile.initials}}</div>
+                        <h4>{{comment?.creator?.profile?.fullname}}</h4>
+                    </div>
+
                     <p *ngIf="global.isToday(comment.created_at); else showDate">{{comment.created_at |
                         date: 'HH:mm'}} Uhr</p>
                     <ng-template #showDate>{{comment.created_at | date: 'dd.MM.yy : HH:mm'}} Uhr</ng-template>
-
+                    <!-- <img (click)="deleteComment(index)" *ngIf="comment.creator.id===user.id" src="./icons/trash.svg"
+                        alt=""> -->
                 </div>
-                <div class="divider"></div>
+                <!-- <div class="divider"></div> -->
                 <textarea (change)="updateComment(index)" name="" [(ngModel)]="comment.text" id=""
                     [disabled]="comment.creator.id !== user.id "></textarea>
-                <div class="bottemLine">
-                    <img (click)="deleteComment(index)" *ngIf="comment.creator.id===user.id" src="./icons/trash.svg"
-                        alt="">
-                </div>
+                <!-- <div class="bottemLine">
+
+                </div> -->
 
             </div>
         </div>
@@ -53,7 +65,7 @@
                 <p *ngIf="log.type!=='due_date'">{{log.new_state}}</p>
                 <p *ngIf="log.type==='due_date'">{{log.new_state | date: 'dd.MM.yyyy : HH:mm'}} Uhr</p>
                 <p *ngIf="log.subtask">{{log.subtask}}</p>
-                <p>Bearbeiter: {{log.updated_by.profile.fullname}}</p>
+                <p class="logAssignee">Bearbeiter: {{log.updated_by.profile.fullname}}</p>
             </div>
         </div>
     </div>

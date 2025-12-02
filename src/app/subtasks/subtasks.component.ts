@@ -94,7 +94,11 @@ export class SubtasksComponent implements OnChanges {
   }
 
   setAssignee(assignee: any) {
-    this.currentSubtask.assignee = assignee.profile.color;
+    console.log(assignee);
+
+    this.currentSubtask.assignee = this.getAssignee(assignee);
+    console.log(this.currentSubtask);
+    
     const data = {
       subtasks: this.task.subtasks
     }
@@ -104,6 +108,14 @@ export class SubtasksComponent implements OnChanges {
     }
     this.sendDataToTask(data, 'assignee', logData);
     this.assigneListOpen = false;
+  }
+
+  getAssignee(assignee: any) {
+    return {
+      fullname: assignee.profile.fullname,
+      initials: assignee.profile.initials,
+      color: assignee.profile.color,
+    }
   }
 
   deleteTask(index: number, subtask: any) {
