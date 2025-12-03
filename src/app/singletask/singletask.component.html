@@ -57,7 +57,7 @@
                         [(ngModel)]="task.description"></textarea>
                 </div>
                 <div class="subtaskCont">
-                    <app-subtasks *ngIf="isloaded" [task]="task" (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
+                    <app-subtasks *ngIf="isloaded" [oldMemberlist]="oldIdList" [task]="task" (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
                 </div>
 
             </div>

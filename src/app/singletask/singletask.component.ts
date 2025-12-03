@@ -164,6 +164,7 @@ export class SingletaskComponent {
 
   openMemberlist() {
     const memberlist = this.transformMemberList();
+    
     this.observerservice.sendTaskMembers(memberlist);
     this.globalservice.memberListOpen = true;
   }

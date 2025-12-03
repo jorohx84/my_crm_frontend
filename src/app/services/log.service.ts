@@ -77,8 +77,8 @@ export class LogBookService {
             release: 'Freigabe erteilt durch Prüfer',
             close: 'Aufgabe abgeschlossen durch Bearbeiter',
             create: 'Neue Aufgabe',
-            members_added: varObj.profile?.fullname,
-            members_deleted: varObj.profile?.fullname,
+            members_added: varObj?.profile?.fullname,
+            members_deleted: varObj?.profile?.fullname,
         }
     }
 

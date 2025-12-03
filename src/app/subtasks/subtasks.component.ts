@@ -33,17 +33,24 @@ export class SubtasksComponent {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['task']) {
       this.subtasks = this.task.subtasks
-      this.checkSubtasks(this.task.subtasks, this.task.members);
-    }
-    if (changes['oldMemberlist']) {
-      console.log('NewList');
-
+      this.checkSubtasks();
     }
   }
 
 
-  checkSubtasks(subtasks: any[], members: any[]) {
-    const memberIds = members.map(m => m.id);
+  checkSubtasks() {
+    if (this.newListisShorter()) {
+      const changed = this.deleteAssignee();
+      if (changed) {
+        this.sendDataToTask({ subtasks: this.subtasks }, 'nolog')
+      }
+    }
+  }
+
+  deleteAssignee() {
+    const subtasks: any[] = this.task.subtasks;
+    const members: any[] = this.task.members;
+    const memberIds = members.map((m) => m.id);
     let changed = false;
     for (const sub of subtasks) {
       if (sub.assignee && !memberIds.includes(sub.assignee.id)) {
@@ -51,13 +58,13 @@ export class SubtasksComponent {
         changed = true;
       }
     }
-    if (changed) {
-      this.sendDataToTask({ subtasks: this.subtasks }, 'nolog')
-    }
+    return changed
   }
 
 
-
+  newListisShorter() {
+    return this.oldMemberlist.length > this.task.members.length;
+  }
 
 
 
