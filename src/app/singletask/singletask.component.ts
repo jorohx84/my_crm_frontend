@@ -44,6 +44,7 @@ export class SingletaskComponent {
   searchValue: string = '';
   isloaded: boolean = false;
   oldIdList: any[] = [];
+  memberlist: any[] = [];
   constructor() {
     this.globalservice.setCustomerSidebarState();
   }
@@ -84,12 +85,16 @@ export class SingletaskComponent {
   subscribeMemberList() {
     this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
+        this.memberlist=response;
+        console.log(response);
+        
         const foundMemberData = this.logbook.findChangesInIdList(response, this.oldIdList);
 
         this.initializeUpdateMembers(foundMemberData)
       }
     })
   }
+
 
   initializeUpdateMembers(foundMemberData: any) {
     const newList = foundMemberData.newList
@@ -110,7 +115,7 @@ export class SingletaskComponent {
   onTaskChanged(data: any) {
     this.updateTask(data.data, data.key, data.obj)
   }
-  
+
   updateTask(data: any, objKey: string, varObj: any = null) {
     this.apiservice.patchData(`task/${this.taskId}/`, data).subscribe({
       next: (response) => {
@@ -123,8 +128,6 @@ export class SingletaskComponent {
 
 
   setTaskTemplate(res: any) {
-    console.log(res);
-    
     this.task = res;
     this.subtasks = res.subtasks
     this.isloaded = true;
@@ -161,8 +164,6 @@ export class SingletaskComponent {
 
   openMemberlist() {
     const memberlist = this.transformMemberList();
-    console.log(memberlist);
-
     this.observerservice.sendTaskMembers(memberlist);
     this.globalservice.memberListOpen = true;
   }
@@ -190,8 +191,6 @@ export class SingletaskComponent {
 
     this.apiservice.postData('task/template/', template).subscribe({
       next: (response) => {
-        console.log(response);
-
       }
     })
 

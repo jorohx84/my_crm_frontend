@@ -28,6 +28,7 @@
     justify-content: space-between;
     gap: 16px;
     position: relative;
+
     .inputfield {
         height: 40px;
     }
@@ -59,9 +60,9 @@
     align-items: center;
     gap: 8px;
 
-    .memberDot{
+    .memberDot {
         position: absolute;
-        min-width: 8px;
+        min-width: 6px;
         height: 100%;
         left: 0px;
     }
@@ -75,9 +76,10 @@
 
 .addAssignee {
     cursor: pointer;
+
     >img {
         width: 18px;
-        
+
     }
 }
 
@@ -117,10 +119,25 @@
 }
 
 .deleteCont {
-cursor: pointer;
+    cursor: pointer;
+
     >img {
         width: 18px;
         display: block !important;
         opacity: 1 !important;
     }
+}
+
+.deleteWrapper {
+    width: 100%;
+    max-width: 500px;
+    padding: 24px;
+    background-color: white;
+    border: var(--borderstyle);
+    border-radius: var(--radius);
+    z-index: 1;
+}
+
+.light {
+    opacity: 0.3;
 }

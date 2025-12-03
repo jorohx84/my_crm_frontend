@@ -77,13 +77,13 @@ export class LogBookService {
             release: 'Freigabe erteilt durch Prüfer',
             close: 'Aufgabe abgeschlossen durch Bearbeiter',
             create: 'Neue Aufgabe',
-            members_added: varObj,
-            members_deleted: varObj,
+            members_added: varObj.profile?.fullname,
+            members_deleted: varObj.profile?.fullname,
         }
     }
 
     findChangesInIdList(res: any, oldMembers: any[]) {
-        const newList = res.added;
+        const newList = res.newList;
         const oldList = oldMembers;
         const allMembers = res.all;
         const oldSet = new Set(oldList);
@@ -92,7 +92,7 @@ export class LogBookService {
         const deleted = oldList.filter((id: string) => !newSet.has(id));
         const addedMembers = this.resolveNames(added, allMembers);
         const deletedMembers = this.resolveNames(deleted, allMembers);
-
+        console.log(deleted);
         return { newList, addedMembers, deletedMembers }
     }
 
@@ -101,13 +101,14 @@ export class LogBookService {
         for (const id of memberIds) {
             const member = allMembers.find(m => m.id === id);
             if (member) {
-                result.push(member.profile.fullname);
+                result.push(member);
             }
         }
         return result;
     }
 
     sendLog(varObj: any, objKey: string, task: any) {
+        if (objKey==='nolog') {return}
         if (objKey === 'members') {
             this.sendMemberLog(varObj, task);
         } else if (objKey === 'assignee') {
@@ -129,6 +130,8 @@ export class LogBookService {
     }
 
     sendSubtaskLog(varObj: any, task: any, objKey: string) {
+        console.log(varObj);
+        
         const fullname = varObj.assignee.profile.fullname;
         const substaskText = varObj.subtask.text;
         this.saveTaskLog(objKey, task, fullname, substaskText);

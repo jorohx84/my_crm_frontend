@@ -6,12 +6,12 @@
     </div>
     <h4 *ngIf="task?.subtasks?.length===0">- Keine Aufgaben gesepeichert -</h4>
     <div *ngFor="let subtask of subtasks, let index=index">
-        <div class="subtaskRow">
+        <div class="subtaskRow" [ngClass]="{'light': subtask.is_checked}">
             <div class="inputfield">
 
                 <div class="inputAndTagCont">
                     <div [ngClass]="{'opacity': !subtask.assignee}" class="memberDot"
-                        [style.background-color]="subtask.assignee.color"></div>
+                        [style.background-color]="subtask.assignee?.color"></div>
                     <input (change)="saveSubtask(subtask)" (click)="saveCurrentSubtask(index)"
                         placeholder="Aufgabe hinzufügen" [(ngModel)]="subtasks[index].text" type="text">
                 </div>
@@ -26,7 +26,7 @@
                         (click)="openAssigneList(subtask)">
                         <img src="./icons/assignee.svg" alt="">
                     </div>
-                    <div *ngIf="subtask.is_saved" class="deleteCont" (click)="deleteTask(index, subtask)">
+                    <div *ngIf="subtask.is_saved" class="deleteCont" (click)="openDelete(index, subtask)">
                         <img src="./icons/trash.svg" alt="">
                     </div>
                 </div>
@@ -49,6 +49,13 @@
             <div class="memberDot" [style.background-color]="assignee.profile.color"></div>
             <p>{{assignee?.profile?.fullname}}</p>
 
+        </div>
+    </div>
+    <div *ngIf="deleteWrapperOpen" class="deleteWrapper center">
+        <p>Aufgabe wirklich löschen?</p>
+        <div class="btnCont">
+            <button (click)="deleteWrapperOpen=false; global.isoverlay=false;">abbrechen</button>
+            <button (click)="deleteTask()">Löschen</button>
         </div>
     </div>
 </div>

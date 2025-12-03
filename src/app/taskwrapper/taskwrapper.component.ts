@@ -98,7 +98,6 @@ export class TaskwrapperComponent {
   loadTask() {
     this.observerservice.taskSubject$.pipe(takeUntil(this.destroy$)).subscribe((taskObj) => {
       if (taskObj) {
-        console.log(taskObj);
 
         this.mainTask = taskObj;
       }
@@ -186,8 +185,6 @@ export class TaskwrapperComponent {
 
   getTemplate(index: number) {
     const currentTemplate = this.taskTemplates[index];
-
-    console.log(currentTemplate);
     this.task.title = currentTemplate.title;
     this.task.description = currentTemplate.description;
     this.task.subtasks = currentTemplate.subtasks;
@@ -202,14 +199,8 @@ export class TaskwrapperComponent {
   }
 
   deleteSubtask(index: number) {
-    console.log(index);
-
     const subtasks = this.taskTemplate.subtasks
-    console.log(subtasks);
-
     subtasks.splice(index, 1)
-    console.log(subtasks);
-    console.log(this.taskTemplate);
 
   }
 
@@ -220,25 +211,20 @@ export class TaskwrapperComponent {
       is_saved: true,
     }
     this.taskTemplate.subtasks.push(task);
-    console.log(this.taskTemplate.subtasks);
     this.subtaskText = '';
   }
 
 
   saveTaskTemplateChanges() {
     const id = this.taskTemplate.id;
-    console.log(this.taskTemplate.subtasks);
-
     const data = {
       title: this.taskTemplate.title,
       description: this.taskTemplate.description,
       subtasks: this.taskTemplate.subtasks,
     }
-    console.log(data);
 
     this.apiservice.patchData(`task/template/${id}/`, data).subscribe({
       next: (response) => {
-        console.log(response);
         this.closeTemplate();
       }
     })

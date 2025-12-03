@@ -30,6 +30,7 @@ export class GlobalService {
     contactWrapperOpen: boolean = false;
     activityWrapperOpen: boolean = false;
     wrongTime: boolean = false;
+    isoverlay: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }

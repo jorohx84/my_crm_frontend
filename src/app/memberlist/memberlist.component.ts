@@ -53,8 +53,6 @@ export class MemberlistComponent {
   susbscribeMemberListFromTaks() {
     this.observerservice.taskMembersSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
-        console.log(response);
-
         this.addedMembers = response;
       }
     })
@@ -103,7 +101,7 @@ export class MemberlistComponent {
 
   sendList() {
     const listData: any = {
-      added: this.addedMembers,
+      newList: this.addedMembers,
       all: this.allMembers
     }
     this.observerservice.sendMemberList(listData);

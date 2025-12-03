@@ -75,8 +75,6 @@ export class TasksidebarComponent {
   loadComments(id: string) {
     this.api.getData(`comments/${id}/`).subscribe({
       next: (response) => {
-        console.log(response);
-
         this.sortedComments = this.global.sortListbyTime(response, 'created_at', 'down')
       }
     })
@@ -87,8 +85,6 @@ export class TasksidebarComponent {
     this.api.getData(`task/logs/${id}`).subscribe({
       next: (response) => {
         this.logBook = this.global.sortListbyTime(response, 'logged_at', 'down');
-        console.log(this.logBook);
-
       }
     })
   }
@@ -105,8 +101,6 @@ export class TasksidebarComponent {
     }
     this.api.postData('comment-create/', commentData).subscribe({
       next: (response) => {
-        console.log(response);
-
         const id = this.taskID
         this.sidebarKey = 'comments';
         this.comment.text = '';
@@ -119,17 +113,13 @@ export class TasksidebarComponent {
 
 
   updateComment(index: number) {
-    console.log(index);
     const comments = this.sortedComments;
     const currentComment = comments[index];
     const id = currentComment.id
-    console.log(currentComment.id);
 
     this.api.patchData(`comment/update/${id}/`, currentComment).subscribe({
       next: (response) => {
         const id = this.task.id
-        console.log(response);
-
         console.log('Kommentar bearbeitet!', response);
       }
     })
@@ -145,8 +135,6 @@ export class TasksidebarComponent {
     this.api.deleteData(`comments/${id}/`, currentComment).subscribe({
       next: (response) => {
         const id = this.task.id
-        console.log(response);
-
         console.log('Kommentar bearbeitet!', response);
 
       }

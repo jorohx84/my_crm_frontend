@@ -3,6 +3,8 @@ import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChange
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { GlobalService } from '../services/global.service';
+import { LogBookService } from '../services/log.service';
 
 @Component({
   selector: 'app-subtasks',
@@ -10,29 +12,64 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './subtasks.component.html',
   styleUrl: './subtasks.component.scss'
 })
-export class SubtasksComponent implements OnChanges {
+export class SubtasksComponent {
   observer = inject(ObservableService);
+  global = inject(GlobalService);
+  logbook = inject(LogBookService);
   @Input() task: any;
-  @Input() subtasks: any[] = [];
+  subtasks: any[] = [];
   @Output() subtaskChanged = new EventEmitter();
+  @Input() oldMemberlist: any[] = [];
+
   subtaskText: string = '';
   oldSubtask: any;
   private destroy$ = new Subject<void>()
   currentSubtask: any;
-  currentIndex: number | null = null;
+  currentIndex: any;
   assigneListOpen: boolean = false;
   isEmpty: boolean = false;
+  deleteWrapperOpen: boolean = false;
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['task']) {
       this.subtasks = this.task.subtasks
+      this.checkSubtasks(this.task.subtasks, this.task.members);
+    }
+    if (changes['oldMemberlist']) {
+      console.log('NewList');
 
     }
   }
 
-  ngOnInit() {
 
+  checkSubtasks(subtasks: any[], members: any[]) {
+    const memberIds = members.map(m => m.id);
+    let changed = false;
+    for (const sub of subtasks) {
+      if (sub.assignee && !memberIds.includes(sub.assignee.id)) {
+        sub.assignee = null;
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.sendDataToTask({ subtasks: this.subtasks }, 'nolog')
+    }
   }
 
+
+
+
+
+
+  // subscribeMemberList() {
+  //   this.observer.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
+  //     if (response) {
+  //       this.foundMembersToDelete(response);
+  //       console.log(response);
+
+  //     }
+  //   })
+  // }
 
   addSubtask() {
     const listObj = {
@@ -98,7 +135,7 @@ export class SubtasksComponent implements OnChanges {
 
     this.currentSubtask.assignee = this.getAssignee(assignee);
     console.log(this.currentSubtask);
-    
+
     const data = {
       subtasks: this.task.subtasks
     }
@@ -112,19 +149,22 @@ export class SubtasksComponent implements OnChanges {
 
   getAssignee(assignee: any) {
     return {
+      id: assignee.id,
       fullname: assignee.profile.fullname,
       initials: assignee.profile.initials,
       color: assignee.profile.color,
     }
   }
 
-  deleteTask(index: number, subtask: any) {
-    console.log(index);
-    this.subtasks.splice(index, 1);
+  deleteTask() {
+
+    this.subtasks.splice(this.currentIndex, 1);
     const data = {
       subtasks: this.subtasks,
     }
-    this.sendDataToTask(data, 'subtask_delete', subtask.text);
+    this.deleteWrapperOpen = false;
+    this.global.isoverlay = false;
+    this.sendDataToTask(data, 'subtask_delete', this.currentIndex.text);
   }
 
 
@@ -138,8 +178,65 @@ export class SubtasksComponent implements OnChanges {
     console.log(responseData);
 
     this.subtaskChanged.emit(responseData);
-    // this.observer.sendSubtask(responseData);
+
+  }
+  openDelete(index: number, subtask: number) {
+    this.currentSubtask = subtask;
+    this.currentIndex = index;
+    this.deleteWrapperOpen = true;
+    this.global.isoverlay = true;
   }
 
+  // foundMembersToDelete(memberList: any) {
+  //   const foundMembers = this.logbook.findChangesInIdList(memberList, this.oldMemberlist);
+  //   const deletedMembers = foundMembers.deletedMembers
+  //   console.log(deletedMembers);
 
+  //   if (deletedMembers.length > 0) {
+  //     console.log('GO');
+
+
+
+  //     this.deleteAssigneFromSubtask(deletedMembers);
+  //     console.log(this.subtasks);
+  //     this.task.substasks = this.subtasks;
+  //     const data = {
+  //       subtasks: this.subtasks,
+  //     }
+
+  //     this.sendDataToTask(data, 'nolog', null);
+
+  //   }
+
+  // }
+
+  // deleteAssigneFromSubtask(deletedMembers: any[]) {
+  //   const members = deletedMembers;
+  //   for (let index = 0; index < members.length; index++) {
+  //     const id = members[index].id;
+  //     this.deleteAssigne(id);
+  //   }
+
+  //   const data = {
+  //     subtasks: this.subtasks,
+  //   }
+  //   // this.sendDataToTask(data, 'nolog', null);
+  // }
+
+  // deleteAssigne(id: string) {
+  //   console.log(id);
+  //   for (let index = 0; index < this.subtasks.length; index++) {
+  //     const substask = this.subtasks[index];
+  //     const assignee = substask.assignee;
+  //     if (assignee && assignee.id === id) {
+  //       substask.assignee = null;
+
+  //     }
+  //   }
+
+  //   console.log(this.subtasks);
+
+
+
+  // }
 }

@@ -17,7 +17,11 @@
             <div class="memberListRow" (click)="sendUserdata(member)">
                 <div class="memberInfo">
                     <img src="./icons/profile.svg" alt="">
-                    <p>{{member.profile.fullname}}</p>
+                    <div>
+                        <p>{{member.profile.fullname}}</p>
+                        <p>{{member.profile.email}}</p>
+                    </div>
+
                 </div>
                 <div *ngIf="many" class="checkbox" (click)="addMember(member); $event.stopPropagation()">
                     <img *ngIf="checkMemberAdded(member.id)" src="./icons/done.svg" alt="">
@@ -27,7 +31,8 @@
         </div>
     </div>
     <div *ngIf="many" class="btnCont flxnd">
-         <button (click)="sendList()">Liste speichern</button>
+        <button (click)="globalservice.memberListOpen=false;">schließen</button>
+        <button (click)="sendList()">Liste speichern</button>
     </div>
-   
+
 </section>
