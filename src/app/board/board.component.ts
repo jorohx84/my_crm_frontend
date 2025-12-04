@@ -21,7 +21,7 @@ export class BoardComponent {
   userservice = inject(UserService);
   dataservice = inject(DataService);
   apiservice = inject(APIService);
-  logbook=inject(LogBookService);
+  logbook = inject(LogBookService);
   observerservice = inject(ObservableService);
   user: any;
   countsLoaded: boolean = false;
@@ -29,10 +29,11 @@ export class BoardComponent {
   private destroy$ = new Subject<void>();
 
   boardKey: string = '';
-  tasks: any = {
-    assigned: [],
-    reviewed: [],
-  };
+  // tasks: any = {
+  //   assigned: [],
+  //   reviewed: [],
+  // };
+  tasks: any;
   board: any = {
     undone: [],
     in_progress: [],
@@ -68,7 +69,7 @@ export class BoardComponent {
     this.loadUser()
     // this.connectedBoards = Object.values(this.board);
   }
-  
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -82,16 +83,10 @@ export class BoardComponent {
     this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((userData) => {
       if (userData) {
         this.user = userData
-        console.log(userData);
-        // this.loadAssignedTasks(userData.id);
-        // this.loadReviewedTasks(userData.id);
-
         this.loadTasks(userData.id, this.boardKey);
         if (this.releasesWrapperOpen) {
           this.loadReleases();
-
         }
-
       }
     })
   }
@@ -99,31 +94,22 @@ export class BoardComponent {
   loadTasks(id: number, taskKey: string) {
     this.apiservice.getData(`board/${id}/${taskKey}/`).subscribe({
       next: (response) => {
-        this.setTasks(response, taskKey);
-
+        this.loadBoard(response, taskKey);
       }
     })
   }
 
-  setTasks(taskList: any[], taskKey: string) {
-    this.tasks[taskKey] = taskList;
-    console.log(this.tasks);
-console.log(taskList);
+  // setTasks(tasks: any[], taskKey: string) {
+   
+  //   if (taskKey !== 'releases') {
+  //     this.loadBoard(tasks);
+  //   }
+  // }
 
-    if (taskKey !== 'releases') {
-      this.loadBoard(taskKey);
-    }
-  }
-
-  loadBoard(taskKey: string) {
-
-    const tasks = this.tasks[taskKey];
-    console.log(tasks);
-
-    console.log(tasks);
+  loadBoard(tasks: any[],taskKey: string) {
+    if (taskKey==='releases'){return}
     this.stateKeys.forEach(key => {
       this.board[key] = tasks.filter((task: any) => task.state === key).sort((a: any, b: any) => a.board_position - b.board_position);
-      console.log(this.board[key]);
 
     });
 
@@ -146,21 +132,7 @@ console.log(taskList);
 
   drop(event: CdkDragDrop<any[]>, newState: string) {
     const movedTask = event.item?.data;
-
-    // // Wenn kein Task vorhanden → ignorieren
-    // if (!movedTask) return;
-
-    // // Wenn nichts geändert wurde → ignorieren
-    // if (event.previousContainer === event.container && event.previousIndex === event.currentIndex) {
-    //   return;
-    // }
-
-    // Wenn zwischen Spalten verschoben
     if (event.previousContainer !== event.container) {
-      // console.log('%cTask wurde verschoben nach: ' + newState, 'color: limegreen; font-weight: bold');
-      // console.log('Task:', movedTask);
-
-      // Verschiebe das Element im Datenmodell
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -169,10 +141,7 @@ console.log(taskList);
       );
       this.updateBoardPosition(event.container.data, newState)
     } else {
-      // Innerhalb derselben Spalte neu sortiert
-      console.log('Task innerhalb von', newState, 'verschoben');
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-      console.log('nix passiert');
       this.updateBoardPosition(event.container.data, newState)
 
 
@@ -193,7 +162,6 @@ console.log(taskList);
           this.logbook.saveTaskLog('state', response)
         }
       })
-
     })
   }
 
@@ -213,7 +181,6 @@ console.log(taskList);
       next: (response) => {
         console.log(response);
         this.releases = response
-
       }
     })
   }
@@ -233,7 +200,6 @@ console.log(taskList);
 
   changeList(list: string) {
     this.boardKey = list;
-    console.log(this.boardKey);
     this.dataservice.saveDataToLocalStorage('board', list);
     this.releasesWrapperOpen = false;
     this.dataservice.saveDataToLocalStorage('releases', false)

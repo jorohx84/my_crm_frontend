@@ -37,9 +37,23 @@
                         <h4>{{comment?.creator?.profile?.fullname}}</h4>
                     </div>
 
-                    <p *ngIf="global.isToday(comment.created_at); else showDate">{{comment.created_at |
-                        date: 'HH:mm'}} Uhr</p>
-                    <ng-template #showDate>{{comment.created_at | date: 'dd.MM.yy : HH:mm'}} Uhr</ng-template>
+                    <p *ngIf="global.isToday(comment.created_at)">
+                        {{ comment.created_at | date:'HH:mm' }} Uhr
+                    </p>
+
+                    <!-- Innerhalb der letzten 7 Tage, aber nicht heute -->
+                    <p *ngIf="!global.isToday(comment.created_at) && global.isLastWeek(comment.created_at)">
+                        {{ comment.created_at | date:'EEEE' }}
+                    </p>
+
+                    <!-- Älter als 7 Tage -->
+                    <p *ngIf="!global.isLastWeek(comment.created_at)">
+                        {{ comment.created_at | date:'dd.MM.yyyy' }}
+                    </p>
+
+
+
+                    <ng-template #showDate>{{comment.created_at | date: 'dd.MM.yy'}}</ng-template>
                     <!-- <img (click)="deleteComment(index)" *ngIf="comment.creator.id===user.id" src="./icons/trash.svg"
                         alt=""> -->
                 </div>

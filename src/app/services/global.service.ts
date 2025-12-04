@@ -88,6 +88,16 @@ export class GlobalService {
             date.getFullYear() === today.getFullYear();
     }
 
+    isLastWeek(dateString: string): boolean {
+        const date = new Date(dateString);
+        const now = new Date();
+
+        const oneWeekInMs = 7 * 24 * 60 * 60 * 1000; // 7 Tage
+        const diff = now.getTime() - date.getTime();
+
+        return diff < oneWeekInMs;
+    }
+
 
 
 
