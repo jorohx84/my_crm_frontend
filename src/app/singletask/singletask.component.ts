@@ -8,13 +8,14 @@ import { FormsModule } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { ObservableService } from '../services/observable.service';
 import { MessageService } from '../services/message.service';
-import { combineLatest, Subject, takeUntil } from 'rxjs';
+import { combineLatest, of, Subject, takeUntil } from 'rxjs';
 import { MemberlistComponent } from '../memberlist/memberlist.component';
 import { query, response } from 'express';
 import { SubtasksComponent } from '../subtasks/subtasks.component';
 import { TaskinfobarComponent } from '../taskinfobar/taskinfobar.component';
 import { TasksidebarComponent } from '../tasksidebar/tasksidebar.component';
 import { LogBookService } from '../services/log.service';
+import { PermissionService } from '../services/permissions.service';
 
 @Component({
   selector: 'app-singletask',
@@ -31,6 +32,7 @@ export class SingletaskComponent {
   userservice = inject(UserService);
   dataservice = inject(DataService);
   messageservice = inject(MessageService);
+  permission = inject(PermissionService);
   private destroy$ = new Subject<void>();
   taskId: string | null = null;
   task = this.dataservice.task;
@@ -45,6 +47,8 @@ export class SingletaskComponent {
   isloaded: boolean = false;
   oldIdList: any[] = [];
   memberlist: any[] = [];
+  taskTemplateOpen: boolean = false;
+  currentTaskTemplate: any;
   constructor() {
     this.globalservice.setCustomerSidebarState();
   }
@@ -85,9 +89,9 @@ export class SingletaskComponent {
   subscribeMemberList() {
     this.observerservice.memberlistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if (response) {
-        this.memberlist=response;
+        this.memberlist = response;
         console.log(response);
-        
+
         const foundMemberData = this.logbook.findChangesInIdList(response, this.oldIdList);
 
         this.initializeUpdateMembers(foundMemberData)
@@ -164,7 +168,7 @@ export class SingletaskComponent {
 
   openMemberlist() {
     const memberlist = this.transformMemberList();
-    
+
     this.observerservice.sendTaskMembers(memberlist);
     this.globalservice.memberListOpen = true;
   }
@@ -181,31 +185,62 @@ export class SingletaskComponent {
     return idList;
   }
 
-  saveTaskTemplate() {
+  openTaskTemplate() {
     const subtasks = this.saveSubtasks();
-    const template = {
+    this.currentTaskTemplate = structuredClone({
       title: this.task.title,
       description: this.task.description,
       subtasks: subtasks,
 
-    }
+    });
+    this.taskTemplateOpen = true;
+    this.globalservice.isoverlay = true;
 
-    this.apiservice.postData('task/template/', template).subscribe({
+
+  }
+
+  saveTaskTemplate() {
+
+    this.apiservice.postData('task/template/', this.currentTaskTemplate).subscribe({
       next: (response) => {
+        console.log(response);
+        this.closeTemplateDialog();
+        this.observerservice.sendConfirmation('Aufgabe als Vorlage gespeichert');
       }
     })
+  }
 
+  closeTemplateDialog() {
+    this.taskTemplateOpen = false;
+    this.currentTaskTemplate = null;
+    this.globalservice.isoverlay = false;
   }
 
   saveSubtasks() {
     const savedList = this.task.subtasks;
-    for (let index = 0; index < savedList.length; index++) {
-      const obj = savedList[index];
-      obj.is_saved = true;
-      obj.is_checked = false;
-      obj.assignee = '';
+    for (const sub of savedList) {
+      sub.is_saved = true;
+      sub.is_checked = false;
+      sub.assignee = null;
+      sub.ordering = null;
     }
     return savedList
+  }
+
+  addSubtask() {
+    const task = {
+      text: '',
+      is_checked: false,
+      is_saved: true,
+      ordering: null,
+    }
+    this.currentTaskTemplate.subtasks.push(task);
+    this.subtaskText = '';
+  }
+  deleteSubtask(index: number) {
+    const subtasks = this.currentTaskTemplate.subtasks
+    subtasks.splice(index, 1)
+
   }
 
 }

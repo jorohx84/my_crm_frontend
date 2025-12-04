@@ -3,7 +3,7 @@
                 <div class="infoTab">
                     <div class="tabName">
                         <p>Zuständigkeiten</p>
-                        <button *ngIf="globalservice.checkPermissions(user, task,'reviewer')" class="changeBtn"
+                        <button *ngIf="permission.isReviewer(task.reviewer) || permission.isStaff()" class="changeBtn"
                             (click)="reviewerChangeOpen=true"><img class="editBtn" src="./icons/editx.svg" alt="">
                         </button>
                      
@@ -37,8 +37,8 @@
                 <div class="infoTab">
                     <div class="tabName">
                         <p>Priorität:</p>
-                        <button *ngIf="globalservice.checkPermissions(user, task, 'reviewer')"
-                            [disabled]="globalservice.checkPermissions(user, task, 'reviewer')" class="changeBtn"><img
+                        <button *ngIf="permission.isReviewer(task.reviewer)"
+                            [disabled]="permission.isReviewer(task.reviewer)" class="changeBtn"><img
                                 (click)="priochangeOpen=!priochangeOpen" src="./icons/editx.svg" alt="">
                         </button>
                     </div>
@@ -73,8 +73,8 @@
                 <div class="infoTab">
                     <div class="tabName">
                         <p>Fällig am</p>
-                        <button *ngIf="globalservice.checkPermissions(user, task, 'reviewer')"
-                            [disabled]="globalservice.checkPermissions(user, task, 'reviewer')" class="changeBtn"><img
+                        <button *ngIf="permission.isReviewer(task.reviewer)"
+                            [disabled]="permission.isReviewer(task.reviewer)" class="changeBtn"><img
                                 (click)="duedateChangeOpen=true" src="./icons/editx.svg" alt=""></button>
                     </div>
 

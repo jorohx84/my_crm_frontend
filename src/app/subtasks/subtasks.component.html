@@ -2,33 +2,37 @@
     <div class="subheadline">
         <h4>Aufgabenliste</h4>
 
-        <img (click)="addSubtask()" src="./icons/add.svg" alt="">
+        <img *ngIf="permission.isMember(task.members)" (click)="addSubtask()" src="./icons/add.svg" alt="">
     </div>
     <h4 *ngIf="task?.subtasks?.length===0">- Keine Aufgaben gesepeichert -</h4>
-    <div *ngFor="let subtask of subtasks, let index=index">
-        <div class="subtaskRow" [ngClass]="{'light': subtask.is_checked}">
-            <div class="inputfield">
+    <div class="subtaskList" cdkDropList [cdkDropListData]="subtasks" (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let subtask of subtasks, let index=index" cdkDrag>
+            <div class="subtaskRow" [ngClass]="{'light': subtask.is_checked}">
+                <div class="inputfield">
 
-                <div class="inputAndTagCont">
-                    <div [ngClass]="{'opacity': !subtask.assignee}" class="memberDot"
-                        [style.background-color]="subtask.assignee?.color"></div>
-                    <input (change)="saveSubtask(subtask)" (click)="saveCurrentSubtask(index)"
-                        placeholder="Aufgabe hinzufügen" [(ngModel)]="subtasks[index].text" type="text">
-                </div>
-
-                <div class="subtaskMenu">
-
-
-                    <div (click)="changeIsChecked(index)" class="checkbox" *ngIf="subtask.is_saved">
-                        <img *ngIf="subtask.is_checked===true" src="./icons/done.svg" alt="">
+                    <div class="inputAndTagCont">
+                        <div [ngClass]="{'opacity': !subtask.assignee}" class="memberDot"
+                            [style.background-color]="subtask.assignee?.color"></div>
+                        <input [disabled]="!permission.isMember(task.members)" (change)="saveSubtask(subtask, index)" (click)="saveCurrentSubtask(index)"
+                            placeholder="Aufgabe hinzufügen" [(ngModel)]="subtasks[index].text" type="text">
                     </div>
-                    <div *ngIf="subtask.is_saved && task.members.length>0" class="addAssignee"
-                        (click)="openAssigneList(subtask)">
-                        <img src="./icons/assignee.svg" alt="">
+
+                    <div class="subtaskMenu">
+
+
+                        <div (click)="changeIsChecked(index)" class="checkbox" *ngIf="subtask.is_saved && permission.isMember(task.members)">
+                            <img *ngIf="subtask.is_checked===true" src="./icons/done.svg" alt="">
+                        </div>
+                        <div *ngIf="subtask.is_saved && task.members.length>0 && permission.isMember(task.members)" class="addAssignee"
+                            (click)="openAssigneList(subtask)">
+                            <img src="./icons/assignee.svg" alt="">
+                        </div>
+                        <div *ngIf="subtask.is_saved && permission.isReviewer(task.reviewer)" class="deleteCont" (click)="openDelete(index, subtask)">
+                            <img src="./icons/trash.svg" alt="">
+                        </div>
                     </div>
-                    <div *ngIf="subtask.is_saved" class="deleteCont" (click)="openDelete(index, subtask)">
-                        <img src="./icons/trash.svg" alt="">
-                    </div>
+
+
                 </div>
 
 
@@ -36,8 +40,6 @@
 
 
         </div>
-
-
     </div>
     <div *ngIf="isEmpty " class="errorTxt">
         <p>Aufgabe darf nicht leer sein</p>

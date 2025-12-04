@@ -55,7 +55,12 @@
 
             </div>
 
-
+            <div class="members">
+              <div class="memberDot" [style.backgroundColor]="member.profile.color"
+                *ngFor="let member of task.members let index = index">
+                <p>{{member.profile.initials}}</p>
+              </div>
+            </div>
           </div>
 
           <div class="bottomLine">
@@ -83,52 +88,78 @@
       [ngClass]="{'slideIn': releasesWrapperOpen}">
       <div class="wrapperHeadline">
         <h3>Freigaben</h3>
+
       </div>
+      <div class="divider"></div>
       <div class="releasesList">
-         <p *ngIf="releases.length===0">- Aktuell keine Freigaben -</p>
+        <p *ngIf="releases.length===0">- Aktuell keine Freigaben -</p>
         <div class="taskCard" *ngFor="let task of releases, let index=index" (click)="openTaskInCustomer(task)">
-         
+          <!--  -->
           <div class="topLine">
             <h4>{{ task.title }}</h4>
             <div class="duedate">
-              <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
               <img src="./icons/duedate.svg" alt="">
+              <p>{{task.due_date | date: 'dd.MM.yyyy'}}</p>
+
 
             </div>
           </div>
+          <div class="divider"></div>
+          <!-- <p class="textfield">{{task.description}}</p> -->
 
 
-          <div *ngIf="task.subtasks.length !==0" class="CheckListCount">
-            <p>Checks</p>
-            <div class="countLine">
-              <div class="countLineInner greenLine"
-                [style.width.%]="globalservice.countSubtasksDone(index, releases,'percentage')">
+
+          <div class="midLine">
+
+
+            <div *ngIf="task.subtasks.length !==0" class="subtaskCountCont">
+              <div class="checkbox">
+                <img src="./icons/done.svg" alt="">
+              </div>
+
+              <div class="countLine">
+                <div class="countLineInner greenLine"
+                  [style.width.%]="globalservice.countSubtasksDone(index, releases,'percentage')"></div>
+              </div>
+              <div class="subtaskCount">
+
+                <p>{{globalservice.countSubtasksDone(index, releases,'')}}</p>
+                <p>/</p>
+                <p>{{task.subtasks?.length}}</p>
+              </div>
+
+            </div>
+
+            <div class="members">
+              <div class="memberDot" [style.backgroundColor]="member.profile.color"
+                *ngFor="let member of task.members let index = index">
+                <p>{{member.profile.initials}}</p>
               </div>
             </div>
-            <div class="subtaskCount">
-
-              <p>{{globalservice.countSubtasksDone(index, releases,'')}}</p>
-              <p>/</p>
-              <p>{{task.subtasks?.length}}</p>
-            </div>
-
           </div>
-          <p *ngIf="task.type==='subtask' && task.subtasks.length ===0">Keine Teilaufgabe</p>
-          <p *ngIf="task.type==='task' && task.counts?.total_count ===0">keine todos</p>
 
           <div class="bottomLine">
-            <div class="reviewer">
-              <img src="./icons/review.svg" alt="">
-              <p>{{task.reviewer.fullname}}</p>
+            <div class="company">
+              <div class="companyIcon">
+                <img src="./icons/building.svg" alt="">
+              </div>
+              <p>{{task.customer.companyname}}</p>
             </div>
-
 
             <div class="prioIcon">
               <img *ngIf="task.priority==='low'" src="./icons/low.svg" alt="">
               <img *ngIf="task.priority==='mid'" src="./icons/mid.svg" alt="">
               <img *ngIf="task.priority==='high'" src="./icons/high.svg" alt="">
             </div>
+
           </div>
+
+
+
+
+          <!--  -->
+
+
         </div>
       </div>
 

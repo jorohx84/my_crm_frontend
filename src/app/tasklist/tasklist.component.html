@@ -18,6 +18,7 @@
                 <p>Aufgabenliste</p>
                 <p>Fälligkeitsdatum</p>
                 <p>Priorität</p>
+                <p>Bearbeiter</p>
             </div>
             <div class="divider"></div>
             <div class="list">
@@ -25,8 +26,13 @@
                 <div (click)="openTask(index)" class="listRow" *ngFor="let task of tasks, let index=index">
                     <p> {{task.title}}</p>
                     <p>{{globalservice.interpretation['state'][task.state]}}</p>
+                    <div class="reviewer">
+                        <div class="memberDot" [style.backgroundColor]="task.reviewer.profile.color">
+                               <!-- <p>{{task.reviewer.profile.initials}}</p> -->
+                        </div>
+                        <p>{{task.reviewer.profile.fullname}}</p>
+                    </div>
 
-                    <p>{{task.reviewer.profile.fullname}}</p>
                     <p *ngIf="task.subtasks.length===0">leer</p>
                     <div *ngIf="task.subtasks.length!==0" class="subtaskCountCont">
                         <div class="checkbox">
@@ -57,7 +63,12 @@
                     <!-- <span>zu erledigen von: {{task.assignee.fullname}}</span> -->
 
 
-
+                    <div class="members">
+                        <div class="memberDot" *ngFor="let member of task.members let index = index"
+                            [style.left.px]="index *20" [style.backgroundColor]="member.profile.color">
+                            <p>{{member.profile.initials}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

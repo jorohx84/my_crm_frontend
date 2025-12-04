@@ -108,6 +108,7 @@ export class BoardComponent {
   setTasks(taskList: any[], taskKey: string) {
     this.tasks[taskKey] = taskList;
     console.log(this.tasks);
+console.log(taskList);
 
     if (taskKey !== 'releases') {
       this.loadBoard(taskKey);

@@ -2,8 +2,8 @@
 
     <div class="taskHeader">
         <div class="taskTitle">
-            <input [disabled]="!globalservice.checkPermissions(user, task, 'reviewer')" (change)="changeTitle('title')"
-                class="title" [(ngModel)]="task.title" type="text">
+            <input [disabled]="!permission.isReviewer(task.reviewer)" (change)="changeTitle('title')" class="title"
+                [(ngModel)]="task.title" type="text">
             <div *ngIf="task?.state==='closed'" class="closeText">
                 <h1>Abgschlossen</h1>
                 <img src="./icons/done.svg" alt="">
@@ -14,14 +14,14 @@
 
 
         <div class="taskMenu">
-            <button *ngIf="task?.reviewer?.id===user?.id && task?.state==='done'"
+            <button *ngIf="permission.isReviewer(task.reviewer) && task?.state==='done'"
                 (click)="releaseTask()">Freigeben</button>
 
             <button *ngIf="task?.assignee?.id===user?.id && task?.state==='released'"
                 (click)="closeTask()">Abschließen</button>
-            <button (click)="openMemberlist()">Mitarbeiter hinzufügen</button>
+            <button *ngIf="permission.isMember(task.members) || permission.isReviewer(task.reviewer)" (click)="openMemberlist()">Members bearbeiten</button>
             <button (click)="globalservice.navigateToPath(['main', 'board'])">Board öffnen</button>
-            <button (click)="saveTaskTemplate()">Als Vorlage speichern</button>
+            <button (click)="openTaskTemplate()">Als Vorlage speichern</button>
 
             <div class="closeBtn">
                 <img src="./icons/back.svg" alt="" (click)="backToCustomer()">
@@ -53,11 +53,13 @@
                     </div>
 
 
-                    <textarea (change)="updateTask({description:task.description},'description')" name="" id=""
+                    <textarea [disabled]="!(permission.isMember(task.members) || permission.isStaff())"
+                        (change)="updateTask({description:task.description},'description')" name="" id=""
                         [(ngModel)]="task.description"></textarea>
                 </div>
                 <div class="subtaskCont">
-                    <app-subtasks *ngIf="isloaded" [oldMemberlist]="oldIdList" [task]="task" (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
+                    <app-subtasks *ngIf="isloaded" [oldMemberlist]="oldIdList" [task]="task"
+                        (subtaskChanged)="onTaskChanged($event)"></app-subtasks>
                 </div>
 
             </div>
@@ -73,5 +75,51 @@
     <div class="memberListWrapper  slideOut borderLeft" [ngClass]="{'slideIn': memberListOpen}">
         <app-memberlist [many]="true"></app-memberlist>
     </div>
+
+
+    <div class="taskTemplateDialog center" *ngIf="taskTemplateOpen">
+
+
+        <div class="dialogCont">
+            <div class="">
+                <h3>Vorlage speichern</h3>
+            </div>
+            <div class="divider"></div>
+            <div class="dialogContFieldCont">
+                <div class="inputCont">
+                    <h4>Titel</h4>
+                    <div class="inputfield">
+                        <input type="text" [(ngModel)]="currentTaskTemplate.title">
+                    </div>
+                </div>
+                <div class="inputCont">
+                    <h4>Beschreibung</h4>
+                    <textarea name="" [(ngModel)]="currentTaskTemplate.description" id=""></textarea>
+                </div>
+
+                <div class="subtasksCont">
+                    <div class="subheadline cp">
+                        <h4>Aufgabenliste</h4>
+                        <img (click)="addSubtask()" src="./icons/add.svg" alt="">
+                    </div>
+                    <div class="divider"></div>
+                    <h4 *ngIf="currentTaskTemplate?.subtasks?.length===0">- Keine Aufgaben gespeichert -</h4>
+                    <div *ngFor="let task of currentTaskTemplate.subtasks let index=index">
+                        <div class="inputfield">
+                            <input type="text" placeholder="Aufgabe hinzufügen" [(ngModel)]="task.text">
+                            <img (click)="deleteSubtask(index)" src="./icons/trash.svg" alt="">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="btnCont">
+                    <button (click)="closeTemplateDialog()">Abbrechen</button>
+                    <button (click)="saveTaskTemplate()">Speichern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
 </section>

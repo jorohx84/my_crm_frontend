@@ -140,6 +140,8 @@ export class TaskwrapperComponent {
     const requestData = this.createTaskObject();
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
+        console.log(response);
+        
         this.openNewTask(response);
         const newTask = response;
         this.logbook.saveTaskLog('create', newTask);
@@ -209,6 +211,7 @@ export class TaskwrapperComponent {
       text: '',
       is_checked: false,
       is_saved: true,
+      ordering:null,
     }
     this.taskTemplate.subtasks.push(task);
     this.subtaskText = '';

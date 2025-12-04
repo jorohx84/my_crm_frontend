@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../services/global.service';
 import { APIService } from '../services/api.service';
 import { UserService } from '../services/user.service';
+import { PermissionService } from '../services/permissions.service';
 
 @Component({
   selector: 'app-taskinfobar',
@@ -18,6 +19,7 @@ export class TaskinfobarComponent implements OnChanges {
   observer = inject(ObservableService);
   userservice = inject(UserService);
   globalservice = inject(GlobalService);
+  permission=inject(PermissionService);
   @Input() task: any;
   @Output() infosChanged = new EventEmitter();
   user: any;

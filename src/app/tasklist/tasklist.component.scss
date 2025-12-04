@@ -33,7 +33,7 @@
 //     flex-direction: column;
 //     gap: 8px;
 //     overflow-y: scroll;
-    
+
 // .tasklistHeadline{
 //     width: 100%;
 //     display: flex;
@@ -71,7 +71,7 @@
 
     >p {
         font-size: 20px;
-     
+
     }
 }
 
@@ -95,6 +95,7 @@
 
 .prioIcon {
     width: 100%;
+
     >img {
         width: 30px;
         cursor: pointer;
@@ -137,15 +138,50 @@
 }
 
 .checkbox {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: solid 1px var(--border);
-  border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px var(--border);
+    border-radius: 4px;
 
-  >img {
-    width: 16px;
-  }
+    >img {
+        width: 16px;
+    }
+}
+
+.reviewer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .memberDot {
+     
+        min-width: 28px !important;
+        min-height: 28px !important;
+
+        >p {
+            font-size: 12px;
+        }
+    }
+}
+
+.members {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .memberDot {
+        position: absolute;
+        min-width: 28px !important;
+        min-height: 28px !important;
+
+        >p {
+            font-size: 12px;
+        }
+    }
+
 }

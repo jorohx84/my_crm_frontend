@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { PermissionService } from '../services/permissions.service';
 
 @Component({
   selector: 'app-tasksidebar',
@@ -18,6 +19,7 @@ export class TasksidebarComponent {
   global = inject(GlobalService);
   userservice = inject(UserService);
   route = inject(ActivatedRoute);
+  permission = inject(PermissionService);
   @Input() task: any;
 
   user: any;
@@ -52,6 +54,7 @@ export class TasksidebarComponent {
       this.loadComments(id);
       this.loadLog(id);
     }
+    console.log(this.task);
 
   }
 
@@ -109,7 +112,10 @@ export class TasksidebarComponent {
       }
     });
   }
-
+  toogleTextField() {
+    this.textfieldOpen = !this.textfieldOpen;
+    this.comment.text = '';
+  }
 
 
   updateComment(index: number) {

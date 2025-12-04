@@ -22,12 +22,21 @@
     }
 }
 
+.subtaskList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
 .subtaskRow {
     width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 16px;
     position: relative;
+    background-color: white;
+    cursor: grab;
 
     .inputfield {
         height: 40px;

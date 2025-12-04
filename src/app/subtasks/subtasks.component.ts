@@ -5,10 +5,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { GlobalService } from '../services/global.service';
 import { LogBookService } from '../services/log.service';
+import { DragDropModule, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { PermissionService } from '../services/permissions.service';
 
 @Component({
   selector: 'app-subtasks',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   templateUrl: './subtasks.component.html',
   styleUrl: './subtasks.component.scss'
 })
@@ -16,6 +19,7 @@ export class SubtasksComponent {
   observer = inject(ObservableService);
   global = inject(GlobalService);
   logbook = inject(LogBookService);
+  permission=inject(PermissionService);
   @Input() task: any;
   subtasks: any[] = [];
   @Output() subtaskChanged = new EventEmitter();
@@ -88,11 +92,18 @@ export class SubtasksComponent {
     this.subtasks.push(listObj)
   }
 
-  saveSubtask(subtask: any) {
+  saveSubtask(subtask: any, index: number) {
     const count = this.countEmptyTask();
     this.isEmpty = count > 0 ? true : false;
     if (this.isEmpty) { return }
     subtask.is_saved = true;
+    // if (!subtask.ordering) {
+    //   console.log('Ordering');
+    //   subtask.ordering = index;
+    // }
+
+    console.log(subtask);
+
     const data = {
       subtasks: this.subtasks,
     }
@@ -194,56 +205,10 @@ export class SubtasksComponent {
     this.global.isoverlay = true;
   }
 
-  // foundMembersToDelete(memberList: any) {
-  //   const foundMembers = this.logbook.findChangesInIdList(memberList, this.oldMemberlist);
-  //   const deletedMembers = foundMembers.deletedMembers
-  //   console.log(deletedMembers);
+  drop(event: CdkDragDrop<any[]>) {
+    if (!this.permission.isMember(this.task.members)){return}
+    moveItemInArray(this.subtasks, event.previousIndex, event.currentIndex);
+    this.sendDataToTask({ subtasks: this.subtasks }, 'nolog')
+  }
 
-  //   if (deletedMembers.length > 0) {
-  //     console.log('GO');
-
-
-
-  //     this.deleteAssigneFromSubtask(deletedMembers);
-  //     console.log(this.subtasks);
-  //     this.task.substasks = this.subtasks;
-  //     const data = {
-  //       subtasks: this.subtasks,
-  //     }
-
-  //     this.sendDataToTask(data, 'nolog', null);
-
-  //   }
-
-  // }
-
-  // deleteAssigneFromSubtask(deletedMembers: any[]) {
-  //   const members = deletedMembers;
-  //   for (let index = 0; index < members.length; index++) {
-  //     const id = members[index].id;
-  //     this.deleteAssigne(id);
-  //   }
-
-  //   const data = {
-  //     subtasks: this.subtasks,
-  //   }
-  //   // this.sendDataToTask(data, 'nolog', null);
-  // }
-
-  // deleteAssigne(id: string) {
-  //   console.log(id);
-  //   for (let index = 0; index < this.subtasks.length; index++) {
-  //     const substask = this.subtasks[index];
-  //     const assignee = substask.assignee;
-  //     if (assignee && assignee.id === id) {
-  //       substask.assignee = null;
-
-  //     }
-  //   }
-
-  //   console.log(this.subtasks);
-
-
-
-  // }
 }

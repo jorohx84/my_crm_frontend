@@ -1,5 +1,5 @@
 <div class="taskSidebar">
-    <div class="sidabarNav">
+    <!-- <div class="sidabarNav">
 
         <div [ngClass]="{'btnHlgt': sidebarKey==='comments'}" (click)="changeSidebarContent('comments')">
             <h4>Chat</h4>
@@ -8,12 +8,13 @@
             <h4>Historie</h4>
         </div>
 
-    </div>
-    <div class="placeholder"></div>
+    </div> -->
+    <!-- <div class="placeholder"></div> -->
     <div class="addCont">
         <h4 *ngIf="!textfieldOpen">Nachrichten</h4>
         <h4 *ngIf="textfieldOpen">Neue Nachricht</h4>
-        <img [ngClass]="{'rotate': textfieldOpen}" src="./icons/add.svg" alt="" (click)="textfieldOpen=!textfieldOpen">
+        <img *ngIf="permission.isMember(task.members)" [ngClass]="{'rotate': textfieldOpen}" src="./icons/add.svg"
+            alt="" (click)="toogleTextField()">
 
     </div>
 
@@ -24,8 +25,9 @@
             id=""></textarea>
         <img *ngIf="comment.text!==''" (click)="createComment()" src="./icons/send.svg" alt="">
     </div>
-    <div *ngIf="sidebarKey==='comments'" class="sidebarList">
 
+    <div *ngIf="sidebarKey==='comments'" class="sidebarList">
+        <h4 *ngIf="sortedComments.length===0">- Keine Nachrichten -</h4>
         <div class="" *ngFor="let comment of sortedComments, let index=index">
             <div class="commentsRow">
                 <div class="commentInfo" [ngClass]="{'reverse': user.id===comment.creator.id}">
