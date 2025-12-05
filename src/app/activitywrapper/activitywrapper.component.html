@@ -1,7 +1,7 @@
 <section>
     <div class="acitvityForm">
         <h3>Neue Aktivität</h3>
-        <div class="inputCont" *ngIf="!glo.checkURL('singlecontact')">
+        <div class="inputCont" *ngIf="!glo.checkURL('singlecontact') && !contactID">
             <h4>Kontak wählen</h4>
             <div class="inputfield">
                 <input name="customer" (change)="searchCustomer()" #customer="ngModel" type="text"

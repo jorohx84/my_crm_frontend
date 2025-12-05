@@ -22,7 +22,7 @@ export class ContactlistwrapperComponent {
   private destroy$ = new Subject<void>();
 
   ngOnInit() {
-    this.subscribeCustomer();
+    // this.subscribeCustomer();
 
   }
   ngOnDestroy() {
@@ -40,14 +40,14 @@ export class ContactlistwrapperComponent {
   //   })
   // }
 
-  subscribeCustomer() {
-    this.observerservice.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      if (data) {
-        this.customerID = data;
-        this.loadContacts()
-      }
-    })
-  }
+  // subscribeCustomer() {
+  //   this.observerservice.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+  //     if (data) {
+  //       this.customerID = data;
+  //       this.loadContacts()
+  //     }
+  //   })
+  // }
 
   setContact(index: number) {
     const contact = this.contacts[index]

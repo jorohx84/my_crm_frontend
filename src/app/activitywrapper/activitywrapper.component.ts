@@ -96,6 +96,8 @@ export class ActivitywrapperComponent {
       const id = param.get('customer_id');
       if (id) {
         this.customerID = id
+        console.log(id);
+        
       }
     })
   }
@@ -105,6 +107,8 @@ export class ActivitywrapperComponent {
       const id = param.get('contact_id');
       if (id) {
         this.contactID = id
+        console.log(id);
+        
       }
     })
   }

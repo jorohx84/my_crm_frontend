@@ -6,8 +6,8 @@ import { APIService } from '../services/api.service';
 import { ObservableService } from '../services/observable.service';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
-import { response } from 'express';
-import { combineLatest, Subject, takeUntil } from 'rxjs';
+import { query, response } from 'express';
+import { combineLatestWith, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
 import { ListmenuComponent } from '../listmenu/listmenu.component';
@@ -29,7 +29,7 @@ export class ActivitiesComponent {
   observservice = inject(ObservableService);
   userservice = inject(UserService);
   globalservice = inject(GlobalService);
-  router = inject(ActivatedRoute);
+  route = inject(ActivatedRoute);
   private destroy$ = new Subject<void>();
   activities: any[] = [];
   allActivities: any[] = [];
@@ -79,13 +79,12 @@ export class ActivitiesComponent {
   }
 
   loadTemplate() {
-    combineLatest([this.router.queryParamMap, this.router.parent!.paramMap]).pipe(takeUntil(this.destroy$)).subscribe(([query, params]) => {
-      this.setTemplateData(query, params);
+   this.route.queryParamMap.pipe(combineLatestWith(this.route.parent!.paramMap),takeUntil(this.destroy$)).subscribe(([query, params]) => {
+      this.setTemplateData(query, params); 
     });
-
     this.subscribeActivities();
     this.subscribeContact();
-    // this.subscribeListMenuData();
+  
   }
 
   setTemplateData(query: any, params: any) {
@@ -102,7 +101,10 @@ export class ActivitiesComponent {
     type === 'contact' ? this.contactID = id : this.customerID = id;
     const apiKey = paramID.replace('_id', '');
     this.apiKey = apiKey;
-    this.loadActivities(id, apiKey, 1);
+    if (id && apiKey) {
+      this.loadActivities(id, apiKey, 1);
+    }
+    
   }
 
   getParamID(type: string) {
@@ -214,6 +216,9 @@ export class ActivitiesComponent {
 
 
   saveEdit(aid: string, data: any) {
+    console.log('ich wurde getriggert');
+    
+    if (!aid) { return}
     this.apiservice.patchData(`activity/${aid}/`, data).subscribe({
       next: (response) => {
         // this.observservice.sendActivity(response);

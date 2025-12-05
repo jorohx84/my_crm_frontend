@@ -10,10 +10,10 @@ export class ObservableService {
     public userSubject$ = this.userSubject.asObservable();
     private memberSubject = new Subject<any>();
     public memberSubject$ = this.memberSubject.asObservable();
-    private taskSubject = new BehaviorSubject<any>(null);
+    private taskSubject = new Subject<any>();
     public taskSubject$ = this.taskSubject.asObservable();
 
-    private customerSubject = new BehaviorSubject<any>(null);
+    private customerSubject = new Subject<any>();
     public customerSubject$ = this.customerSubject.asObservable();
 
     private taskTriggerSubject = new Subject<any>();
@@ -23,7 +23,7 @@ export class ObservableService {
 
     private globalsearchSubject = new Subject<any>();
     public globalsearchSubject$ = this.globalsearchSubject.asObservable();
-    private contactSubject = new BehaviorSubject<any>(null);
+    private contactSubject = new Subject<any>();
     public contactSubject$ = this.contactSubject.asObservable();
     private activitySubject = new Subject<any>();
     public activitySubject$ = this.activitySubject.asObservable();

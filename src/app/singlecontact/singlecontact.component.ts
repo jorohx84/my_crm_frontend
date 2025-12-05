@@ -116,7 +116,7 @@ export class SinglecontactComponent {
       if (id) {
         this.contactID = id
         this.loadContact(id);
-        this.obs$.sendContact(id)
+        // this.obs$.sendContact(id)
         // this.tabKey = 'infos';
       }
 
@@ -164,7 +164,7 @@ export class SinglecontactComponent {
 
 
   openActivityForm() {
-    this.obs$.sendContact(this.contact);
+    // this.obs$.sendContact(this.contact);
     this.globalservice.activityWrapperOpen = true
   }
 

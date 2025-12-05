@@ -62,7 +62,7 @@ export class SinglecustomerComponent {
       this.customerID = id
       if (id) {
         this.loadCustomer(id)
-        this.obs$.sendCustomer(id);
+        // this.obs$.sendCustomer(id);
       }
 
     });
@@ -134,21 +134,23 @@ export class SinglecustomerComponent {
 
 
 
-  getContactId() {
-    this.route.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      const id = param.get('contact_id');
-      this.obs$.sendContact(id);
-    })
-  }
+  // getContactId() {
+  //   this.route.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+  //     const id = param.get('contact_id');
+  //     this.obs$.sendContact(id);
+  //   })
+  // }
 
 
   openContactWrapper() {
     this.globalservice.contactWrapperOpen = true;
+    this.globalservice.isoverlay = true;
     this.obs$.sendCustomer(this.customer.id);
   }
 
   openActivityWrapper() {
     this.globalservice.activityWrapperOpen = true;
+    this.globalservice.isoverlay = true;
     this.obs$.sendSignalToDialog(null);
   }
 }
