@@ -1,21 +1,3 @@
-<!-- <section>
-
-    <div class="sidebar">
-
-    </div>
-    <div class="mainWindow">
-        <div class="header">
-            <app-header></app-header>
-        </div>
-
-        <div class="content">
-            <router-outlet></router-outlet>
-        </div>
-    </div>
-
-
-
-</section> -->
 
 <section>
     <div class="header">
@@ -23,11 +5,11 @@
     </div>
 
     <div class="mainWindow">
-        <!-- <div class="sidebar">
+        <div class="sidebar" [ngClass]="{'sidebarIn': globalservice.sidebarOpen}">
             <app-sidebar></app-sidebar>
-        </div> -->
-        <div class="placeholder"></div>
-        <div class="content">
+        </div>
+        <!-- <div class="placeholder"></div> --> 
+        <div class="content" [ngClass]="{'sidebarOut': globalservice.sidebarOpen}">
             <router-outlet></router-outlet>
 
         </div>
@@ -54,4 +36,17 @@
     </div>
 
     <div *ngIf="globalservice.isoverlay" class="overlay"></div>
+            <div class="formDialog dialogSlideOut " [ngClass]="{'dialogSlideIn': globalservice.taskWrapperOpen}">
+                <app-taskwrapper></app-taskwrapper>
+            </div>
+
+            <div class="formDialog dialogSlideOut" [ngClass]="{'dialogSlideIn': globalservice.contactWrapperOpen}">
+                <app-contactwrapper></app-contactwrapper>
+            </div>
+            <div class="formDialog dialogSlideOut" [ngClass]="{'dialogSlideIn': globalservice.activityWrapperOpen}">
+                <app-activitywrapper></app-activitywrapper>
+            </div>
+    <div class="formDialog dialogSlideOut" [ngClass]="{'dialogSlideIn':globalservice.dealwrapperOpen}">
+        <app-dealwrapper></app-dealwrapper>
+    </div>
 </section>

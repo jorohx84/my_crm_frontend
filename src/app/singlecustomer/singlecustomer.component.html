@@ -7,7 +7,7 @@
                 <img src="./icons/building.svg" alt="">
             </div>
             <div class="customertitle">
-                <h1>{{customer?.companyname}}</h1>
+                <h1>{{customer.companyname}}</h1>
                 <input (change)="updateCustomer()" name="branch" type="text" placeholder="Branche"
                     [(ngModel)]="customer.branch" name="" id="">
             </div>
@@ -22,19 +22,17 @@
                 (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'activities'], {actlist:'customer'})">
                 <h4>Aktivitäten</h4>
             </div>
-            <div
-                (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'contacts'], {sidebarOpen:true})">
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'contacts'])">
                 <h4>Kontakte</h4>
             </div>
             <!-- <div (click)="changeFolder('tasks')">
                 <h4>Aufgaben</h4>
             </div> -->
-            <div
-                (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'], {sidebarOpen:true})">
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'tasklist'])">
 
                 <h4>Aufgaben</h4>
             </div>
-            <div>
+            <div (click)="globalservice.navigateToPath(['main', 'singlecustomer', customerID, 'deals'])">
                 <h4>Aufträge</h4>
             </div>
         </div>
@@ -43,11 +41,11 @@
                 <img src=" ./icons/tasks.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn">
-                <img (click)="globalservice.contactWrapperOpen=!globalservice.contactWrapperOpen"
+                <img (click)="openContactWrapper()"
                     src=" ./icons/contact.svg" alt="">
             </div>
             <div *ngIf="!isEdit" class="menuBtn">
-                <img (click)="openActivityForm()" src=" ./icons/activity.svg" alt="">
+                <img (click)="openActivityWrapper()" src=" ./icons/activity.svg" alt="">
             </div>
 
         </div>
@@ -56,7 +54,7 @@
     <div class="customerFile">
 
         <!-- CUSTOMER -->
-        <div class="customerProfile" *ngIf="globalservice.sidebarOpen===true">
+        <div class="customerProfile" *ngIf="globalservice.customerProfileOpen">
 
             <div class="customeInfos">
 
@@ -111,7 +109,7 @@
             <router-outlet></router-outlet>
 
 
-            <div class="formWrapper slideOut " [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
+            <!-- <div class="formWrapper slideOut " [ngClass]="{'slideIn': globalservice.taskWrapperOpen}">
                 <app-taskwrapper></app-taskwrapper>
             </div>
 
@@ -120,7 +118,7 @@
             </div>
             <div class="formWrapper slideOut" [ngClass]="{'slideIn': globalservice.activityWrapperOpen}">
                 <app-activitywrapper></app-activitywrapper>
-            </div>
+            </div> -->
 
         </div>
 
@@ -142,7 +140,7 @@
     <div *ngIf="isOpen" class="deleteWrapper border">
         <div class="textCont" *ngIf="!isDelete">
             <p>Wollen Sie den Kunden</p>
-            <h3>- {{customer?.companyname}} -</h3>
+            <h3>- {{customer.companyname}} -</h3>
             <p>wirklich löschen?</p>
         </div>
         <p *ngIf="isDelete">Kunde wurde gelöscht</p>

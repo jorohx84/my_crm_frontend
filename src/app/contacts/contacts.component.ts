@@ -47,7 +47,7 @@ export class ContactsComponent {
   ];
 
   constructor() {
-    this.globalservice.setCustomerSidebarState();
+    this.globalservice.setCustomerProfileState();
   }
 
   ngOnInit() {

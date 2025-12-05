@@ -11,6 +11,9 @@ import { combineLatest, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
 import { ListmenuComponent } from '../listmenu/listmenu.component';
+import { createActivityModel } from '../models/activity.model';
+import { Activity } from '../models/activity.model';
+
 
 
 @Component({
@@ -39,14 +42,7 @@ export class ActivitiesComponent {
   editDateOpen: boolean = false;
   contactListOpen: boolean = false;
   editTypeOpen: boolean = false;
-  currentActivity: any = {
-    title: '',
-    description: '',
-    type: '',
-    contact: null,
-    customer: null,
-    date: '',
-  }
+  activity = createActivityModel();
 
   activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
     { fieldName: 'type', displayName: 'Typ' },
@@ -67,13 +63,15 @@ export class ActivitiesComponent {
   apiKey: string = '';
   totalCount: number | null = null;
   currentSearchFilter: any;
+
   constructor() {
-    this.globalservice.setCustomerSidebarState();
+    this.globalservice.setCustomerProfileState();
   }
 
   ngOnInit() {
     this.loadTemplate();
   }
+
 
   ngOnDestroy() {
     this.destroy$.next();
@@ -179,7 +177,7 @@ export class ActivitiesComponent {
   subscribeContact() {
     this.observservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        this.currentActivity.contact = data;
+        this.activity.contact = data;
         this.contactListOpen = false;
         this.editActivity('contact');
       }
@@ -201,13 +199,13 @@ export class ActivitiesComponent {
   }
 
   openActivity(index: number) {
-    this.currentActivity = this.activities[index];
-    console.log(this.currentActivity);
+    this.activity = this.activities[index];
+    console.log(this.activity);
     this.activityOpen = true
   }
 
-  editActivity(key: string) {
-    const aid = this.currentActivity.id
+  editActivity(key: keyof Activity) {
+    const aid = this.activity.id
     const data: any = this.getData(key);
     this.editInvalid = this.validateData(data[key]) ? true : false;
     if (this.editInvalid) { return }
@@ -219,7 +217,7 @@ export class ActivitiesComponent {
     this.apiservice.patchData(`activity/${aid}/`, data).subscribe({
       next: (response) => {
         // this.observservice.sendActivity(response);
-        const updatedActivity = this.currentActivity
+        const updatedActivity = this.activity
         this.activities = this.activities.map(a =>
           a.id === updatedActivity.id ? updatedActivity : a
         );
@@ -229,11 +227,11 @@ export class ActivitiesComponent {
     })
   }
 
-  getData(key: string) {
+  getData(key: keyof Activity) {
     if (key === 'contact') {
-      return { contact: this.currentActivity.contact.id }
+      return { contact: this.activity.contact.id }
     } else {
-      return { [key]: this.currentActivity[key] }
+      return { [key]: this.activity[key] }
     }
   }
 
@@ -244,8 +242,8 @@ export class ActivitiesComponent {
 
 
   openContactList() {
-    const cid = this.currentActivity.customer.id
-    this.observservice.triggerloadCustomer(cid);
+    const cid = this.activity.customer.id
+    this.observservice.sendCustomer(cid);
     this.contactListOpen = true
 
   }
@@ -260,7 +258,7 @@ export class ActivitiesComponent {
 
   editType(type: string) {
     console.log(type);
-    this.currentActivity.type = type;
+    this.activity.type = type;
     this.editActivity('type');
     this.editTypeOpen = false
   }

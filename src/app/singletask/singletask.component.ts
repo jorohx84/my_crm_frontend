@@ -16,6 +16,7 @@ import { TaskinfobarComponent } from '../taskinfobar/taskinfobar.component';
 import { TasksidebarComponent } from '../tasksidebar/tasksidebar.component';
 import { LogBookService } from '../services/log.service';
 import { PermissionService } from '../services/permissions.service';
+import { createTaskModel } from '../models/task.model';
 
 @Component({
   selector: 'app-singletask',
@@ -35,7 +36,7 @@ export class SingletaskComponent {
   permission = inject(PermissionService);
   private destroy$ = new Subject<void>();
   taskId: string | null = null;
-  task = this.dataservice.task;
+   task = createTaskModel();
   user: any;
   sortedComments: any[] = [];
   memberListOpen: boolean = false;
@@ -50,7 +51,7 @@ export class SingletaskComponent {
   taskTemplateOpen: boolean = false;
   currentTaskTemplate: any;
   constructor() {
-    this.globalservice.setCustomerSidebarState();
+    this.globalservice.setCustomerProfileState();
   }
 
   ngOnInit() {
@@ -139,7 +140,7 @@ export class SingletaskComponent {
 
 
   backToCustomer() {
-    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task.customer.id, 'tasklist'], null);
+    this.globalservice.navigateToPath(['main', 'singlecustomer', this.task?.customer?.id, 'tasklist'], null);
   }
 
 

@@ -4,7 +4,7 @@
         <div class="inputfield"
             [ngClass]="{'errorBorder': companyName.invalid && companyName.touched && globalservice.customerWrapperOpen}">
             <input #companyName="ngModel" type="text" id="companyName" name="companyName" placeholder="Firmenname"
-                [(ngModel)]="customer.companyName" required>
+                [(ngModel)]="customer.companyname" required>
         </div>
         <!-- <div class="errorTxt">
                     <p *ngIf="companyName.invalid && companyName.touched && isOpen">Pflichtfeld</p>

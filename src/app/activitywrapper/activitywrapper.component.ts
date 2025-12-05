@@ -6,8 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { response } from 'express';
-import { flatMap, Subject, takeUntil } from 'rxjs';
+import { flatMap, single, Subject, takeUntil } from 'rxjs';
 import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
+import { createActivityModel } from '../models/activity.model';
 
 
 @Component({
@@ -18,34 +19,30 @@ import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwr
 })
 export class ActivitywrapperComponent {
   apiservice = inject(APIService);
-  observerservice = inject(ObservableService);
-  globalservice = inject(GlobalService);
+  obs$ = inject(ObservableService);
+  glo = inject(GlobalService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  activity = createActivityModel();
   contact: any;
   contactID: string = '';
-  contacts: any[] = [];
+  isloaded: boolean = false;
   customerID: string = '';
   tabKey: string = 'infos';
   typeInvalid: boolean = false;
   contactListOpen: boolean = false;
   noContact: boolean = false;
   isSingleContact: boolean = false;
+  isSingleCustomer: boolean = false;
   noNavigate: boolean = false;
   private destroy$ = new Subject<void>();
-  activity: any = {
-    title: '',
-    description: '',
-    type: '',
-    contact: null,
-    customer: null,
-    date: '',
-  }
-
-
-
+  noCustomer: boolean = false;
+  searchValue: string = '';
+  contacts: any[] = [];
   ngOnInit() {
+    // this.subscribeCustomer();
     this.subscribeContact();
+    this.subscribeDiaolgSignal();
     this.loadCustomer();
   }
 
@@ -55,16 +52,64 @@ export class ActivitywrapperComponent {
   }
 
   subscribeContact() {
-    this.observerservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
-      if (data) {
-        this.setContactData(data);
-        this.contactListOpen = false;
-        this.noContact = false;
-      }
-      this.setVariabelFromURL();
+    this.obs$.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      console.log('Contact ist angekommen', res);
+      if (res) {
+        console.log(res);
+        
+        this.setContactData(res);
+ 
 
+      }
+      // this.setVariabelFromURL();
     })
   }
+
+  subscribeCustomer() {
+    this.obs$.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      console.log('Customer ist angekommen', res);
+
+      this.customerID = res
+      this.noCustomer = this.customerID ? false : true;
+      this.setVariabelFromURL();
+    })
+
+  }
+
+  subscribeDiaolgSignal() {
+
+
+    this.obs$.dialogSubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      console.log('Signal ausgelöst');
+      if (this.glo.checkURL('singlecustomer')) {
+        this.loadCustomerFromUrl();
+      }
+      if (this.glo.checkURL('singlecontact')) {
+        this.loadContactFromUrl();
+      }
+    })
+
+  }
+
+  loadCustomerFromUrl() {
+    this.route.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+      const id = param.get('customer_id');
+      if (id) {
+        this.customerID = id
+      }
+    })
+  }
+
+  loadContactFromUrl() {
+    this.route.firstChild?.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+      const id = param.get('contact_id');
+      if (id) {
+        this.contactID = id
+      }
+    })
+  }
+
+
 
 
   setContactData(data: any) {
@@ -77,8 +122,12 @@ export class ActivitywrapperComponent {
   }
 
   setVariabelFromURL() {
-    this.isSingleContact = this.globalservice.checkURL('singlecontact');
-    this.noNavigate = this.globalservice.checkURL('activities');
+    this.isSingleCustomer = this.glo.checkURL('singlecustomer');
+    this.isSingleContact = this.glo.checkURL('singlecontact');
+    console.log(this.isSingleContact);
+    console.log(this.isSingleCustomer);
+
+    this.noNavigate = this.glo.checkURL('activities');
   }
 
 
@@ -110,7 +159,7 @@ export class ActivitywrapperComponent {
     const requestData = this.createActivityData();
     this.saveActivity(requestData);
     if (!this.noNavigate && !this.isSingleContact) {
-      this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'activities'], { actlist: 'customer' });
+      this.glo.navigateToPath(['main', 'singlecustomer', this.customerID, 'activities'], { actlist: 'customer' });
     }
     this.resetForm(form);
 
@@ -119,8 +168,8 @@ export class ActivitywrapperComponent {
   saveActivity(data: any) {
     this.apiservice.postData('activities/', data).subscribe({
       next: (response) => {
-        this.observerservice.sendActivity(response);
-        this.observerservice.sendConfirmation('Aktivität wurde erfolgreich angelegt');
+        this.obs$.sendActivity(response);
+        this.obs$.sendConfirmation('Aktivität wurde erfolgreich angelegt');
       }
     })
   }
@@ -143,27 +192,55 @@ export class ActivitywrapperComponent {
     form.reset();
     this.activity.type = '';
     this.contact = undefined;
-    this.contactID = '';
+
     this.typeInvalid = false;
-    this.globalservice.activityWrapperOpen = false;
-
+    this.glo.activityWrapperOpen = false;
+    this.glo.isoverlay = false;
+    setTimeout(() => {
+      this.contactID = '';
+      this.customerID = '';
+      this.searchValue = '';
+    }, 300);
   }
 
-  openContactList() {
-    this.contactListOpen = true;
-    // this.apiservice.getData(`contacts/${this.customerID}/`).subscribe({
-    //   next: (response) => {
-    //     this.contacts = response;
-    //   }
-    // })
-    this.observerservice.triggerloadCustomer(this.customerID)
+  // openContactList() {
+  //   this.contactListOpen = true;
+  //   // this.apiservice.getData(`contacts/${this.customerID}/`).subscribe({
+  //   //   next: (response) => {
+  //   //     this.contacts = response;
+  //   //   }
+  //   // })
+  //   this.obs$.sendCustomer(this.customerID)
+  // }
+
+
+  // setContact(index: number) {
+  //   this.contact = this.contacts[index]
+  //   this.contactID = this.contact.id
+  //   this.contactListOpen = false;
+  //   this.noContact = false;
+  // }
+
+  searchCustomer() {
+    console.log(this.searchValue);
+    this.apiservice.getData(`search/contact/${this.searchValue}/`).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.contacts = res;
+        this.isloaded = true;
+      }
+    })
   }
 
-
-  setContact(index: number) {
-    this.contact = this.contacts[index]
-    this.contactID = this.contact.id
+  setContact(selectedContact: any) {
+    this.contact = selectedContact;
+    console.log(this.contact);
+    this.searchValue = this.contact.name
+    this.customerID = this.contact.customer.id;
+    this.contactID = this.contact.id;
     this.contactListOpen = false;
-    this.noContact = false;
+    this.isloaded = false;
   }
 }
+
+

@@ -46,7 +46,7 @@ export class HeaderComponent {
     })
   }
 
-    ngOnDestroy() {
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -63,7 +63,7 @@ export class HeaderComponent {
 
 
   globalSearch() {
-    this.apiservice.getData(`search/${this.searchInput}`).subscribe({
+    this.apiservice.getData(`search/global/${this.searchInput}`).subscribe({
       next: (response) => {
         this.searchInput = '';
         this.observservice.sendSearch(response);
@@ -136,6 +136,10 @@ export class HeaderComponent {
 
 
 
+  toggleSidebar() {
 
+    this.globalservice.sidebarOpen = !this.globalservice.sidebarOpen;
+    this.dataservice.saveDataToLocalStorage('sidebarOpen', this.globalservice.sidebarOpen);
+  }
 
 }

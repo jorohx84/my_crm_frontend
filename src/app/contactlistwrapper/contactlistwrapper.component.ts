@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { APIService } from '../services/api.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -15,14 +15,15 @@ export class ContactlistwrapperComponent {
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
   route = inject(ActivatedRoute);
-  contact: any;
-  contacts: any[] = [];
+
+  @Input() contacts: any[] = [];
+  @Output() selectedContact = new EventEmitter()
   customerID: string = '';
   private destroy$ = new Subject<void>();
 
   ngOnInit() {
     this.subscribeCustomer();
-  
+
   }
   ngOnDestroy() {
     this.destroy$.next();
@@ -40,7 +41,7 @@ export class ContactlistwrapperComponent {
   // }
 
   subscribeCustomer() {
-    this.observerservice.customerTriggersubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
+    this.observerservice.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
         this.customerID = data;
         this.loadContacts()
@@ -51,7 +52,8 @@ export class ContactlistwrapperComponent {
   setContact(index: number) {
     const contact = this.contacts[index]
     console.log(contact);
-    this.observerservice.sendContact(contact);
+    // this.observerservice.sendContact(contact);
+    this.selectedContact.emit(contact)
   }
 
 

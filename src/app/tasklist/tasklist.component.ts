@@ -29,7 +29,7 @@ export class TasklistComponent {
 
   filteredTaskList: any[] = [];
  constructor() {
-    this.globalservice.setCustomerSidebarState();
+    this.globalservice.setCustomerProfileState();
   }
 
   ngOnInit() {

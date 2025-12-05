@@ -7,6 +7,8 @@ import { response } from 'express';
 import { ObservableService } from '../services/observable.service';
 import { GlobalService } from '../services/global.service';
 import { Subject, takeUntil } from 'rxjs';
+import { createContactModel } from '../models/contact.model';
+
 @Component({
   selector: 'app-contactwrapper',
   imports: [CommonModule, FormsModule],
@@ -18,30 +20,27 @@ export class ContactwrapperComponent {
   observerservice = inject(ObservableService);
   globalservice = inject(GlobalService);
   route = inject(ActivatedRoute);
-  customerId: string | null = null;
+  customerID: string | null = null;
   private destroy$ = new Subject<void>();
-  contact: any = {
-    name: '',
-    position: '',
-    function: '',
-    department: '',
-    phone: '',
-    email: '',
-    is_active: '',
-    newsletter_opt_in: '',
-    notes: '',
-    last_contact: '',
-    last_contact_by: '',
-    created_at: '',
-    created_by: '',
-    updated_at: '',
-    updated_by: '',
+  contact = createContactModel();
+  noCustomer: boolean = true;
+  ngOnInit() {
+    this.subscribeCustomer();
+    // this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
+    //   const id = param.get('customer_id');
+    //   if (id) {
+    //     this.customerId = id;
+    //   }
+    //   console.log(this.customerId);
+
+    // })
   }
 
-  ngOnInit() {
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      const id = param.get('customer_id');
-      this.customerId = id;
+  subscribeCustomer() {
+    this.observerservice.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.customerID = res
+     
+
     })
   }
 
@@ -69,7 +68,7 @@ export class ContactwrapperComponent {
         this.observerservice.sendContact(response);
         this.observerservice.sendConfirmation('Kontakt wurde erfolgreich angelegt');
         this.resetFrom(form)
-        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerId, 'singlecontact', contactId, 'activities'], { actlist: 'contact' })
+        this.globalservice.navigateToPath(['main', 'singlecustomer', this.customerID, 'singlecontact', contactId, 'activities'], { actlist: 'contact' })
       }
     })
 
@@ -77,7 +76,7 @@ export class ContactwrapperComponent {
 
   createRequestData() {
     return {
-      customer: this.customerId,
+      customer: this.customerID,
       name: this.contact.name,
       position: this.contact.position,
       function: this.contact.function,
@@ -90,6 +89,7 @@ export class ContactwrapperComponent {
   resetFrom(form: NgForm) {
     form.reset()
     this.globalservice.contactWrapperOpen = false;
+    this.globalservice.isoverlay = false;
   }
 
 }

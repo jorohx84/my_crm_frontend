@@ -12,8 +12,10 @@ export class ObservableService {
     public memberSubject$ = this.memberSubject.asObservable();
     private taskSubject = new BehaviorSubject<any>(null);
     public taskSubject$ = this.taskSubject.asObservable();
-    private customerTriggersubject = new Subject<any>();
-    public customerTriggersubject$ = this.customerTriggersubject.asObservable();
+
+    private customerSubject = new BehaviorSubject<any>(null);
+    public customerSubject$ = this.customerSubject.asObservable();
+
     private taskTriggerSubject = new Subject<any>();
     public taskTriggerSubject$ = this.taskTriggerSubject.asObservable();
     private notificationSubject = new BehaviorSubject<any>(null);
@@ -21,7 +23,7 @@ export class ObservableService {
 
     private globalsearchSubject = new Subject<any>();
     public globalsearchSubject$ = this.globalsearchSubject.asObservable();
-    private contactSubject = new Subject<any>();
+    private contactSubject = new BehaviorSubject<any>(null);
     public contactSubject$ = this.contactSubject.asObservable();
     private activitySubject = new Subject<any>();
     public activitySubject$ = this.activitySubject.asObservable();
@@ -34,6 +36,8 @@ export class ObservableService {
     private taskMembersSubject = new Subject<any[]>;
     public taskMembersSubject$ = this.taskMembersSubject.asObservable();
 
+    private dialogSubject = new Subject<any[]>;
+    public dialogSubject$ = this.dialogSubject.asObservable();
 
     observeUser(user: any) {
         this.userSubject.next(user)
@@ -47,8 +51,8 @@ export class ObservableService {
         this.taskSubject.next(task);
     }
 
-    triggerloadCustomer(customer: any) {
-        this.customerTriggersubject.next(customer);
+    sendCustomer(customer: any) {
+        this.customerSubject.next(customer);
     }
 
     triggerloadTask(task: any) {
@@ -90,6 +94,8 @@ export class ObservableService {
         this.taskMembersSubject.next(list);
     }
 
-
+    sendSignalToDialog(data: any) {
+        this.dialogSubject.next(data);
+    }
 
 }

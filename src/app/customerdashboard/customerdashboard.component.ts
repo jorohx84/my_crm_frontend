@@ -8,6 +8,7 @@ import { UserService } from '../services/user.service';
 import { ObservableService } from '../services/observable.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { createCustomerModel } from '../models/customer.models';
 
 @Component({
   selector: 'app-customerdashboard',
@@ -22,12 +23,12 @@ export class CustomerdashboardComponent {
   observerservice = inject(ObservableService);
   dataservice = inject(DataService);
   route = inject(ActivatedRoute);
-  customer = this.dataservice.emptyCustomer;
+  customer = createCustomerModel();
   customerID: string = '';
   private destroy$ = new Subject<void>();
 
- constructor() {
-    this.globalservice.setCustomerSidebarState();
+  constructor() {
+    this.globalservice.setCustomerProfileState();
   }
 
   ngOnInit() {

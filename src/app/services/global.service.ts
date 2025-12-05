@@ -29,11 +29,15 @@ export class GlobalService {
     searchWrapperOpen: boolean = false;
     contactWrapperOpen: boolean = false;
     activityWrapperOpen: boolean = false;
+    dealwrapperOpen: boolean = false;
     wrongTime: boolean = false;
     isoverlay: boolean = false;
+    customerProfileOpen: boolean = false;
     // navigateToPath(path: string,) {
     //     this.router.navigate([path]);
     // }
+
+
     private destroy$ = new Subject<void>();
 
 
@@ -54,13 +58,15 @@ export class GlobalService {
     }
 
 
-    constructor() { }
+    constructor() {
+        this.sidebarOpen = this.dataservice.getDataFromLocalStorage('sidebarOpen');
+    }
 
-    setCustomerSidebarState() {
+    setCustomerProfileState() {
         if (this.checkURL('singlecontact')) {
-            this.sidebarOpen = false;
+            this.customerProfileOpen = false;
         } else {
-            this.sidebarOpen = true;
+            this.customerProfileOpen = true;
         }
     }
 

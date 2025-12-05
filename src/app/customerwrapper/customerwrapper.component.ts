@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Customer } from '../models/customer.models';
+
 import { UserService } from '../services/user.service';
 import { APIService } from '../services/api.service';
 import { DataService } from '../services/data.service';
 import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
+import { createCustomerModel } from '../models/customer.models';
 
 @Component({
   selector: 'app-customerwrapper',
@@ -20,7 +21,7 @@ export class CustomerwrapperComponent {
   dataservice = inject(DataService);
   apiservice = inject(APIService);
   observerservice = inject(ObservableService);
-  customer = this.dataservice.emptyCustomer;
+  customer = createCustomerModel();
   isValid: boolean = false;
   isSend: boolean = false;
 
@@ -55,7 +56,7 @@ export class CustomerwrapperComponent {
   }
   createCustomerObject() {
     return {
-      companyname: this.customer.companyName,
+      companyname: this.customer.companyname,
       street: this.customer.street,
       areacode: this.customer.areacode,
       city: this.customer.city,
@@ -72,11 +73,11 @@ export class CustomerwrapperComponent {
     this.globalservice.customerWrapperOpen = false
     setTimeout(() => {
       form.resetForm();
-      this.customer = new Customer();
+      this.customer = createCustomerModel();
       this.isSend = false;
     }, 1000);
 
-    
+
 
 
   }

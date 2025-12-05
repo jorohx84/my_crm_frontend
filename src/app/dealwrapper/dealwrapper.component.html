@@ -1,0 +1,39 @@
+<section>
+    <h3>Neuer Deal</h3>
+    <div class="divider"></div>
+    <form #dealCreationForm="ngForm" (ngSubmit)="createDeal(dealCreationForm)">
+        <div class="inputCont">
+            <div class="inputfield">
+                <input type="text" placeholder="Titel">
+            </div>
+            <div class="errorTxt"></div>
+        </div>
+
+        <div class="inputCont">
+            <textarea name="" id=""></textarea>
+            <div class="errorTxt"></div>
+        </div>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input type="text" placeholder="">
+            </div>
+            <div class="errorTxt"></div>
+        </div>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input type="text" placeholder="">
+            </div>
+            <div class="errorTxt"></div>
+        </div>
+        <div class="inputCont">
+            <div class="inputfield">
+                <input #amount type="number" placeholder="Betrag [€]" step="0,01" [(ngModel)]="deal.total_amount" name="amount" (blur)="formatAmount()">
+                <p>€</p>
+            </div>
+            <div class="errorTxt"></div>
+        </div>
+        <div class="btnCont">
+            <button (click)="resetForm(dealCreationForm)"></button>
+        </div>
+    </form>
+</section>

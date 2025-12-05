@@ -1,17 +1,18 @@
 <section>
 
-    <h3>Kontaktliste</h3>
+    <h4>Kontaktliste</h4>
     <div class="divider"></div>
-    <div class="inputfield">
+    <!-- <div class="inputfield">
         <input type="text" placeholder="Name oder E-Mail-Adresse">
         <img src="./icons/search.svg" alt="">
-    </div>
+    </div> -->
     <div class="contactList">
+        <p *ngIf="contacts.length===0">- keine Kontakte gefunden -</p>
         <div class="contactListRow" *ngFor="let contact of contacts, let index=index" (click)="setContact(index)">
             <img src="./icons/contactprofile.svg" alt="">
             <div class="contactInfos">
                 <p>{{contact.name}}</p>
-                <p>{{contact.email}}</p>
+                <p>{{contact.customer.companyname}}</p>
             </div>
 
         </div>

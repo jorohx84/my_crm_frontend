@@ -2,6 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { APIService } from "./api.service";
 import { GlobalService } from "./global.service";
 import { DataService } from "./data.service";
+import { createTaskModel } from "../models/task.model";
 
 @Injectable({
     providedIn: 'root'
@@ -11,8 +12,7 @@ export class LogBookService {
     api = inject(APIService);
     global = inject(GlobalService);
     dataservice = inject(DataService);
-    task = this.dataservice.task;
-
+    task = createTaskModel();
     taskLogs: Record<string, string> = {
         title: 'Titel wurde geändert:',
         description: 'Beschreibung wurde geändert:',
@@ -108,7 +108,7 @@ export class LogBookService {
     }
 
     sendLog(varObj: any, objKey: string, task: any) {
-        if (objKey==='nolog') {return}
+        if (objKey === 'nolog') { return }
         if (objKey === 'members') {
             this.sendMemberLog(varObj, task);
         } else if (objKey === 'assignee') {
@@ -131,7 +131,7 @@ export class LogBookService {
 
     sendSubtaskLog(varObj: any, task: any, objKey: string) {
         console.log(varObj);
-        
+
         const fullname = varObj.assignee.profile.fullname;
         const substaskText = varObj.subtask.text;
         this.saveTaskLog(objKey, task, fullname, substaskText);

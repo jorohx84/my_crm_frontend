@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { GlobalService } from '../services/global.service';
 import { CommonModule } from '@angular/common';
-import { Customer } from '../models/customer.models';
 import { FormsModule, NgForm, NgSelectOption } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { APIService } from '../services/api.service';
@@ -11,6 +10,7 @@ import { CustomerwrapperComponent } from '../customerwrapper/customerwrapper.com
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ListmenuComponent } from '../listmenu/listmenu.component';
+import { createCustomerModel } from '../models/customer.models';
 
 
 @Component({
@@ -27,7 +27,8 @@ export class CustomersComponent {
   observerservice = inject(ObservableService);
   private destroy$ = new Subject<void>();
   isOpen: boolean = false;
-  customer = this.dataservice.emptyCustomer;
+  // customer = this.dataservice.emptyCustomer;
+  customer=createCustomerModel();
   user: any;
   customers: any[] = [];
   allCustomers: any[] = [];
@@ -110,13 +111,14 @@ export class CustomersComponent {
 
 
   ngOnInit() {
+console.log(this.customer);
 
     this.userservice.getUser().pipe(takeUntil(this.destroy$)).subscribe((user) => {
       if (user) {
         this.user = user;
       }
     })
-    this.observerservice.customerTriggersubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.observerservice.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.loadCustomers();
     })
     this.loadCustomers()

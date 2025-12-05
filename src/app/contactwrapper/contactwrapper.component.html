@@ -1,6 +1,6 @@
 <section>
     <h2>Kontakt erstellen</h2>
-
+<button *ngIf="noCustomer">Kunde auswählen</button>
     <form #contactCreationFrom="ngForm" (ngSubmit)="createContact(contactCreationFrom)">
         <div class="inputCont">
             <div class="inputfield">

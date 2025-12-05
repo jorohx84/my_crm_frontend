@@ -15,6 +15,7 @@ import { SetpasswordComponent } from './setpassword/setpassword.component';
 import { AdminpanelComponent } from './adminpanel/adminpanel.component';
 import { CustomerdashboardComponent } from './customerdashboard/customerdashboard.component';
 import { ActivitiesComponent } from './activities/activities.component';
+import { DealsComponent } from './deals/deals.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent },
@@ -35,6 +36,7 @@ export const routes: Routes = [
                     { path: 'singlecontact/:contact_id', component: SinglecontactComponent, children:[
                         {path:'activities', component: ActivitiesComponent},
                     ] },
+                    {path:'deals', component: DealsComponent},
                 ]
             },
             { path: 'board', component: BoardComponent },

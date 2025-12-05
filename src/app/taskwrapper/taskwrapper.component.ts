@@ -9,6 +9,7 @@ import { UserService } from '../services/user.service';
 import { MessageService } from '../services/message.service';
 import { Subject, takeUntil } from 'rxjs';
 import { LogBookService } from '../services/log.service';
+import { createTaskModel } from '../models/task.model';
 
 @Component({
   selector: 'app-taskwrapper',
@@ -18,7 +19,7 @@ import { LogBookService } from '../services/log.service';
 })
 export class TaskwrapperComponent {
   apiservice = inject(APIService);
-  logbook=inject(LogBookService);
+  logbook = inject(LogBookService);
   globalservice = inject(GlobalService);
   observerservice = inject(ObservableService);
   userservice = inject(UserService);
@@ -33,21 +34,7 @@ export class TaskwrapperComponent {
   customerID: number | string | null = null;
   subtaskText: string = '';
   user: any;
-  task: any = {
-    title: '',
-    description: '',
-    customer: null,
-    state: 'todo',
-    comment: '',
-    priority: 'low',
-    created_at: '',
-    updated_at: '',
-    due_date: '',
-    reviewer: '',
-    completed_at: '',
-    log: [],
-    subtasks: [],
-  };
+  task = createTaskModel();
   mainTask: any | null = null;
   taskTemplates: any[] = [];
   taskTemplate: any = {
@@ -141,7 +128,7 @@ export class TaskwrapperComponent {
     this.apiservice.postData('tasks/', requestData).subscribe({
       next: (response) => {
         console.log(response);
-        
+
         this.openNewTask(response);
         const newTask = response;
         this.logbook.saveTaskLog('create', newTask);
@@ -152,7 +139,7 @@ export class TaskwrapperComponent {
     })
   }
 
-    createTaskObject() {
+  createTaskObject() {
 
     return {
       title: this.task.title,
@@ -178,6 +165,7 @@ export class TaskwrapperComponent {
     this.globalservice.isSubtaskWrapper = false;
     form.resetForm();
     this.globalservice.taskWrapperOpen = false;
+    this.globalservice.isoverlay = false;
   }
 
   setPriority(prio: string) {
@@ -211,7 +199,7 @@ export class TaskwrapperComponent {
       text: '',
       is_checked: false,
       is_saved: true,
-      ordering:null,
+      ordering: null,
     }
     this.taskTemplate.subtasks.push(task);
     this.subtaskText = '';

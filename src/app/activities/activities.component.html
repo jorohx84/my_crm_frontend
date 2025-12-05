@@ -44,9 +44,9 @@
         <div class="activityWrapper">
             <div class="wrapperHeadline">
                 <div class="titleCont">
-                    <img (click)="editTypeOpen=true" [src]="dataservice.activityTypes[currentActivity?.type]?.path"
+                    <img (click)="editTypeOpen=true" [src]="dataservice.activityTypes[activity.type]?.path"
                         alt="">
-                    <input class="title" type="text" [(ngModel)]="currentActivity.title"
+                    <input class="title" type="text" [(ngModel)]="activity.title"
                         (change)="editActivity('title')">
 
                 </div>
@@ -72,24 +72,24 @@
             <div class="activityInfos">
                 <div class="imgCont" (click)="editDateOpen=true">
                     <img src="./icons/duedate.svg" alt="">
-                    <h4>{{currentActivity?.date | date: 'dd.MM.yy - hh:mm' }} Uhr</h4>
+                    <h4>{{activity.date | date: 'dd.MM.yy - hh:mm' }} Uhr</h4>
 
                     <!-- Edit Date -->
                     <div *ngIf="editDateOpen" class="changeDate">
                         <h4>Datum ändern</h4>
-                        <input (change)="editActivity('date')" [(ngModel)]="currentActivity.date" type="datetime-local">
+                        <input (change)="editActivity('date')" [(ngModel)]="activity.date" type="datetime-local">
                         <img (click)="editDateOpen = false; $event.stopPropagation()" src="./icons/close.svg" alt="">
                     </div>
                     <!--  -->
                 </div>
                 <div class="imgCont" (click)="openContactList()">
                     <img src="./icons/contactprofile.svg" alt="">
-                    <p>{{currentActivity?.contact?.name}}</p>
+                    <p>{{activity?.contact?.name}}</p>
                 </div>
             </div>
             <div class="inputCont">
                 <h4>Beschreibung</h4>
-                <textarea class="txtContHeight" name="description" [(ngModel)]="currentActivity.description" id=""
+                <textarea class="txtContHeight" name="description" [(ngModel)]="activity.description" id=""
                     (change)="editActivity('description')"></textarea>
             </div>
             <div *ngIf="editInvalid" class="errorTxt">

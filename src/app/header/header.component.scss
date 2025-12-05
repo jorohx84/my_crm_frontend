@@ -8,6 +8,13 @@ section {
 
 }
 
+.burgerBtn{
+    cursor: pointer;
+    >img{
+        width: 24px;
+    }
+}
+
 .profileCont {
     // background-color: var(--box);
     width: 100%;

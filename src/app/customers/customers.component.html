@@ -2,6 +2,7 @@
     <div class="sidebar">
         <h3>Kundenportfolio</h3>
         <!-- <button (click)="fillDB()">Dummys laden</button> -->
+         <button (click)="globalservice.customerWrapperOpen=true">neuer Kunde</button>
     </div>
     <div class="listCont">
             <app-listmenu *ngIf="isloaded" [next]="next" [searchField]="true" [timeFilter]="false" [list]="'customers'"

@@ -1,12 +1,20 @@
-<!-- <section>
+<section>
     <nav>
-        <div class="navlink" (click)="globalservice.navigateToPath('main/customers')">
-            <img src="./icons/customers.svg" alt="">
-            <p>Kunden</p>
+        <div class="navlink" (click)="openContactWrapper()">
+            <img src="./icons/contact.svg" alt="">
+            <!-- <p>Kontakte</p> -->
         </div>
-        <div class="navlink" (click)="globalservice.navigateToPath('main/tasks')">
+        <div class="navlink" (click)="openActivityWrapper()">
+            <img src="./icons/activity.svg" alt="">
+            <!-- <p>Aktivitäten</p> -->
+        </div>
+        <div class="navlink" (click)="openTaskWrapper()">
             <img src="./icons/tasks.svg" alt="">
-            <p>Aufgaben</p>
+            <!-- <p>Aufgaben</p> -->
+        </div>
+        <div class="navlink" (click)="openDealWrapper()">
+            <img src="./icons/deal.svg" alt="">
+            <!-- <p>Aufträge</p> -->
         </div>
     </nav>
-</section> -->
+</section>

@@ -8,42 +8,43 @@ import { APIService } from "./api.service";
 
 export class DataService {
     customerList: any[] = [];
-    emptyCustomer: any = {
-        companyname: '',
-        street: '',
-        areacode: '',
-        city: '',
-        country: '',
-        email: '',
-        phone: '',
-        website: '',
-        branch: '',
-        isActiv: false,
-        created_at: '',
-        lastContact: '',
-        assignedTo: 0,
-        notes: '',
-        revenue: 0,
-        paymentTerms: '',
-        insideSales: null,
-        outsideSales: null,
-        created_by: null,
-        updated_at: ''
-    }
 
-    task: any = {
-        title: '',
-        description: '',
-        customer: null,
-        state: 'todo',
-        comments: '',
-        priority: 'low',
-        created_at: '',
-        updated_at: '',
-        due_date: '',
-        reviewer: '',
-        completed_at: '',
-    };
+    // emptyCustomer: any = {
+    //     companyname: '',
+    //     street: '',
+    //     areacode: '',
+    //     city: '',
+    //     country: '',
+    //     email: '',
+    //     phone: '',
+    //     website: '',
+    //     branch: '',
+    //     isActiv: false,
+    //     created_at: '',
+    //     lastContact: '',
+    //     assignedTo: 0,
+    //     notes: '',
+    //     revenue: 0,
+    //     paymentTerms: '',
+    //     insideSales: null,
+    //     outsideSales: null,
+    //     created_by: null,
+    //     updated_at: ''
+    // }
+
+    // task: any = {
+    //     title: '',
+    //     description: '',
+    //     customer: null,
+    //     state: 'todo',
+    //     comments: '',
+    //     priority: 'low',
+    //     created_at: '',
+    //     updated_at: '',
+    //     due_date: '',
+    //     reviewer: '',
+    //     completed_at: '',
+    // };
 
     activityTypes: { [key: string]: { path: string; label: string; } } = {
         call: {

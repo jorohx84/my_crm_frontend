@@ -8,10 +8,25 @@ import { GlobalService } from '../services/global.service';
 import { ObservableService } from '../services/observable.service';
 import { Subject, takeUntil } from 'rxjs';
 import { MemberlistComponent } from '../memberlist/memberlist.component';
+import { DealwrapperComponent } from '../dealwrapper/dealwrapper.component';
+import { TaskwrapperComponent } from '../taskwrapper/taskwrapper.component';
+import { ContactwrapperComponent } from '../contactwrapper/contactwrapper.component';
+import { ActivitywrapperComponent } from '../activitywrapper/activitywrapper.component';
 
 @Component({
   selector: 'app-main',
-  imports: [CommonModule, RouterOutlet, HeaderComponent, GlobalsearchwrapperComponent, MemberlistComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    HeaderComponent,
+    SidebarComponent,
+    GlobalsearchwrapperComponent,
+    MemberlistComponent,
+    DealwrapperComponent,
+    TaskwrapperComponent,
+    ContactwrapperComponent,
+    ActivitywrapperComponent,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

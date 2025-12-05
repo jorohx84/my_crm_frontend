@@ -14,10 +14,10 @@
 
 
         <div class="taskMenu">
-            <button *ngIf="permission.isReviewer(task.reviewer) && task?.state==='done'"
+            <button *ngIf="permission.isReviewer(task.reviewer) && task.state==='done'"
                 (click)="releaseTask()">Freigeben</button>
 
-            <button *ngIf="task?.assignee?.id===user?.id && task?.state==='released'"
+            <button *ngIf="permission.isReviewer(task.reviewer) && task.state==='released'"
                 (click)="closeTask()">Abschließen</button>
             <button *ngIf="permission.isMember(task.members) || permission.isReviewer(task.reviewer)" (click)="openMemberlist()">Members bearbeiten</button>
             <button (click)="globalservice.navigateToPath(['main', 'board'])">Board öffnen</button>

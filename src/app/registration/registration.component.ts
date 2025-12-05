@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User } from '../models/user.model';
 import { APIService } from '../services/api.service';
 import { Router } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { UserService } from '../services/user.service';
-
+import { createUserModel } from '../models/user.model';
+createUserModel
 @Component({
   selector: 'app-registration',
   imports: [CommonModule, FormsModule],
@@ -18,7 +18,7 @@ export class RegistrationComponent {
   dataservice = inject(DataService);
   userservice = inject(UserService);
   router = inject(Router);
-  user = new User();
+  user = createUserModel();
   isSend: boolean = false;
   isValid: boolean = true;
   isPasswordVisibility: boolean = false;

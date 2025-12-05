@@ -12,7 +12,7 @@ import { ActivitiesComponent } from '../activities/activities.component';
 import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-singlecontact',
-  imports: [CommonModule, FormsModule, RouterOutlet, ActivitiesComponent],
+  imports: [CommonModule, FormsModule, RouterOutlet],
   templateUrl: './singlecontact.component.html',
   styleUrl: './singlecontact.component.scss'
 })
@@ -20,7 +20,7 @@ export class SinglecontactComponent {
   route = inject(ActivatedRoute);
   apiservice = inject(APIService);
   dataservice = inject(DataService);
-  observerservice = inject(ObservableService);
+  obs$ = inject(ObservableService);
   globalservice = inject(GlobalService);
   private destroy$ = new Subject<void>();
   activities: any[] = [];
@@ -77,7 +77,7 @@ export class SinglecontactComponent {
   ];
 
  constructor() {
-    this.globalservice.setCustomerSidebarState();
+    this.globalservice.setCustomerProfileState();
   }
 
 
@@ -105,7 +105,6 @@ export class SinglecontactComponent {
 
 
   loadTemplate() {
-    this.globalservice.toggleSidebar(false);
     this.loadIDFromURL();
     this.tabKey = this.dataservice.getDataFromLocalStorage('contactTab');
   }
@@ -117,6 +116,7 @@ export class SinglecontactComponent {
       if (id) {
         this.contactID = id
         this.loadContact(id);
+        this.obs$.sendContact(id)
         // this.tabKey = 'infos';
       }
 
@@ -128,6 +128,7 @@ export class SinglecontactComponent {
       next: (response) => {
         this.contact = response;
         // this.loadActivities(response.id)
+        this.obs$.sendContact(response);
       }
     })
   }
@@ -150,7 +151,7 @@ export class SinglecontactComponent {
     }
     this.apiservice.patchData(`contact/${this.contactID}/`, data).subscribe({
       next: (response) => {
-        this.observerservice.sendContact(response); // entfernen falls die Kontaktliste separierte wird
+        this.obs$.sendContact(response); // entfernen falls die Kontaktliste separierte wird
       }
     });
   }
@@ -163,7 +164,7 @@ export class SinglecontactComponent {
 
 
   openActivityForm() {
-    this.observerservice.sendContact(this.contact);
+    this.obs$.sendContact(this.contact);
     this.globalservice.activityWrapperOpen = true
   }
 

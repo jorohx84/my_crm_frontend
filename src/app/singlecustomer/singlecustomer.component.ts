@@ -12,6 +12,8 @@ import { RouterOutlet } from '@angular/router';
 import { ContactwrapperComponent } from '../contactwrapper/contactwrapper.component';
 import { ActivitywrapperComponent } from '../activitywrapper/activitywrapper.component';
 import { Subject, takeUntil } from 'rxjs';
+import { createCustomerModel } from '../models/customer.models';
+
 @Component({
   selector: 'app-singlecustomer',
   imports: [CommonModule, FormsModule, TaskwrapperComponent, ContactwrapperComponent, ActivitywrapperComponent, RouterOutlet],
@@ -22,11 +24,11 @@ export class SinglecustomerComponent {
   globalservice = inject(GlobalService);
   apiservice = inject(APIService);
   userservice = inject(UserService);
-  observerservice = inject(ObservableService);
+  obs$ = inject(ObservableService);
   dataservice = inject(DataService);
   route = inject(ActivatedRoute);
   customerID: number | string | null = null;
-  customer = this.dataservice.emptyCustomer; //das leere objekt falls daten zu spät geladen werde und ngModel darauf zugreifen möchte
+  customer = createCustomerModel()
   isOpen: boolean = false;
   isEdit: boolean = false;
   isDelete: boolean = false;
@@ -40,9 +42,11 @@ export class SinglecustomerComponent {
 
 
   constructor() {
-    this.globalservice.setCustomerSidebarState();
+    this.globalservice.setCustomerProfileState();
   }
   ngOnInit() {
+    console.log(this.customer);
+
     // this.globalservice.toggleSidebar(true);
     this.loadCustomerFromURL();
   }
@@ -58,7 +62,7 @@ export class SinglecustomerComponent {
       this.customerID = id
       if (id) {
         this.loadCustomer(id)
-
+        this.obs$.sendCustomer(id);
       }
 
     });
@@ -129,18 +133,23 @@ export class SinglecustomerComponent {
   // }
 
 
-  openActivityForm() {
-    this.getContactId();
-    this.globalservice.activityWrapperOpen = !this.globalservice.activityWrapperOpen
-  }
 
   getContactId() {
     this.route.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('contact_id');
-      this.observerservice.sendContact(id);
+      this.obs$.sendContact(id);
     })
   }
 
 
+  openContactWrapper() {
+    this.globalservice.contactWrapperOpen = true;
+    this.obs$.sendCustomer(this.customer.id);
+  }
+
+  openActivityWrapper() {
+    this.globalservice.activityWrapperOpen = true;
+    this.obs$.sendSignalToDialog(null);
+  }
 }
 
