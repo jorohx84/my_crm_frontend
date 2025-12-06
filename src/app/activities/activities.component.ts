@@ -36,14 +36,14 @@ export class ActivitiesComponent {
   searchValue: string = '';
   customerID: string = '';
   contactID: string = '';
-
+  currentIndex: number | null = null;
   activityOpen: boolean = false;
   editInvalid: boolean = false;
   editDateOpen: boolean = false;
   contactListOpen: boolean = false;
   editTypeOpen: boolean = false;
   activity = createActivityModel();
-
+  activityID: number | null = null;
   activityFields = [  //hier werden die felder der Tabelle hinzugefügt!!!!!
     { fieldName: 'type', displayName: 'Typ' },
     { fieldName: 'date', displayName: 'Datum' },
@@ -63,13 +63,17 @@ export class ActivitiesComponent {
   apiKey: string = '';
   totalCount: number | null = null;
   currentSearchFilter: any;
-
+  newActivity: boolean = false;
+  activitiyIndex: number | null = null;
+  openNewActivity: boolean = false;
+  newActivityAdded: boolean = false;
   constructor() {
     this.globalservice.setCustomerProfileState();
   }
 
   ngOnInit() {
     this.loadTemplate();
+    this.subscribeActivities();
   }
 
 
@@ -79,12 +83,12 @@ export class ActivitiesComponent {
   }
 
   loadTemplate() {
-   this.route.queryParamMap.pipe(combineLatestWith(this.route.parent!.paramMap),takeUntil(this.destroy$)).subscribe(([query, params]) => {
-      this.setTemplateData(query, params); 
+    this.route.queryParamMap.pipe(combineLatestWith(this.route.parent!.paramMap), takeUntil(this.destroy$)).subscribe(([query, params]) => {
+      this.setTemplateData(query, params);
     });
     this.subscribeActivities();
     this.subscribeContact();
-  
+
   }
 
   setTemplateData(query: any, params: any) {
@@ -104,7 +108,7 @@ export class ActivitiesComponent {
     if (id && apiKey) {
       this.loadActivities(id, apiKey, 1);
     }
-    
+
   }
 
   getParamID(type: string) {
@@ -118,11 +122,41 @@ export class ActivitiesComponent {
     this.apiservice.getData(`activities/${key}/${id}/?page=${page}&size=${this.pageSize}`).subscribe({
       next: (response) => {
         this.buildActivityList(response);
-        // this.observservice.sendListCount(response.count);
         this.totalCount = response.count
+
+        // this.loadSingleContact();
+
       }
     });
   }
+
+  // loadSingleContact() {
+  //   if (this.newActivity) {
+  //     this.apiservice.getData(`activity/${this.activityID}/`).subscribe({
+  //       next: (res) => {
+
+  //         this.addnewActivityToList(res);
+
+  //       }
+  //     })
+  //   }
+  // }
+
+  // addnewActivityToList(res: any) {
+  //   if (this.newActivityAdded) {
+  //     return
+  //   }
+  //   this.activities.unshift(res)
+  //   this.newActivityAdded = true;
+  //   this.currentIndex = 0;
+  //   if (this.openNewActivity) {
+  //     setTimeout(() => {
+  //       this.openActivity(0)
+
+  //     }, 500);
+  //   }
+  // }
+
 
   buildActivityList(data: any) {
     this.next = data.next;
@@ -130,22 +164,6 @@ export class ActivitiesComponent {
     this.activities = data.results
     this.allActivities = data.results;
   }
-
-
-  // subscribeListMenuData() {
-  //   this.observservice.menulistSubject$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-  //     if (response) {
-  //       this.setList(response);
-  //       if (response.startTime || response.endTime) {
-  //         this.filterActivitiesToDate(response.startTime, response.endTime);
-  //       } else {
-  //         this.loadActivities(this.listID, this.apiKey, response.page);
-  //       }
-  //     }
-  //   })
-  // }
-
-
 
   changeList(response: any) {
     if (response) {
@@ -168,13 +186,17 @@ export class ActivitiesComponent {
   subscribeActivities() {
     this.observservice.activitySubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
       if (data) {
-        if (this.totalCount) {
-          this.totalCount++;
-          this.observservice.sendListCount(this.totalCount)
-        }
+        console.log('hallo');
+
+        // this.activityID = data.id;
+        // const id = data.contact;
+        // this.newActivity = true;
+        // this.loadSingleContact();
       }
     })
   }
+
+
 
   subscribeContact() {
     this.observservice.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((data) => {
@@ -203,6 +225,8 @@ export class ActivitiesComponent {
   openActivity(index: number) {
     this.activity = this.activities[index];
     console.log(this.activity);
+
+    console.log(this.activity);
     this.activityOpen = true
   }
 
@@ -217,8 +241,8 @@ export class ActivitiesComponent {
 
   saveEdit(aid: string, data: any) {
     console.log('ich wurde getriggert');
-    
-    if (!aid) { return}
+
+    if (!aid) { return }
     this.apiservice.patchData(`activity/${aid}/`, data).subscribe({
       next: (response) => {
         // this.observservice.sendActivity(response);

@@ -1,7 +1,11 @@
 <section>
     <div class="acitvityForm">
         <h3>Neue Aktivität</h3>
-        <div class="inputCont" *ngIf="!glo.checkURL('singlecontact') && !contactID">
+        <div class="divider"></div>
+
+        <p *ngIf="customer" class="customername">{{customer?.companyname}}</p>
+        <!-- Search -->
+        <div class="inputCont" *ngIf="!glo.checkURL('singlecontact') && !contact">
             <h4>Kontak wählen</h4>
             <div class="inputfield">
                 <input name="customer" (change)="searchCustomer()" #customer="ngModel" type="text"
@@ -9,24 +13,33 @@
                 <img src="./icons/search.svg" alt="">
 
             </div>
+            <!-- resultlist -->
             <div *ngIf="isloaded" class="resultList">
                 <app-contactlistwrapper [contacts]="contacts"
                     (selectedContact)="setContact($event)"></app-contactlistwrapper>
             </div>
         </div>
-        <form *ngIf="customerID && contactID" #createActivityForm="ngForm"
-            (ngSubmit)="checkValidation(createActivityForm)">
-  
-            <div class="contactCard">
+
+
+        <!-- contactCard -->
+        <div *ngIf="contact" class="contactCard">
+            <div class="contactInfo">
                 <img src="./icons/contactprofile.svg" alt="">
                 <div class="contactInfos">
-                    <p>{{contact.name}}</p>
-                    <!-- <p>{{contact.email}}</p> -->
-                    <p>{{contact.customer.companyname}}</p>
+                    <p>{{contact?.name}}</p>
+                    <p>{{contact.email}}</p>
+                    <!-- <p>{{contact?.customer.companyname}}</p> -->
                 </div>
 
             </div>
+            <div *ngIf="!glo.checkURL('singlecontact')" class="removeBtn" (click)="resetContact()">
+                <img src="./icons/close.svg" alt="">
+            </div>
 
+        </div>
+
+        <!-- form -->
+        <form *ngIf="customer && contact" #createActivityForm="ngForm" (ngSubmit)="checkValidation(createActivityForm)">
             <div class="inputCont">
                 <div class="inputfield">
                     <input #title="ngModel" name="title" type="text" [(ngModel)]="activity.title"
@@ -61,27 +74,6 @@
 
             </div>
 
-            <!-- <div class="inputCont" *ngIf="!glo.checkURL('singlecustomer')">
-                <div class="inputfield">
-                    <input #customer="ngModel"  type="text" [(ngModel)]="searchValue" placeholder="Kunde auswählen">
-                    <img src="./icons/search.svg" alt="">
-                </div>
-            </div> -->
-            <!-- <div *ngIf="glo.checkURL('singlecustomer') && !glo.checkURL('singlecontact')" class="contactChoice">
-                <button type="button" (click)="openContactList()">Kontakt wählen</button>
-                <div *ngIf="contact" class="currentContact">
-                    <img src="./icons/contactprofile.svg" alt="">
-                    <p>{{contact?.name}}</p>
-
-                </div>
-                <div *ngIf="noContact" class="errorTxt">
-                    <p>*Kontakt wählen</p>
-                </div>
-            </div> -->
-
-
-
-
 
             <div class="inputCont">
                 <h4>Start</h4>
@@ -104,7 +96,8 @@
 
             <div class="btnCont">
                 <button (click)="resetForm(createActivityForm)" type="button">Abbrechen</button>
-                <button type="submit">Speichern</button>
+                <button type="submit" (click)="action='save'">Speichern</button>
+                <!-- <button type="submit" (click)="action='save_and_nav'">Speichern & Öffnen</button> -->
             </div>
         </form>
     </div>

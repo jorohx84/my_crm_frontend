@@ -87,6 +87,26 @@
 
 }
 
+.rowhighlight {
+    
+   animation: puls 1.5s ease-in-out;
+
+}
+
+@keyframes puls {
+    0% {
+        background-color: var(--box-light);
+    }
+
+    50% {
+       background-color: var(--listrow-hover);
+    }
+
+    100% {
+      background-color: var(--box-light);
+    }
+}
+
 .editType {
     width: 100%;
     position: absolute;

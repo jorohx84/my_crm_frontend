@@ -24,7 +24,8 @@ export class ActivitywrapperComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
   activity = createActivityModel();
-  contact: any;
+  contact: any | null = null;
+  customer: any | null = null;
   contactID: string = '';
   isloaded: boolean = false;
   customerID: string = '';
@@ -36,14 +37,12 @@ export class ActivitywrapperComponent {
   isSingleCustomer: boolean = false;
   noNavigate: boolean = false;
   private destroy$ = new Subject<void>();
-  noCustomer: boolean = false;
   searchValue: string = '';
   contacts: any[] = [];
+  action: string = 'save';
+
   ngOnInit() {
-    // this.subscribeCustomer();
-    this.subscribeContact();
     this.subscribeDiaolgSignal();
-    this.loadCustomer();
   }
 
   ngOnDestroy() {
@@ -51,34 +50,7 @@ export class ActivitywrapperComponent {
     this.destroy$.complete();
   }
 
-  subscribeContact() {
-    this.obs$.contactSubject$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
-      console.log('Contact ist angekommen', res);
-      if (res) {
-        console.log(res);
-        
-        this.setContactData(res);
- 
-
-      }
-      // this.setVariabelFromURL();
-    })
-  }
-
-  subscribeCustomer() {
-    this.obs$.customerSubject$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
-      console.log('Customer ist angekommen', res);
-
-      this.customerID = res
-      this.noCustomer = this.customerID ? false : true;
-      this.setVariabelFromURL();
-    })
-
-  }
-
   subscribeDiaolgSignal() {
-
-
     this.obs$.dialogSubject$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       console.log('Signal ausgelöst');
       if (this.glo.checkURL('singlecustomer')) {
@@ -88,16 +60,13 @@ export class ActivitywrapperComponent {
         this.loadContactFromUrl();
       }
     })
-
   }
 
   loadCustomerFromUrl() {
     this.route.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('customer_id');
       if (id) {
-        this.customerID = id
-        console.log(id);
-        
+        this.loadData('customer', id);
       }
     })
   }
@@ -106,42 +75,32 @@ export class ActivitywrapperComponent {
     this.route.firstChild?.firstChild?.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
       const id = param.get('contact_id');
       if (id) {
-        this.contactID = id
-        console.log(id);
-        
+        this.loadData('contact', id);
       }
     })
   }
 
+  loadData(listkey: string, id: string) {
+    this.apiservice.getData(`${listkey}/${id}`).subscribe({
+      next: (res) => {
+        console.log(listkey, 'geladen', res);
+        if (listkey === 'customer') {
+          this.customer = res;
+        }
+        if (listkey === 'contact') {
+          this.contact = res
+        }
 
 
-
-  setContactData(data: any) {
-    if (typeof data === 'string') {
-      this.contactID = data;
-    } else {
-      this.contact = data;
-      this.contactID = data.id;
-    }
+      }
+    })
   }
+
 
   setVariabelFromURL() {
     this.isSingleCustomer = this.glo.checkURL('singlecustomer');
     this.isSingleContact = this.glo.checkURL('singlecontact');
-    console.log(this.isSingleContact);
-    console.log(this.isSingleCustomer);
-
     this.noNavigate = this.glo.checkURL('activities');
-  }
-
-
-  loadCustomer() {
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((param) => {
-      const id = param.get('customer_id');
-      if (id) {
-        this.customerID = id;
-      }
-    })
   }
 
   changeActivityType(type: string) {
@@ -149,9 +108,9 @@ export class ActivitywrapperComponent {
   }
 
   checkValidation(form: NgForm) {
+    console.log('Hallo');
     this.typeInvalid = !this.activity.type;
-    this.noContact = !this.contactID;
-    if (this.typeInvalid || this.noContact || !form.valid) {
+    if (this.typeInvalid || !form.valid) {
       form.control.markAllAsTouched();
       return;
     }
@@ -160,20 +119,32 @@ export class ActivitywrapperComponent {
 
 
   createActivity(form: NgForm) {
+
+
     const requestData = this.createActivityData();
-    this.saveActivity(requestData);
-    if (!this.noNavigate && !this.isSingleContact) {
-      this.glo.navigateToPath(['main', 'singlecustomer', this.customerID, 'activities'], { actlist: 'customer' });
-    }
-    this.resetForm(form);
+    this.saveActivity(requestData, form);
+    console.log(this.action);
+
+
+
 
   }
 
-  saveActivity(data: any) {
+  saveActivity(data: any, form: NgForm) {
     this.apiservice.postData('activities/', data).subscribe({
       next: (response) => {
         this.obs$.sendActivity(response);
         this.obs$.sendConfirmation('Aktivität wurde erfolgreich angelegt');
+        // if (this.action === 'save_and_nav') {
+        //   this.glo.navigateToPath(['main', 'singlecustomer', this.customer.id, 'singlecontact', this.contact.id, 'activities'],
+        //     {
+        //       actlist: 'contact',
+        //       activity: response.id,
+        //       openActivity: true,
+        //     });
+        // }
+        this.resetForm(form);
+
       }
     })
   }
@@ -182,8 +153,8 @@ export class ActivitywrapperComponent {
   createActivityData() {
     return {
       title: this.activity.title,
-      contact: this.contactID,
-      customer: this.customerID,
+      contact: this.contact.id,
+      customer: this.customer.id,
       type: this.activity.type,
       description: this.activity.description,
       date: this.activity.date,
@@ -195,39 +166,33 @@ export class ActivitywrapperComponent {
   resetForm(form: NgForm) {
     form.reset();
     this.activity.type = '';
-    this.contact = undefined;
-
     this.typeInvalid = false;
     this.glo.activityWrapperOpen = false;
     this.glo.isoverlay = false;
     setTimeout(() => {
-      this.contactID = '';
-      this.customerID = '';
+      this.contact = null;
+      this.customer = null
       this.searchValue = '';
     }, 300);
   }
 
-  // openContactList() {
-  //   this.contactListOpen = true;
-  //   // this.apiservice.getData(`contacts/${this.customerID}/`).subscribe({
-  //   //   next: (response) => {
-  //   //     this.contacts = response;
-  //   //   }
-  //   // })
-  //   this.obs$.sendCustomer(this.customerID)
-  // }
+  resetContact() {
+    this.contact = null;
+    this.searchValue = '';
+    if (!this.glo.checkURL('singlecustomer')) {
+      this.customer = null;
+    }
+  }
 
-
-  // setContact(index: number) {
-  //   this.contact = this.contacts[index]
-  //   this.contactID = this.contact.id
-  //   this.contactListOpen = false;
-  //   this.noContact = false;
-  // }
 
   searchCustomer() {
     console.log(this.searchValue);
-    this.apiservice.getData(`search/contact/${this.searchValue}/`).subscribe({
+    const id = this.customer?.id || null;
+    console.log(id);
+    const url = this.getURL(id);
+    console.log(url);
+
+    this.apiservice.getData(url).subscribe({
       next: (res) => {
         console.log(res);
         this.contacts = res;
@@ -236,12 +201,20 @@ export class ActivitywrapperComponent {
     })
   }
 
+  getURL(id: string) {
+    if (id) {
+      return `search/contact/${id}/${this.searchValue}/`
+    } else {
+      return `search/contact/${this.searchValue}/`
+    }
+  }
+
+
   setContact(selectedContact: any) {
     this.contact = selectedContact;
     console.log(this.contact);
     this.searchValue = this.contact.name
-    this.customerID = this.contact.customer.id;
-    this.contactID = this.contact.id;
+    this.customer = this.contact.customer;
     this.contactListOpen = false;
     this.isloaded = false;
   }

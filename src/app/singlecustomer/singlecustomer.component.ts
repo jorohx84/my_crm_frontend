@@ -48,7 +48,7 @@ export class SinglecustomerComponent {
     console.log(this.customer);
 
     // this.globalservice.toggleSidebar(true);
-    this.loadCustomerFromURL();
+    this.loadCustomerIDFromURL();
   }
 
   ngOnDestroy() {
@@ -56,7 +56,7 @@ export class SinglecustomerComponent {
     this.destroy$.complete();
   }
 
-  loadCustomerFromURL() {
+  loadCustomerIDFromURL() {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const id = params.get('customer_id');
       this.customerID = id
@@ -82,9 +82,9 @@ export class SinglecustomerComponent {
   }
 
   loadCustomer(id: string | number | null = null) {
-    this.apiservice.getData(`customers/${id}/`).subscribe({
-      next: (response) => {
-        this.customer = response;
+    this.apiservice.getData(`customer/${id}/`).subscribe({ next: (res) => {
+        this.customer = res;
+        this.obs$.sendCustomer(res);
       }
     })
   }

@@ -69,6 +69,8 @@ export class ListmenuComponent {
     if (changes['totalCount']) {
       if (this.totalCount) {
         this.totalPages = this.global.calcPages(this.totalCount, this.pageSize);
+        console.log(this.totalCount);
+        
       }
 
     }

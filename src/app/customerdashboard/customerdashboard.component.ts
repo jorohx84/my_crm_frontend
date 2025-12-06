@@ -54,7 +54,7 @@ export class CustomerdashboardComponent {
 
 
   loadCustomer(id: string) {
-    this.apiservice.getData(`customers/${id}`).subscribe({
+    this.apiservice.getData(`customer/${id}`).subscribe({
       next: (response) => {
         console.log(response);
         this.customer = response

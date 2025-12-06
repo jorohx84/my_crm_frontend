@@ -6,6 +6,10 @@ section {
 
 }
 
+.customername {
+    font-size: 20px;
+}
+
 .acitvityForm {
     width: 100%;
     display: flex;
@@ -115,7 +119,7 @@ section {
 }
 
 .resultList {
-    position:absolute;
+    position: absolute;
     top: 60px;
     width: 100%;
     max-width: 600px;
@@ -125,15 +129,42 @@ section {
     z-index: 1;
 }
 
-.contactCard{
-    width: 100%;
+.contactCard {
+
     display: flex;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
     gap: 8px;
     padding: 12px 24px;
     border-radius: var(--radius);
     background-color: var(--box-light);
-    >img{
-        width:30px;
+
+}
+
+.contactInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+
+    >img {
+        width: 30px;
+    }
+}
+
+.removeBtn {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    border-radius: 100px;
+    transition: background-color 0.3s ease-in-out;
+
+    >img {
+        width: 14px;
+    }
+
+    &:hover {
+        background-color: var(--listrow-hover);
     }
 }
