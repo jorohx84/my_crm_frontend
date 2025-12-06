@@ -14,8 +14,8 @@
                 <h4 *ngIf="activities.length===0">- keine Aktivitäten gefunden -</h4>
 
 
-                <div class="listRow" *ngFor="let activity of activities let index=index" (click)="openActivity(index)" [ngClass]="{'rowhighlight': activity.id===activityID}">
-<p>{{activity.id}} - {{activityID}}</p>
+                <div class="listRow" *ngFor="let activity of activities let index=index" (click)="openActivity(index)" [ngClass]="{'rowhighlight': currentIndex===index}">
+ 
 
                     <div class="typeCont">
                         <img [src]="dataservice.activityTypes[activity.type].path" alt="">
@@ -83,7 +83,7 @@
                     </div>
                     <!--  -->
                 </div>
-                <div class="imgCont" (click)="openContactList()">
+                <div class="imgCont">
                     <img src="./icons/contactprofile.svg" alt="">
                     <p>{{activity?.contact?.name}}</p>
                 </div>

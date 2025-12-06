@@ -88,8 +88,8 @@
 }
 
 .rowhighlight {
-    
-   animation: puls 1.5s ease-in-out;
+    //   background-color: var(--listrow-hover);
+    animation: puls 3s ease-in-out;
 
 }
 
@@ -99,11 +99,11 @@
     }
 
     50% {
-       background-color: var(--listrow-hover);
+        background-color: var(--listrow-hover);
     }
 
     100% {
-      background-color: var(--box-light);
+        background-color: var(--box-light);
     }
 }
 

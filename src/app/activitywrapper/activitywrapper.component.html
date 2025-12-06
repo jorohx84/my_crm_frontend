@@ -38,6 +38,31 @@
 
         </div>
 
+        <!-- <div class="typeChoiceBtns">
+            <div class="typeChoices">
+                <div class="typeBtn" (click)="changeActivityType('call')"
+                    [ngClass]="{'tabActive': activity.type==='call'}">
+                    <p>Anruf</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('email')"
+                    [ngClass]="{'tabActive': activity.type==='email'}">
+                    <p>E-Mail</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('invite')"
+                    [ngClass]="{'tabActive': activity.type==='invite'}">
+                    <p>Besuch</p>
+                </div>
+                <div class="typeBtn" (click)="changeActivityType('video')"
+                    [ngClass]="{'tabActive': activity.type==='video'}">
+                    <p>VideoCall</p>
+                </div>
+            </div>
+            <div class="errorTxt">
+                <p *ngIf="typeInvalid">*Pflichtfeld</p>
+            </div>
+
+        </div> -->
+
         <!-- form -->
         <form *ngIf="customer && contact" #createActivityForm="ngForm" (ngSubmit)="checkValidation(createActivityForm)">
             <div class="inputCont">
@@ -45,45 +70,44 @@
                     <input #title="ngModel" name="title" type="text" [(ngModel)]="activity.title"
                         placeholder="Kurzbeschreibung" required maxlength="45">
                 </div>
-                <div *ngIf="title.invalid && title.touched" class="errorTxt">
-                    <p>*Pflichtfeld</p>
+                <div  class="errorTxt">
+                    <p *ngIf="title.invalid && title.touched">*Pflichtfeld</p>
                 </div>
-            </div>
-            <div class="typeChoiceBtns">
-                <div class="typeChoices">
-                    <div class="typeBtn" (click)="changeActivityType('call')"
-                        [ngClass]="{'tabActive': activity.type==='call'}">
-                        <p>Anruf</p>
-                    </div>
-                    <div class="typeBtn" (click)="changeActivityType('email')"
-                        [ngClass]="{'tabActive': activity.type==='email'}">
-                        <p>E-Mail</p>
-                    </div>
-                    <div class="typeBtn" (click)="changeActivityType('invite')"
-                        [ngClass]="{'tabActive': activity.type==='invite'}">
-                        <p>Besuch</p>
-                    </div>
-                    <div class="typeBtn" (click)="changeActivityType('video')"
-                        [ngClass]="{'tabActive': activity.type==='video'}">
-                        <p>VideoCall</p>
-                    </div>
-                </div>
-                <div class="errorTxt">
-                    <p *ngIf="typeInvalid">*Pflichtfeld</p>
-                </div>
-
             </div>
 
 
-            <div class="inputCont">
-                <h4>Start</h4>
-                <div class="inputfield">
-                    <input #date="ngModel" type="datetime-local" [(ngModel)]="activity.date" name="date" required>
+            <div class="dateTypeFields">
+                <div class="inputCont">
+                    <h4>Datum</h4>
+                    <div class="inputfield dateInput">
+                        <input #date="ngModel" type="datetime-local" [(ngModel)]="activity.date" name="date" required>
+                    </div>
+                    <div class="errorTxt">
+                        <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+                    </div>
                 </div>
-                <div class="errorTxt">
-                    <p *ngIf="date.invalid && date.touched">*Pflichtfeld</p>
+                <div class="dropdownCont">
+
+                    <h4>Typ</h4>
+                    <div class="dropdown" (click)="dropdownOpen=true">
+                        <input type="text" [disabled]="true" name="type" [(ngModel)]="currentType"
+                            placeholder="Typ wählen">
+                        <img src="./icons/dropdown.svg" alt="">
+                        <div class="choices" *ngIf="dropdownOpen">
+                            <div *ngFor="let choice of typeChoices" (click)="changeActivityType(choice.type, $event)">
+                                <p>{{choice.displayName}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="errorTxt">
+                        <p *ngIf="typeInvalid">*Pflichtfeld</p>
+                    </div>
                 </div>
+
+
             </div>
+
 
             <div class="inputCont">
                 <h4>Beschreibung</h4>
@@ -97,7 +121,7 @@
             <div class="btnCont">
                 <button (click)="resetForm(createActivityForm)" type="button">Abbrechen</button>
                 <button type="submit" (click)="action='save'">Speichern</button>
-                <!-- <button type="submit" (click)="action='save_and_nav'">Speichern & Öffnen</button> -->
+                <button type="submit" (click)="action='save_and_nav'">Speichern & Kontak öffnen</button>
             </div>
         </form>
     </div>

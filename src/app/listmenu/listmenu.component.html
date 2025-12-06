@@ -43,7 +43,7 @@
             </div>
         </div>
         <div class="dropdown" (click)="dropdownOpen=true">
-            <input style="width: 40px" [disabled]="true" type="text" placeholder="wähle" [(ngModel)]="pageSize">
+            <input style="width: 40px" [disabled]="true" type="text"  [(ngModel)]="pageSize">
             <img src="./icons/dropdown.svg" alt="">
             <div class="choices" *ngIf="dropdownOpen">
                 <div *ngFor="let choice of dataservice.paginations"

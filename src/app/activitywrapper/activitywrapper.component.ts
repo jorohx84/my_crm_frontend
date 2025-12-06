@@ -40,7 +40,22 @@ export class ActivitywrapperComponent {
   searchValue: string = '';
   contacts: any[] = [];
   action: string = 'save';
+  dropdownOpen: boolean = false;
+  currentType: string = '';
+  typeChoices = [
+    { type: 'call', displayName: 'Anruf' },
+    { type: 'invite', displayName: 'Besuch' },
+    { type: 'video', displayName: 'Videoanruf' },
+    { type: 'email', displayName: 'E-Mail' },
+  ];
 
+  types: any = {
+    call: 'Anruf',
+    invite: 'Besuch',
+    video: 'Videoanruf',
+    email: 'E-Mail',
+
+  }
   ngOnInit() {
     this.subscribeDiaolgSignal();
   }
@@ -103,8 +118,11 @@ export class ActivitywrapperComponent {
     this.noNavigate = this.glo.checkURL('activities');
   }
 
-  changeActivityType(type: string) {
+  changeActivityType(type: string, event: Event) {
     this.activity.type = type;
+    this.currentType = this.types[type];
+    this.dropdownOpen = false;
+    event.stopPropagation();
   }
 
   checkValidation(form: NgForm) {
@@ -135,14 +153,9 @@ export class ActivitywrapperComponent {
       next: (response) => {
         this.obs$.sendActivity(response);
         this.obs$.sendConfirmation('Aktivität wurde erfolgreich angelegt');
-        // if (this.action === 'save_and_nav') {
-        //   this.glo.navigateToPath(['main', 'singlecustomer', this.customer.id, 'singlecontact', this.contact.id, 'activities'],
-        //     {
-        //       actlist: 'contact',
-        //       activity: response.id,
-        //       openActivity: true,
-        //     });
-        // }
+        if (this.action === 'save_and_nav') {
+          this.glo.navigateToPath(['main', 'singlecustomer', this.customer.id, 'singlecontact', this.contact.id, 'activities'], { actlist: 'contact', })
+        };
         this.resetForm(form);
 
       }
@@ -173,6 +186,7 @@ export class ActivitywrapperComponent {
       this.contact = null;
       this.customer = null
       this.searchValue = '';
+      this.dropdownOpen = false;
     }, 300);
   }
 

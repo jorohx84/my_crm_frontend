@@ -7,7 +7,7 @@ import { ObservableService } from '../services/observable.service';
 import { UserService } from '../services/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { query, response } from 'express';
-import { combineLatestWith, Subject, takeUntil } from 'rxjs';
+import { combineLatestWith, findIndex, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { ContactlistwrapperComponent } from '../contactlistwrapper/contactlistwrapper.component';
 import { ListmenuComponent } from '../listmenu/listmenu.component';
@@ -130,17 +130,7 @@ export class ActivitiesComponent {
     });
   }
 
-  // loadSingleContact() {
-  //   if (this.newActivity) {
-  //     this.apiservice.getData(`activity/${this.activityID}/`).subscribe({
-  //       next: (res) => {
 
-  //         this.addnewActivityToList(res);
-
-  //       }
-  //     })
-  //   }
-  // }
 
   // addnewActivityToList(res: any) {
   //   if (this.newActivityAdded) {
@@ -188,12 +178,41 @@ export class ActivitiesComponent {
       if (data) {
         console.log('hallo');
 
+        this.loadSingleContact(data.id);
+
+
         // this.activityID = data.id;
         // const id = data.contact;
         // this.newActivity = true;
         // this.loadSingleContact();
+
+
       }
     })
+  }
+
+  loadSingleContact(id: string) {
+    // if (this.newActivity) {
+    this.apiservice.getData(`activity/detail/${id}/`).subscribe({
+      next: (res) => {
+        const exists = this.activities.some(a => a.id === res.id);
+
+
+        if (!exists) {
+          this.activities.unshift(res);
+          this.globalservice.sortListbyTime(this.activities, 'date');
+          const index = this.activities.findIndex(a => a.id === res.id);
+          console.log(index);
+          
+          this.currentIndex = index
+
+          // this.openActivity(0); // optional direkt öffnen
+        }
+        // this.addnewActivityToList(res);
+
+      }
+    })
+    // }
   }
 
 
